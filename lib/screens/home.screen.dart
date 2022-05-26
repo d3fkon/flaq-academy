@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FalqPoints extends StatefulWidget {
-  const FalqPoints({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<FalqPoints> createState() => _FalqPointsState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _FalqPointsState extends State<FalqPoints> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;

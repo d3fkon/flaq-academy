@@ -1,13 +1,15 @@
+import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 
-class Approval extends StatefulWidget {
-  const Approval({Key? key}) : super(key: key);
+class OpenSettingsScreen extends StatefulWidget {
+  const OpenSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<Approval> createState() => _ApprovalState();
+  State<OpenSettingsScreen> createState() => _OpenSettingsScreenState();
 }
 
-class _ApprovalState extends State<Approval> {
+class _OpenSettingsScreenState extends State<OpenSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -38,7 +40,7 @@ class _ApprovalState extends State<Approval> {
                       const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          'Flaq requires your\napproval for messages',
+                          'battery optimizations need to be disabled',
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             color: Colors.white,
@@ -53,7 +55,7 @@ class _ApprovalState extends State<Approval> {
                       const Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: Text(
-                          'flaq application rewards you for every payment you make, which are detected using messages',
+                          'flaq is a very lightweight app and doesn\'t require battery optimizations. We require battery optimizations to be disabled to ensure that you earn rewards with no interactions',
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             color: Colors.white,
@@ -78,9 +80,12 @@ class _ApprovalState extends State<Approval> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               )),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.find<RootService>()
+                                .requestBatteryOptimizationDisable();
+                          },
                           child: const Text(
-                            'give approval',
+                            'take me to settings',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,

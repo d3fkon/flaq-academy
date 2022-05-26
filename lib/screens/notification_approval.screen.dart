@@ -1,13 +1,16 @@
+import 'package:flaq/services/messaging.service.dart';
+import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 
-class TakeSettings extends StatefulWidget {
-  const TakeSettings({Key? key}) : super(key: key);
+class Approval extends StatefulWidget {
+  const Approval({Key? key}) : super(key: key);
 
   @override
-  State<TakeSettings> createState() => _TakeSettingsState();
+  State<Approval> createState() => _ApprovalState();
 }
 
-class _TakeSettingsState extends State<TakeSettings> {
+class _ApprovalState extends State<Approval> {
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -21,11 +24,12 @@ class _TakeSettingsState extends State<TakeSettings> {
             children: [
               Container(
                 decoration: const BoxDecoration(
-                    color: Color(0xFF1D1D1D),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(18),
-                      bottomRight: Radius.circular(18),
-                    )),
+                  color: Color(0xFF1D1D1D),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(18),
+                    bottomRight: Radius.circular(18),
+                  ),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -78,9 +82,11 @@ class _TakeSettingsState extends State<TakeSettings> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               )),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.find<RootService>().requestSmsPermission();
+                          },
                           child: const Text(
-                            'take me to settings',
+                            'give approval',
                             style: TextStyle(
                               fontFamily: 'Montserrat',
                               color: Colors.black,
