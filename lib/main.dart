@@ -1,6 +1,8 @@
+import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/open_settings.screen.dart';
+import 'package:flaq/screens/auth/signup.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
