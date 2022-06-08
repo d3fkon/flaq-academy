@@ -1,6 +1,8 @@
 import 'package:flaq/screens/auth/login.dart';
+import 'package:flaq/services/auth.service.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -243,7 +245,9 @@ class _SignUpState extends State<SignUp> {
                       passwordLengthError = false;
                     });
                     if (_signupformKey.currentState!.validate()) {
-                      //add functionality here
+                      final AuthService authService = Get.find();
+                      authService.signup(
+                          emailController.text, passwordController.text);
                     }
                   } else {
                     setState(() {
@@ -271,7 +275,7 @@ class _SignUpState extends State<SignUp> {
                     Navigator.pop(context);
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return const Login();
+                      return const LoginScreen();
                     }));
                   },
                   child: const Text(

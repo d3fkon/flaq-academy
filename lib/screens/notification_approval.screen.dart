@@ -3,14 +3,14 @@ import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 
-class Approval extends StatefulWidget {
-  const Approval({Key? key}) : super(key: key);
+class SmsApprovalScreen extends StatefulWidget {
+  const SmsApprovalScreen({Key? key}) : super(key: key);
 
   @override
-  State<Approval> createState() => _ApprovalState();
+  State<SmsApprovalScreen> createState() => _SmsApprovalScreenState();
 }
 
-class _ApprovalState extends State<Approval> {
+class _SmsApprovalScreenState extends State<SmsApprovalScreen> {
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;

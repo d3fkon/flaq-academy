@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
-class Referral extends StatefulWidget {
-  const Referral({Key? key}) : super(key: key);
+class ReferralScreen extends StatefulWidget {
+  const ReferralScreen({Key? key}) : super(key: key);
 
   @override
-  State<Referral> createState() => _ReferralState();
+  State<ReferralScreen> createState() => _ReferralScreenState();
 }
 
-class _ReferralState extends State<Referral> {
+class _ReferralScreenState extends State<ReferralScreen> {
   TextEditingController referralController = TextEditingController();
   final GlobalKey<FormState> _referralformKey = GlobalKey<FormState>();
   @override

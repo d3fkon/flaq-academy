@@ -1,25 +1,22 @@
-import 'package:flaq/screens/auth/login.dart';
-import 'package:flaq/screens/notification_approval.screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flaq/bindings.dart';
+import 'package:flaq/firebase_options.dart';
 import 'package:flaq/screens/home.screen.dart';
-import 'package:flaq/screens/open_settings.screen.dart';
-import 'package:flaq/screens/auth/signup.dart';
-import 'package:flaq/services/auth.service.dart';
-import 'package:flaq/services/messaging.service.dart';
-import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get/instance_manager.dart';
 
 void main() async {
+  Future.delayed(const Duration(milliseconds: 1)).then((value) =>
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark, // bar light == text dark
+      )));
   WidgetsFlutterBinding.ensureInitialized();
-  await initServices();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
-}
-
-Future<void> initServices() async {
-  await Get.putAsync(() => RootService().init());
-  await Get.putAsync(() => AuthService().init());
-  await Get.putAsync(() => MessagingService().init());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,9 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
+      initialBinding: AppBindings(),
       debugShowCheckedModeBanner: false,
-      home: Approval(),
+      home: Container(color: Colors.black,),
+      builder: EasyLoading.init(),
     );
   }
 }

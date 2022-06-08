@@ -1,4 +1,4 @@
-package com.example.flaq
+package club.flaq
 
 import io.flutter.embedding.android.FlutterActivity
 

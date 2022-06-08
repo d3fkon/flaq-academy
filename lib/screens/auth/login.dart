@@ -1,15 +1,17 @@
 import 'package:flaq/screens/auth/signup.dart';
+import 'package:flaq/services/auth.service.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _loginformKey = GlobalKey<FormState>();
@@ -235,7 +237,11 @@ class _LoginState extends State<Login> {
                     )),
                 onPressed: () {
                   if (_loginformKey.currentState!.validate()) {
-                    // add functionality here
+                    final AuthService authService = Get.find();
+                    authService.login(
+                      emailController.text,
+                      passwordController.text,
+                    );
                   }
                 },
                 child: const Text(
@@ -255,11 +261,7 @@ class _LoginState extends State<Login> {
                 alignment: Alignment.center,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return const SignUp();
-                    }));
+                    Get.offAll(() => const SignUp());
                   },
                   child: const Text(
                     'new user? sign up',

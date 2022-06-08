@@ -1,6 +1,11 @@
+import 'package:flaq/services/api.service.dart';
+import 'package:flaq/services/auth.service.dart';
+import 'package:flaq/services/data.service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
+import 'package:http/http.dart' as http;
 
 const bags = [
   ["Mode", "INR", "Account", "sent", "UPI"],
@@ -40,26 +45,45 @@ backgroundMessageHandler(SmsMessage message) async {
       AndroidNotificationDetails(
     '1234',
     'FLAQ',
-    channelDescription: 'your channel description',
+    channelDescription: 'Reward Notification',
     importance: Importance.max,
     priority: Priority.high,
     ticker: 'ticker',
+    subText: "You've received a reward",
   );
   const NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('flaq_logo');
   flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(android: initializationSettingsAndroid));
+    const InitializationSettings(android: initializationSettingsAndroid),
+    onSelectNotification: (payload) async {
+      print("IN ON SELECT NOTIFICATION");
+      final SharedPreferences sp = await SharedPreferences.getInstance();
+      final key = sp.getString("AUTHKEY");
+      if (key == null) return;
+
+      try {
+        await http.post(Uri.parse("$BASE_URL/payments/register"), body: {
+          "amount": amount.toString()
+        }, headers: {
+          'x-auth-token': key,
+        });
+      } catch (e) {
+        print(e);
+      }
+    },
+  );
 
   Future.delayed(const Duration(seconds: 3)).then(
     (value) => flutterLocalNotificationsPlugin.show(
       100,
-      'Rewarded for $amount!',
-      'You just earned some flaq. Let\'s go!',
+      'Flaq Rewarded for $amount!',
+      'You just earned some flaq. Tap this notification to claim it!',
       platformChannelSpecifics,
-      payload: 'item x',
+      payload: '$amount',
     ),
   );
 }
@@ -69,13 +93,10 @@ class MessagingService extends GetxService {
 
   Future<MessagingService> init() async {
     telephony = Telephony.instance;
-    return this;
-  }
-
-  addSmsListener() {
     telephony.listenIncomingSms(
       onBackgroundMessage: backgroundMessageHandler,
       onNewMessage: backgroundMessageHandler,
     );
+    return this;
   }
 }
