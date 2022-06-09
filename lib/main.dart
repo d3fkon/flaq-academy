@@ -2,10 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flaq/bindings.dart';
 import 'package:flaq/firebase_options.dart';
 import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/screens/whatIsFrontier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() async {
   Future.delayed(const Duration(milliseconds: 1)).then((value) =>
@@ -27,7 +29,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       initialBinding: AppBindings(),
       debugShowCheckedModeBanner: false,
-      home: Container(color: Colors.black,),
+      home: Container(
+        color: Colors.black,
+      ),
       builder: EasyLoading.init(),
     );
   }

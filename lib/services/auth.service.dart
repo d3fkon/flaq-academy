@@ -25,6 +25,10 @@ class AuthService extends GetxService {
   void onInit() {
     super.onInit();
     _apiService = Get.find<ApiService>();
+    firebaseUser = Rx<User?>(auth.currentUser);
+    debugPrint("Setting up auth service");
+    firebaseUser.bindStream(auth.userChanges());
+    ever(firebaseUser, _setInitialScreen);
   }
 
   @override
