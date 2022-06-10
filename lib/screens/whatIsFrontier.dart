@@ -9,9 +9,9 @@ class WhatIsFrontier extends StatefulWidget {
 }
 
 class _WhatIsFrontierState extends State<WhatIsFrontier> {
-  YoutubePlayerController _controller = YoutubePlayerController(
+  final YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'FLlMfUaE2uo',
-    flags: YoutubePlayerFlags(
+    flags: const YoutubePlayerFlags(
       autoPlay: true,
       mute: true,
     ),
@@ -21,11 +21,11 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
     var customHeight = MediaQuery.of(context).size.height;
     var customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Color(0xFF0E0C0E),
+      backgroundColor: const Color(0xFF0E0C0E),
       body: SafeArea(
           child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: 20,
           ),
           child: Column(
@@ -37,7 +37,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               ),
               InkWell(
                 onTap: () {},
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back_outlined,
                   color: Colors.white,
                 ),
@@ -45,7 +45,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.02,
               ),
-              Align(
+              const Align(
                   alignment: Alignment.topLeft,
                   child: Text.rich(
                     TextSpan(
@@ -63,7 +63,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                           text: 'frontier',
                           style: TextStyle(
                             fontFamily: 'Montserrat',
-                            color: const Color(0xFFa76237),
+                            color: Color(0xFFa76237),
                             fontWeight: FontWeight.w400,
                             fontSize: 24,
                           ),
@@ -83,7 +83,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.02,
               ),
-              Container(
+              SizedBox(
                 height: customHeight * 0.38,
                 child: Container(
                   padding:
@@ -137,7 +137,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.05,
               ),
-              Align(
+              const Align(
                   alignment: Alignment.topLeft,
                   child: Text(
                     'feed your mind',
@@ -151,7 +151,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.01,
               ),
-              Container(
+              SizedBox(
                 width: customWidth * 0.8,
                 child: const Text(
                   'here are some articles for you to read and learn about how the frontier works in depth',
@@ -166,7 +166,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.01,
               ),
-              Container(
+              SizedBox(
                 height: customHeight * 0.26,
                 child: ListView.builder(
                     itemCount: 2,
@@ -198,9 +198,9 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                               SizedBox(
                                 height: customHeight * 0.01,
                               ),
-                              Align(
+                              const Align(
                                 alignment: Alignment.topLeft,
-                                child: const Text(
+                                child: Text(
                                   'frontier and avax',
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
@@ -213,7 +213,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                               SizedBox(
                                 height: customHeight * 0.01,
                               ),
-                              Text(
+                              const Text(
                                 'how does frontier contribute to the avalanche ecosystem',
                                 style: TextStyle(
                                   fontFamily: 'Montserrat',
