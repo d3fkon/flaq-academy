@@ -1,3 +1,5 @@
+import 'package:flaq/screens/about_frontier.dart';
+import 'package:flaq/screens/claim_rewards/claim_rewards.screen.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   late final DataService dataService;
   @override
   void initState() {
@@ -91,15 +93,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     Align(
                                       alignment: Alignment.topLeft,
-                                      child: Obx(() => Text(
-                                            '${dataService.totalFlaqRewarded}',
-                                            style: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 30,
-                                            ),
-                                          )),
+                                      child: Obx(
+                                        () => Text(
+                                          '${dataService.totalFlaqRewarded}',
+                                          style: const TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 30,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 )
@@ -165,12 +169,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(4),
                                 )),
                             onPressed: () {
-                              Get.snackbar(
-                                "Coming Soon",
-                                "Claiming Rewards is coming soon",
-                                backgroundColor: Colors.black,
-                                colorText: Colors.white,
-                              );
+                              Get.to(() => const ClaimRewardsScreen());
+                              // Get.snackbar(
+                              //   "Coming Soon",
+                              //   "Claiming Rewards is coming soon",
+                              //   backgroundColor: Colors.black,
+                              //   colorText: Colors.white,
+                              // );
                             },
                             child: const Text(
                               'claim rewards',
@@ -191,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(
                   height: customHeight * 0.03,
                 ),
-                Container(
+                SizedBox(
                   height: customHeight * 0.26,
                   child: ListView.builder(
                       itemCount: 2,
@@ -280,7 +285,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           fixedSize: Size(customWidth * 0.32,
                                               customHeight * 0.04)),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Get.to(() => const WhatIsFrontier());
+                                      },
                                       child: Row(
                                         children: [
                                           const Text(

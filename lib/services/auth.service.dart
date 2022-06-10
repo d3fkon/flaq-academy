@@ -44,6 +44,8 @@ class AuthService extends GetxService {
     try {
       EasyLoading.show();
       await auth.signInWithEmailAndPassword(email: email, password: password);
+      await _sp.setString(
+          "AUTHKEY", await auth.currentUser?.getIdToken() ?? "");
       debugPrint("Logged In");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

@@ -1,8 +1,40 @@
+import 'package:flaq/services/data.service.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:material_dialogs/material_dialogs.dart';
+import 'package:material_dialogs/widgets/buttons/icon_button.dart';
 
 class Helper {
   static toast(String message) {
     Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_LONG);
+  }
+
+  static showRewardReceipt(String payload) {
+    Dialogs.materialDialog(
+      color: Colors.white,
+      msg: 'you earned $payload flaq',
+      title: 'Congratulations',
+      lottieBuilder: Lottie.asset(
+        'assets/animations/success.json',
+        fit: BoxFit.contain,
+      ),
+      barrierDismissible: false,
+      context: Get.context as BuildContext,
+      actions: [
+        IconsButton(
+          onPressed: () async {
+            await Get.find<DataService>().fetchTransactions();
+            Get.back();
+          },
+          text: 'Claim',
+          iconData: Icons.done,
+          color: Colors.blue,
+          textStyle: const TextStyle(color: Colors.white),
+          iconColor: Colors.white,
+        ),
+      ],
+    );
   }
 
   static String? validateReferralCode(String? value) {

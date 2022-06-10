@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WhatIsFrontier extends StatefulWidget {
@@ -36,7 +37,9 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                 height: customHeight * 0.05,
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  Get.back();
+                },
                 child: const Icon(
                   Icons.arrow_back_outlined,
                   color: Colors.white,

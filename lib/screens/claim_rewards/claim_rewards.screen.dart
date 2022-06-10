@@ -4,21 +4,23 @@ import 'package:flaq/services/data.service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ClaimRewards extends StatefulWidget {
-  const ClaimRewards({Key? key}) : super(key: key);
+class ClaimRewardsScreen extends StatefulWidget {
+  const ClaimRewardsScreen({Key? key}) : super(key: key);
 
   @override
-  State<ClaimRewards> createState() => _ClaimRewardsState();
+  State<ClaimRewardsScreen> createState() => _ClaimRewardsScreenState();
 }
 
-class _ClaimRewardsState extends State<ClaimRewards>
+class _ClaimRewardsScreenState extends State<ClaimRewardsScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   bool walletConnected = false;
+  late final DataService dataService;
 
   @override
   void initState() {
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+    dataService = Get.find();
     super.initState();
   }
 
@@ -49,8 +51,10 @@ class _ClaimRewardsState extends State<ClaimRewards>
                       height: customHeight * 0.06,
                     ),
                     InkWell(
-                      onTap: () {},
-                      child: Align(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: const Align(
                         alignment: Alignment.topLeft,
                         child: Icon(
                           Icons.arrow_back_outlined,
@@ -125,16 +129,19 @@ class _ClaimRewardsState extends State<ClaimRewards>
                               width: customWidth * 0.01,
                             ),
                             Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  '1201.12',
+                              alignment: Alignment.topLeft,
+                              child: Obx(
+                                () => Text(
+                                  '${dataService.totalFlaqRewarded}',
                                   style: const TextStyle(
                                     fontFamily: 'Montserrat',
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 30,
                                   ),
-                                )),
+                                ),
+                              ),
+                            ),
                           ],
                         )
                       ],

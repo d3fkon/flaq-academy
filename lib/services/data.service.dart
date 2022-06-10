@@ -1,5 +1,6 @@
 import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/services/api.service.dart';
+import 'package:flaq/utils/helper.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,7 @@ class DataService extends GetxService {
         await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     final payload = notificationAppLaunchDetails?.payload;
     if (payload != null) {
+      Helper.showRewardReceipt(payload);
       registerTxn(payload);
     }
   }
