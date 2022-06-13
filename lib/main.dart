@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flaq/bindings.dart';
 import 'package:flaq/firebase_options.dart';
-import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
