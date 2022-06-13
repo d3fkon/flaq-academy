@@ -91,12 +91,13 @@ class AuthService extends GetxService {
       Get.offAll(() => const LoginScreen());
       return;
     }
-    // if (user!.isAllowed) {
-    if (true) {
-      Get.offAll(() => const HomeScreen());
-      Get.find<RootService>().navigate();
-      // navigate with the root service
-      return;
+    if (user!.isAllowed) {
+      if (true) {
+        Get.offAll(() => const HomeScreen());
+        Get.find<RootService>().navigate();
+        // navigate with the root service
+        return;
+      }
     }
     if (!user!.isAllowed) {
       Get.offAll(() => const ReferralScreen());

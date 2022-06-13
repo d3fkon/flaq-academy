@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
+import 'package:flaq/screens/auth/referral.dart';
+import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/services/auth.service.dart';
+import 'package:flaq/services/root.service.dart';
+import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 const BASE_URL = "http://52.66.228.64:4000/api/v1";
@@ -65,5 +73,37 @@ class ApiService extends GetConnect implements GetxService {
     final data = TransactionDataResponse.fromJson(res.body).data;
     print(data?.length);
     return data;
+  }
+
+  checkReferralCode(String referralCode) async {
+    EasyLoading.show();
+    debugPrint('Checking Referral Code');
+    final res = await httpClient.post('/user/referral/apply', body: {
+      'referralCode': referralCode,
+    });
+    var jsonData = res.body;
+    debugPrint(jsonData['message']);
+    if (jsonData['statusCode'] != 200) {
+      if (jsonData['message'] != null) {
+        Helper.toast(jsonData['message']);
+      }
+    } else {
+      debugPrint("Referral Code checked successfully");
+      final apiService = Get.find<ApiService>();
+
+      var user = (await apiService.getProfile());
+
+      if (user!.isAllowed) {
+        if (true) {
+          Get.offAll(() => const HomeScreen());
+          Get.find<RootService>().navigate();
+          return;
+        }
+      }
+      if (!user.isAllowed) {
+        Get.offAll(() => const ReferralScreen());
+      }
+    }
+    EasyLoading.dismiss();
   }
 }
