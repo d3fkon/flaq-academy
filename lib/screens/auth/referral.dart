@@ -1,5 +1,11 @@
+import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/services/api.service.dart';
+import 'package:flaq/services/root.service.dart';
+import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ReferralScreen extends StatefulWidget {
   const ReferralScreen({Key? key}) : super(key: key);
@@ -11,6 +17,17 @@ class ReferralScreen extends StatefulWidget {
 class _ReferralScreenState extends State<ReferralScreen> {
   TextEditingController referralController = TextEditingController();
   final GlobalKey<FormState> _referralformKey = GlobalKey<FormState>();
+  final Uri toLaunch =
+      Uri(scheme: 'https', host: 't.me', path: '+pUwD3bO2KAA0NTI1');
+  _launchUrl(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -138,9 +155,10 @@ class _ReferralScreenState extends State<ReferralScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     )),
-                onPressed: () {
+                onPressed: () async {
                   if (_referralformKey.currentState!.validate()) {
-                    // add functionality here
+                    final apiService = Get.find<ApiService>();
+                    await apiService.checkReferralCode(referralController.text);
                   }
                 },
                 child: const Text(
@@ -159,7 +177,9 @@ class _ReferralScreenState extends State<ReferralScreen> {
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () async {
+                    await _launchUrl(toLaunch);
+                  },
                   child: const Text(
                     'no referral code? join our telegram group',
                     style: TextStyle(
