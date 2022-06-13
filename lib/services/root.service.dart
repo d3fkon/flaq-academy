@@ -23,6 +23,12 @@ class RootService extends GetxService with WidgetsBindingObserver {
 
   @override
   onReady() async {
+    EasyLoading.instance.contentPadding = const EdgeInsets.all(0);
+    EasyLoading.instance.indicatorWidget = Image.asset(
+      "assets/images/loading.gif",
+      width: 100,
+      height: 100,
+    );
     if (await (Permission.sms.status).isGranted) {
       isSmsPermissionGranted(true);
     } else {
