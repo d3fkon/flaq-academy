@@ -2,6 +2,8 @@ import 'package:flaq/constants/auth.constants.dart';
 import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/auth/referral.dart';
 import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/screens/notification_approval.screen.dart';
+import 'package:flaq/screens/sms_open_settings.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/helper.dart';
@@ -92,10 +95,24 @@ class AuthService extends GetxService {
       return;
     }
     if (user!.isAllowed) {
-      if (true) {
+      if (await Permission.sms.status.isGranted) {
         Get.offAll(() => const HomeScreen());
+
         Get.find<RootService>().navigate();
         // navigate with the root service
+        return;
+      } else if (await Permission.sms.status.isDenied) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
+        if (permissionAsked) {
+          Get.offAll(() => const SmsOpenSettingsScreen());
+          return;
+        } else {
+          Get.offAll(() => const SmsApprovalScreen());
+          return;
+        }
+      } else if (await Permission.sms.status.isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
         return;
       }
     }

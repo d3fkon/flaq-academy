@@ -1,30 +1,51 @@
+import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
-import 'package:optimize_battery/optimize_battery.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class OpenSettingsScreen extends StatefulWidget {
-  const OpenSettingsScreen({Key? key}) : super(key: key);
+class SmsOpenSettingsScreen extends StatefulWidget {
+  const SmsOpenSettingsScreen({Key? key}) : super(key: key);
 
   @override
-  State<OpenSettingsScreen> createState() => _OpenSettingsScreenState();
+  State<SmsOpenSettingsScreen> createState() => _OpenSettingsScreenState();
 }
 
-class _OpenSettingsScreenState extends State<OpenSettingsScreen>
+class _OpenSettingsScreenState extends State<SmsOpenSettingsScreen>
     with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
-      if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-        Get.find<RootService>().isBatteryOptimizationDisabled(true);
-        Get.find<RootService>().navigate();
+      if (await (Permission.sms.status).isGranted) {
+        Get.find<RootService>().isSmsPermissionGranted(true);
+        await Get.find<RootService>().navigate();
+      }
+      if (await (Permission.sms.status).isDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+        return;
+      }
+      if (await (Permission.sms.status).isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+        return;
       }
     }
     if (state == AppLifecycleState.resumed) {
-      if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-        Get.find<RootService>().isBatteryOptimizationDisabled(true);
-        Get.find<RootService>().navigate();
+      if (await (Permission.sms.status).isGranted) {
+        Get.find<RootService>().isSmsPermissionGranted(true);
+        await Get.find<RootService>().navigate();
+      }
+      if (await (Permission.sms.status).isDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+        return;
+      }
+      if (await (Permission.sms.status).isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+        return;
       }
     }
   }
@@ -71,7 +92,7 @@ class _OpenSettingsScreenState extends State<OpenSettingsScreen>
                       const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
-                          'battery optimizations need to be disabled',
+                          'sms permission need to be enabled',
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             color: Colors.white,
@@ -86,7 +107,7 @@ class _OpenSettingsScreenState extends State<OpenSettingsScreen>
                       const Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: Text(
-                          'flaq is a very lightweight app and doesn\'t require battery optimizations. We require battery optimizations to be disabled to ensure that you earn rewards with no interactions',
+                          'flaq needs access to sms',
                           style: TextStyle(
                             fontFamily: 'Montserrat',
                             color: Colors.white,
@@ -111,10 +132,9 @@ class _OpenSettingsScreenState extends State<OpenSettingsScreen>
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               )),
-                          onPressed: () {
-                            // Get.find<RootService>()
-                            //     .requestBatteryOptimizationDisable();
-                            OptimizeBattery.openBatteryOptimizationSettings();
+                          onPressed: () async {
+                            await openAppSettings();
+                            // Get.find<RootService>().requestSmsPermission();
                           },
                           child: const Text(
                             'take me to settings',
