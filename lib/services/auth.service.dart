@@ -43,22 +43,26 @@ class AuthService extends GetxService {
   }
 
   /// Login the user
-  void login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
       EasyLoading.show();
       await auth.signInWithEmailAndPassword(email: email, password: password);
       await _sp.setString(
           "AUTHKEY", await auth.currentUser?.getIdToken() ?? "");
       debugPrint("Logged In");
+      Helper.toast("logged in");
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        Get.snackbar('Error', 'User not found');
+        Helper.toast("user not found. please sign up to Flaq");
       } else if (e.code == 'wrong-password') {
-        Get.snackbar('Error', 'Incorrect Password');
+        Helper.toast("incorrect password");
       }
+      return false;
     } catch (e) {
       debugPrint("Error logging in ");
-      print(e);
+      Helper.toast("error logging in. please check your network");
+      return false;
     } finally {
       EasyLoading.dismiss();
     }
