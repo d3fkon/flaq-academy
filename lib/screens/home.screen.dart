@@ -2,6 +2,7 @@ import 'package:flaq/screens/about_frontier.dart';
 import 'package:flaq/screens/claim_rewards/claim_rewards.screen.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/data.service.dart';
+import 'package:flaq/services/messaging.service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
       dataService.fetchTransactions();
     });
+    Get.putAsync(() => MessagingService().init());
   }
 
   @override

@@ -1,7 +1,9 @@
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
 import 'package:flaq/screens/open_settings.screen.dart';
+import 'package:flaq/screens/sms_open_settings.dart';
 import 'package:flaq/services/auth.service.dart';
+import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:optimize_battery/optimize_battery.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony/telephony.dart';
 
 class RootService extends GetxService with WidgetsBindingObserver {
@@ -23,12 +26,6 @@ class RootService extends GetxService with WidgetsBindingObserver {
 
   @override
   onReady() async {
-    EasyLoading.instance.contentPadding = const EdgeInsets.all(0);
-    EasyLoading.instance.indicatorWidget = Image.asset(
-      "assets/images/loading.gif",
-      width: 100,
-      height: 100,
-    );
     if (await (Permission.sms.status).isGranted) {
       isSmsPermissionGranted(true);
     } else {
@@ -53,7 +50,13 @@ class RootService extends GetxService with WidgetsBindingObserver {
         return;
       }
     } else {
-      Get.to(() => const SmsApprovalScreen());
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
+      if (!permissionAsked) {
+        Get.to(() => const SmsApprovalScreen());
+      } else {
+        Get.to(() => const SmsOpenSettingsScreen());
+      }
     }
   }
 
@@ -62,6 +65,33 @@ class RootService extends GetxService with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       if (await (Permission.sms.status).isGranted) {
         isSmsPermissionGranted(true);
+        await navigate();
+      }
+      if (await (Permission.sms.status).isDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+      }
+      if (await (Permission.sms.status).isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+      }
+      if (await (Permission.ignoreBatteryOptimizations).isGranted) {
+        isBatteryOptimizationDisabled(true);
+        navigate();
+      }
+    }
+    if (state == AppLifecycleState.paused) {
+      if (await (Permission.sms.status).isGranted) {
+        isSmsPermissionGranted(true);
+        await navigate();
+      }
+      if (await (Permission.sms.status).isDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+      }
+      if (await (Permission.sms.status).isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
       }
       if (await (Permission.ignoreBatteryOptimizations).isGranted) {
         isBatteryOptimizationDisabled(true);
@@ -71,18 +101,46 @@ class RootService extends GetxService with WidgetsBindingObserver {
   }
 
   requestSmsPermission() async {
-    if (!(await telephony.isSmsCapable ?? false)) {
+    if (!(await Telephony.instance.isSmsCapable ?? false)) {
       Helper.toast("Your device does not support SMS");
       return;
     }
-    var permissionGranted = await telephony.requestSmsPermissions;
-    isSmsPermissionGranted(permissionGranted ?? false);
-    if (permissionGranted ?? false) {
-      navigate();
-    } else {
-      Helper.toast("Please enable SMS permission from settings");
-    }
+    // var permissionGranted = await telephony.requestSmsPermissions;
+    // isSmsPermissionGranted(permissionGranted ?? false);
+    // if (permissionGranted == true) {
+    //   navigate();
+    // } else if (permissionGranted == false || permissionGranted == null) {
+    //   Helper.toast("Please enable SMS permission from settings");
+    //   Get.offAll(() => const SmsOpenSettingsScreen());
+    //   debugPrint('navigate to open settings screen');
+    // }
     // Open the "OPEN SETTINGS" screen
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
+      if (permissionAsked == false) {
+        await prefs.setBool('permissionAsked', true);
+        debugPrint('in function');
+        await telephony.requestSmsPermissions;
+      }
+    } catch (e) {
+      Helper.toast('please enable sms permissions');
+    }
+    var permissionGranted = await Permission.sms.status;
+    if (permissionGranted.isPermanentlyDenied) {
+      Get.offAll(() => const SmsOpenSettingsScreen());
+      debugPrint('permanent');
+      return;
+    }
+    if (permissionGranted.isDenied) {
+      Get.offAll(() => const SmsOpenSettingsScreen());
+      debugPrint('denied');
+      return;
+    }
+    if (permissionGranted.isGranted) {
+      isSmsPermissionGranted(true);
+      navigate();
+    }
   }
 
   requestBatteryOptimizationDisable() async {

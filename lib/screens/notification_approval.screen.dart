@@ -1,7 +1,12 @@
+import 'package:flaq/main.dart';
+import 'package:flaq/screens/sms_open_settings.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/instance_manager.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SmsApprovalScreen extends StatefulWidget {
   const SmsApprovalScreen({Key? key}) : super(key: key);
@@ -10,7 +15,42 @@ class SmsApprovalScreen extends StatefulWidget {
   State<SmsApprovalScreen> createState() => _SmsApprovalScreenState();
 }
 
-class _SmsApprovalScreenState extends State<SmsApprovalScreen> {
+class _SmsApprovalScreenState extends State<SmsApprovalScreen>
+    with WidgetsBindingObserver {
+  load() async {
+    await Get.putAsync(() => RootService().init());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      if (await (Permission.sms.status).isGranted) {
+        Get.find<RootService>().isSmsPermissionGranted(true);
+        await Get.find<RootService>().navigate();
+      }
+      if (await (Permission.sms.status).isDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+      }
+      if (await (Permission.sms.status).isPermanentlyDenied) {
+        Get.offAll(() => const SmsOpenSettingsScreen());
+        debugPrint('navigate to open settings screen');
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -82,7 +122,8 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(4),
                               )),
-                          onPressed: () {
+                          onPressed: () async {
+                            await load();
                             Get.find<RootService>().requestSmsPermission();
                           },
                           child: const Text(

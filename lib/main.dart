@@ -26,6 +26,14 @@ const NotificationDetails PLATFORM_CHANNEL_SPECIFICS =
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
+
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
+
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   const AndroidInitializationSettings initializationSettingsAndroid =
