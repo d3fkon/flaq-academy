@@ -129,6 +129,7 @@ class ApiService extends GetConnect implements GetxService {
       }
       if (!user.isAllowed) {
         Get.offAll(() => const ReferralScreen());
+        EasyLoading.dismiss();
         return;
       }
     }
