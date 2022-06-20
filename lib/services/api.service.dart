@@ -4,6 +4,9 @@ import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
 import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/screens/notification_approval.screen.dart';
+import 'package:flaq/screens/open_settings.screen.dart';
+import 'package:flaq/screens/sms_open_settings.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flaq/utils/helper.dart';
@@ -11,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:optimize_battery/optimize_battery.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 const BASE_URL = "http://52.66.228.64:4000/api/v1";
 
@@ -95,13 +101,35 @@ class ApiService extends GetConnect implements GetxService {
 
       if (user!.isAllowed) {
         if (true) {
-          Get.offAll(() => const HomeScreen());
-          Get.find<RootService>().navigate();
-          return;
+          if (await Permission.sms.isGranted) {
+            if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
+              Get.offAll(() => const HomeScreen());
+              EasyLoading.dismiss();
+              return;
+            } else {
+              Get.offAll(() => const OpenSettingsScreen());
+              EasyLoading.dismiss();
+              return;
+            }
+          } else {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+            bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
+            if (!permissionAsked) {
+              Get.offAll(() => const SmsApprovalScreen());
+              EasyLoading.dismiss();
+              return;
+            } else {
+              Get.offAll(() => const SmsOpenSettingsScreen());
+              EasyLoading.dismiss();
+              return;
+            }
+          }
         }
       }
       if (!user.isAllowed) {
         Get.offAll(() => const ReferralScreen());
+        return;
       }
     }
     EasyLoading.dismiss();
