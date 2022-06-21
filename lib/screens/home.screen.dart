@@ -1,5 +1,6 @@
 import 'package:flaq/screens/about_frontier.dart';
 import 'package:flaq/screens/claim_rewards/claim_rewards.screen.dart';
+import 'package:flaq/screens/withdrawFrontierForm.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flaq/services/messaging.service.dart';
@@ -111,36 +112,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 )
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Logout from auth service
-                                  print("Logging out");
-                                  Get.find<AuthService>().logout();
-                                },
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Image.asset('assets/images/icon-2.png'),
-                                    Positioned(
-                                      bottom: 30,
-                                      right: 30,
-                                      child: CircleAvatar(
-                                        radius: 23,
-                                        backgroundColor:
-                                            const Color(0xFF9999A5),
-                                        child: Image.asset(
-                                          'assets/images/icon-1-white.png',
-                                          width: 23,
-                                          height: 23,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 20),
+                            //   child: GestureDetector(
+                            //     onTap: () {
+                            //       // Logout from auth service
+                            //       print("Logging out");
+                            //       Get.find<AuthService>().logout();
+                            //     },
+                            //     child: Stack(
+                            //       clipBehavior: Clip.none,
+                            //       children: [
+                            //         Image.asset('assets/images/icon-2.png'),
+                            //         Positioned(
+                            //           bottom: 30,
+                            //           right: 30,
+                            //           child: CircleAvatar(
+                            //             radius: 23,
+                            //             backgroundColor:
+                            //                 const Color(0xFF9999A5),
+                            //             child: Image.asset(
+                            //               'assets/images/icon-1-white.png',
+                            //               width: 23,
+                            //               height: 23,
+                            //             ),
+                            //           ),
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(
@@ -196,12 +197,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   ),
                 ),
                 SizedBox(
-                  height: customHeight * 0.03,
+                  height: customHeight * 0.022,
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'learn and earn',
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: customHeight * 0.022,
                 ),
                 SizedBox(
                   height: customHeight * 0.26,
                   child: ListView.builder(
-                      itemCount: 2,
+                      itemCount: 3,
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
@@ -211,124 +230,234 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   left: 20, top: 5, bottom: 5, right: 5)
                               : const EdgeInsets.symmetric(
                                   horizontal: 5, vertical: 5),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 20),
-                            width: customWidth * 0.88,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF131212),
-                              border: Border.all(
-                                  color: const Color(0xFF272727), width: 2),
-                            ),
-                            child: Column(
-                              children: [
-                                const Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: 'what is ',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: 'frontier',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Color(0xFFa76237),
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: '?',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                        ],
+                          child: index == 0
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  width: customWidth * 0.88,
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFAC663B),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Row(
+                                            children: [
+                                              const Text(
+                                                'Frontier',
+                                                style: TextStyle(
+                                                  fontFamily: 'Montserrat',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 18,
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: customWidth * 0.02,
+                                              ),
+                                              CircleAvatar(
+                                                radius: 13,
+                                                child: Image.asset(
+                                                    'assets/images/frontier.png'),
+                                              ),
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        height: customHeight * 0.01,
                                       ),
-                                    )),
-                                SizedBox(
-                                  height: customHeight * 0.01,
-                                ),
-                                const Text(
-                                  'Frontier is a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
+                                      const Text(
+                                        'Frontier is a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
+                                        style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: customHeight * 0.01,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary: Colors.white,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                fixedSize: Size(
+                                                    customWidth * 0.42,
+                                                    customHeight * 0.04)),
+                                            onPressed: () {
+                                              Get.to(() =>
+                                                  const WithDrawFrontierForm());
+                                            },
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  'take the quiz',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFFAC663B),
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: customWidth * 0.02,
+                                                ),
+                                                const Icon(
+                                                  Icons.arrow_forward,
+                                                  size: 15,
+                                                  color: Color(0xFFAC663B),
+                                                )
+                                              ],
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        height: customHeight * 0.02,
+                                      ),
+                                      const Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'pass the quiz to claim your reward',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 20),
+                                  width: customWidth * 0.88,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF131212),
+                                    border: Border.all(
+                                        color: const Color(0xFF272727),
+                                        width: 2),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      const Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: 'what is ',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: 'frontier',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Color(0xFFa76237),
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: '?',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                      SizedBox(
+                                        height: customHeight * 0.01,
+                                      ),
+                                      const Text(
+                                        'Frontier is a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
+                                        style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: customHeight * 0.01,
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topLeft,
+                                        child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                primary:
+                                                    const Color(0xFF0E0C0E),
+                                                shape: RoundedRectangleBorder(
+                                                  side: const BorderSide(
+                                                    color: Colors.white,
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                fixedSize: Size(
+                                                    customWidth * 0.32,
+                                                    customHeight * 0.04)),
+                                            onPressed: () {
+                                              Get.to(
+                                                  () => const WhatIsFrontier());
+                                            },
+                                            child: Row(
+                                              children: [
+                                                const Text(
+                                                  'learn more',
+                                                  style: TextStyle(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: customWidth * 0.02,
+                                                ),
+                                                const Icon(
+                                                  Icons.arrow_forward,
+                                                  size: 15,
+                                                )
+                                              ],
+                                            )),
+                                      ),
+                                      SizedBox(
+                                        height: customHeight * 0.02,
+                                      ),
+                                      const Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                          'wallets are an integral part of your Web3 journey',
+                                          style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                SizedBox(
-                                  height: customHeight * 0.01,
-                                ),
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          primary: const Color(0xFF0E0C0E),
-                                          shape: RoundedRectangleBorder(
-                                            side: const BorderSide(
-                                              color: Colors.white,
-                                              width: 1,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          fixedSize: Size(customWidth * 0.32,
-                                              customHeight * 0.04)),
-                                      onPressed: () {
-                                        Get.to(() => const WhatIsFrontier());
-                                      },
-                                      child: Row(
-                                        children: [
-                                          const Text(
-                                            'learn more',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: customWidth * 0.02,
-                                          ),
-                                          const Icon(
-                                            Icons.arrow_forward,
-                                            size: 15,
-                                          )
-                                        ],
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: customHeight * 0.02,
-                                ),
-                                const Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    'wallets are an integral part of your Web3 journey',
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         );
                       }),
                 ),

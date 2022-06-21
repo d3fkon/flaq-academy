@@ -232,7 +232,28 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                     }),
               ),
               SizedBox(
-                height: customHeight * 0.1,
+                height: customHeight * 0.02,
+              ),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      elevation: 0,
+                      fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      )),
+                  onPressed: () {},
+                  child: const Text(
+                    'take the frontier quiz',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  )),
+              SizedBox(
+                height: customHeight * 0.07,
               ),
             ],
           ),
