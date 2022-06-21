@@ -1,3 +1,4 @@
+import 'package:flaq/screens/quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -242,7 +243,9 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4),
                       )),
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => const QuizScreen());
+                  },
                   child: const Text(
                     'take the frontier quiz',
                     style: TextStyle(

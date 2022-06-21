@@ -1,5 +1,6 @@
 import 'package:flaq/screens/about_frontier.dart';
 import 'package:flaq/screens/claim_rewards/claim_rewards.screen.dart';
+import 'package:flaq/screens/quiz.dart';
 import 'package:flaq/screens/withdrawFrontierForm.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/data.service.dart';
@@ -291,8 +292,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                     customWidth * 0.42,
                                                     customHeight * 0.04)),
                                             onPressed: () {
-                                              Get.to(() =>
-                                                  const WithDrawFrontierForm());
+                                              Get.to(() => const QuizScreen());
                                             },
                                             child: Row(
                                               mainAxisAlignment:
