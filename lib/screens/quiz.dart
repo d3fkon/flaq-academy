@@ -1,3 +1,4 @@
+import 'package:flaq/models/questions_model.dart';
 import 'package:flaq/utils/radioListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,14 @@ class _QuizScreenState extends State<QuizScreen> {
   late PageController _controller;
   final ItemScrollController _scrollController = ItemScrollController();
   int count = 0;
-  String? _value;
+  List<String?> _value = [];
 
   @override
   void initState() {
     _controller = PageController(initialPage: 0);
+    for (int i = 0; i < 10; i++) {
+      _value.add('');
+    }
     super.initState();
   }
 
@@ -159,9 +163,9 @@ class _QuizScreenState extends State<QuizScreen> {
                           itemBuilder: (_, i) {
                             return Column(children: [
                               SizedBox(height: customHeight * 0.03),
-                              const Text(
-                                'which exchange/exchanges is frontier on ?',
-                                style: TextStyle(
+                              Text(
+                                quizQuestions[i].question,
+                                style: const TextStyle(
                                   fontFamily: 'Ubuntu',
                                   color: Colors.black,
                                   fontWeight: FontWeight.w500,
@@ -172,80 +176,103 @@ class _QuizScreenState extends State<QuizScreen> {
                                 height: customHeight * 0.02,
                               ),
                               MyRadioListTile<String?>(
-                                value: 'frontier is on binance',
-                                groupValue: _value,
+                                value: quizQuestions[i].option1,
+                                groupValue: _value[i],
                                 leading: 'A',
-                                title: Text(
-                                  'frontier is on binance',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: _value == 'frontier is on binance'
-                                        ? Colors.black
-                                        : const Color(0xFF9999A5),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
+                                title: SizedBox(
+                                  width: customWidth * 0.6,
+                                  child: Text(
+                                    quizQuestions[i].option1,
+                                    style: TextStyle(
+                                      fontFamily: 'Ubuntu',
+                                      color:
+                                          _value[i] == quizQuestions[i].option1
+                                              ? Colors.black
+                                              : const Color(0xFF9999A5),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                                 onChanged: (value) =>
-                                    setState(() => _value = value!),
+                                    setState(() => _value[i] = value!),
                               ),
                               MyRadioListTile<String?>(
-                                value: 'frontier is on binance & coinbase',
-                                groupValue: _value,
+                                value: quizQuestions[i].option2,
+                                groupValue: _value[i],
                                 leading: 'B',
-                                title: Text(
-                                  'frontier is on binance & coinbase',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: _value ==
-                                            'frontier is on binance & coinbase'
-                                        ? Colors.black
-                                        : const Color(0xFF9999A5),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
+                                title: SizedBox(
+                                  width: customWidth * 0.6,
+                                  child: Text(
+                                    quizQuestions[i].option2,
+                                    style: TextStyle(
+                                      fontFamily: 'Ubuntu',
+                                      color:
+                                          _value[i] == quizQuestions[i].option2
+                                              ? Colors.black
+                                              : const Color(0xFF9999A5),
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                                 onChanged: (value) =>
-                                    setState(() => _value = value!),
+                                    setState(() => _value[i] = value!),
                               ),
-                              MyRadioListTile<String?>(
-                                value: 'frontier is on gate.io & huobi global',
-                                groupValue: _value,
-                                leading: 'C',
-                                title: Text(
-                                  'frontier is on gate.io & huobi global',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: _value ==
-                                            'frontier is on gate.io & huobi global'
-                                        ? Colors.black
-                                        : const Color(0xFF9999A5),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                onChanged: (value) =>
-                                    setState(() => _value = value!),
-                              ),
-                              MyRadioListTile<String?>(
-                                value: 'frontier is on kucoin & kraken',
-                                groupValue: _value,
-                                leading: 'D',
-                                title: Text(
-                                  'frontier is on kucoin & kraken',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: _value ==
-                                            'frontier is on kucoin & kraken'
-                                        ? Colors.black
-                                        : const Color(0xFF9999A5),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                onChanged: (value) =>
-                                    setState(() => _value = value!),
-                              ),
+                              quizQuestions[i].option3 != ''
+                                  ? MyRadioListTile<String?>(
+                                      value: quizQuestions[i].option3,
+                                      groupValue: _value[i],
+                                      leading: 'C',
+                                      title: SizedBox(
+                                        width: customWidth * 0.6,
+                                        child: Text(
+                                          quizQuestions[i].option3,
+                                          style: TextStyle(
+                                            fontFamily: 'Ubuntu',
+                                            color: _value[i] ==
+                                                    quizQuestions[i].option3
+                                                ? Colors.black
+                                                : const Color(0xFF9999A5),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) =>
+                                          setState(() => _value[i] = value!),
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    ),
+                              quizQuestions[i].option4 != ''
+                                  ? MyRadioListTile<String?>(
+                                      value: quizQuestions[i].option4,
+                                      groupValue: _value[i],
+                                      leading: 'D',
+                                      title: SizedBox(
+                                        width: customWidth * 0.6,
+                                        child: Text(
+                                          quizQuestions[i].option4,
+                                          style: TextStyle(
+                                            fontFamily: 'Ubuntu',
+                                            color: _value[i] ==
+                                                    quizQuestions[i].option4
+                                                ? Colors.black
+                                                : const Color(0xFF9999A5),
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) =>
+                                          setState(() => _value[i] = value!),
+                                    )
+                                  : const SizedBox(
+                                      height: 0,
+                                      width: 0,
+                                    ),
                             ]);
                           },
                         ),

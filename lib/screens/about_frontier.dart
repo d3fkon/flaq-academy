@@ -1,3 +1,5 @@
+import 'package:flaq/models/article_model.dart';
+import 'package:flaq/screens/article.dart';
 import 'package:flaq/screens/quiz.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,7 +14,7 @@ class WhatIsFrontier extends StatefulWidget {
 
 class _WhatIsFrontierState extends State<WhatIsFrontier> {
   final YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: 'FLlMfUaE2uo',
+    initialVideoId: 'eZI95CU3iSE',
     flags: const YoutubePlayerFlags(
       autoPlay: true,
       mute: true,
@@ -173,7 +175,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               SizedBox(
                 height: customHeight * 0.26,
                 child: ListView.builder(
-                    itemCount: 2,
+                    itemCount: article.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -183,50 +185,62 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                                 left: 0, top: 5, bottom: 5, right: 5)
                             : const EdgeInsets.symmetric(
                                 horizontal: 5, vertical: 5),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          width: customWidth * 0.5,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                                color: const Color(0xFF272727), width: 2),
-                          ),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Image.asset(
-                                  'assets/images/book.PNG',
+                        child: InkWell(
+                          onTap: () {
+                            Get.to(() => ArticleScreen(
+                                  title: article[index].title,
+                                  content: article[index].content,
+                                ));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 20),
+                            width: customWidth * 0.5,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: const Color(0xFF272727), width: 2),
+                            ),
+                            child: Column(
+                              children: [
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: Image.asset(
+                                    'assets/images/book.PNG',
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: customHeight * 0.01,
-                              ),
-                              const Align(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                  'frontier and avax',
+                                SizedBox(
+                                  height: customHeight * 0.01,
+                                ),
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    article[index].title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: customHeight * 0.01,
+                                ),
+                                Text(
+                                  article[index].content,
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: 'Montserrat',
                                     color: Colors.white,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 16,
+                                    fontSize: 14,
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: customHeight * 0.01,
-                              ),
-                              const Text(
-                                'how does frontier contribute to the avalanche ecosystem',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       );
