@@ -16,7 +16,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
   final YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: 'eZI95CU3iSE',
     flags: const YoutubePlayerFlags(
-      autoPlay: true,
+      autoPlay: false,
       mute: true,
     ),
   );

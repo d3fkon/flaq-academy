@@ -295,8 +295,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                       customWidth * 0.42,
                                                       customHeight * 0.04)),
                                               onPressed: () {
-                                                Get.to(
-                                                    () => const QuizScreen());
+                                                Get.to(() =>
+                                                    const WhatIsFrontier());
                                               },
                                               child: Row(
                                                 mainAxisAlignment:
@@ -420,7 +420,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                                     0.04)),
                                                     onPressed: () {
                                                       Get.to(() =>
-                                                          const QuizScreen());
+                                                          const WhatIsFrontier());
                                                     },
                                                     child: const Text(
                                                       'use 800 flaq',
