@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
+import 'package:flaq/screens/dashboard.dart';
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
 import 'package:flaq/screens/open_settings.screen.dart';
@@ -103,7 +104,7 @@ class ApiService extends GetConnect implements GetxService {
         if (true) {
           if (await Permission.sms.isGranted) {
             if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-              Get.offAll(() => const HomeScreen());
+              Get.offAll(() => const DashBoard());
               EasyLoading.dismiss();
               return;
             } else {

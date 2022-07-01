@@ -1,3 +1,4 @@
+import 'package:flaq/screens/dashboard.dart';
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
 import 'package:flaq/screens/open_settings.screen.dart';
@@ -44,7 +45,7 @@ class RootService extends GetxService with WidgetsBindingObserver {
   navigate() async {
     if (isSmsPermissionGranted.value) {
       if (isBatteryOptimizationDisabled.value) {
-        Get.to(() => const HomeScreen());
+        Get.to(() => const DashBoard());
       } else {
         Get.to(() => const OpenSettingsScreen());
         return;
