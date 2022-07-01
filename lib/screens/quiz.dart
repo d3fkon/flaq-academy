@@ -1,4 +1,5 @@
 import 'package:flaq/models/questions_model.dart';
+import 'package:flaq/screens/quizResult.dart';
 import 'package:flaq/utils/radioListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -359,7 +360,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                   score++;
                                 }
                               }
-                              debugPrint(score.toString());
+                              Get.to(() => QuizResultScreen(score: score));
                             },
                             child: const Text(
                               'next',

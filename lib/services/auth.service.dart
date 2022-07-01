@@ -1,6 +1,7 @@
 import 'package:flaq/constants/auth.constants.dart';
 import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/auth/referral.dart';
+import 'package:flaq/screens/dashboard.dart';
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
 import 'package:flaq/screens/sms_open_settings.dart';
@@ -100,7 +101,7 @@ class AuthService extends GetxService {
     }
     if (user!.isAllowed) {
       if (await Permission.sms.status.isGranted) {
-        Get.offAll(() => const HomeScreen());
+        Get.offAll(() => const DashBoard());
 
         Get.find<RootService>().navigate();
         // navigate with the root service
