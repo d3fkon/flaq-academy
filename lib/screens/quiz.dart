@@ -17,6 +17,7 @@ class _QuizScreenState extends State<QuizScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
   int count = 0;
   List<String?> _value = [];
+  int score = 0;
 
   @override
   void initState() {
@@ -24,6 +25,7 @@ class _QuizScreenState extends State<QuizScreen> {
     for (int i = 0; i < 10; i++) {
       _value.add('');
     }
+    score = 0;
     super.initState();
   }
 
@@ -347,7 +349,18 @@ class _QuizScreenState extends State<QuizScreen> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 )),
-                            onPressed: () {},
+                            onPressed: () {
+                              setState(() {
+                                score = 0;
+                              });
+                              for (int i = 0; i < _value.length; i++) {
+                                if (_value[i] ==
+                                    quizQuestions[i].correctOption) {
+                                  score++;
+                                }
+                              }
+                              debugPrint(score.toString());
+                            },
                             child: const Text(
                               'next',
                               style: TextStyle(

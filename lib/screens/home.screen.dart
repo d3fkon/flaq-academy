@@ -422,17 +422,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                       Get.to(() =>
                                                           const WhatIsFrontier());
                                                     },
-                                                    child: const Text(
-                                                      'use 800 flaq',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontSize: 12,
-                                                      ),
-                                                    )),
+                                                    child: Obx(() => Text(
+                                                          'use ${dataService.totalFlaqRewarded} flaq',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            color: Colors.black,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ))),
                                               ],
                                             ),
                                     ],
