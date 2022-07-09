@@ -1,3 +1,4 @@
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +16,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
-    var customWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xFF0E0C0E),
       body: SafeArea(
@@ -28,21 +28,17 @@ class _ArticleScreenState extends State<ArticleScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: customHeight * 0.05,
-                  ),
+                  verticalSpace(customHeight * 0.05),
                   InkWell(
                     onTap: () {
                       Get.back();
                     },
-                    child: const Icon(
+                    child: customIcon(
                       Icons.arrow_back_outlined,
-                      color: Colors.white,
+                      Colors.white,
                     ),
                   ),
-                  SizedBox(
-                    height: customHeight * 0.03,
-                  ),
+                  verticalSpace(customHeight * 0.03),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
@@ -52,41 +48,29 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     ),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: customHeight * 0.03,
-                        ),
+                        verticalSpace(customHeight * 0.03),
                         Align(
                           alignment: Alignment.topLeft,
-                          child: Text(
+                          child: text(
                             widget.title,
-                            style: const TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 22,
-                            ),
+                            FontWeight.w400,
+                            22,
+                            Colors.white,
                           ),
                         ),
-                        SizedBox(
-                          height: customHeight * 0.03,
-                        ),
+                        verticalSpace(customHeight * 0.03),
                         Align(
                           alignment: Alignment.topLeft,
                           child: SizedBox(
-                            child: Text(
+                            child: text(
                               widget.content,
-                              style: const TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Color(0xFFB9B9B9),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
+                              FontWeight.w500,
+                              16,
+                              const Color(0xFFB9B9B9),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: customHeight * 0.05,
-                        ),
+                        verticalSpace(customHeight * 0.05),
                       ],
                     ),
                   ),

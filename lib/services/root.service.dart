@@ -45,18 +45,18 @@ class RootService extends GetxService with WidgetsBindingObserver {
   navigate() async {
     if (isSmsPermissionGranted.value) {
       if (isBatteryOptimizationDisabled.value) {
-        Get.to(() => const DashBoard());
+        Get.offAll(() => const DashBoard());
       } else {
-        Get.to(() => const OpenSettingsScreen());
+        Get.offAll(() => const OpenSettingsScreen());
         return;
       }
     } else {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
       if (!permissionAsked) {
-        Get.to(() => const SmsApprovalScreen());
+        Get.offAll(() => const SmsApprovalScreen());
       } else {
-        Get.to(() => const SmsOpenSettingsScreen());
+        Get.offAll(() => const SmsOpenSettingsScreen());
       }
     }
   }

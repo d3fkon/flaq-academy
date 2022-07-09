@@ -12,7 +12,7 @@ class DataService extends GetxService {
   get totalFlaqRewarded {
     var total = 0.0;
     for (var txn in _txnList.value) {
-      total += double.parse(txn.rewardFlaq ?? '0');
+      total += double.parse(txn.flaqReward.toString());
     }
     return total;
   }

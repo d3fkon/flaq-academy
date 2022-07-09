@@ -1,3 +1,4 @@
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 
 class BountiesScreen extends StatefulWidget {
@@ -8,6 +9,54 @@ class BountiesScreen extends StatefulWidget {
 }
 
 class _BountiesScreenState extends State<BountiesScreen> {
+  Widget circleAvatar(
+    double radius,
+    Color color,
+    Widget child,
+  ) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: color,
+      child: child,
+    );
+  }
+
+  Widget italicText(
+    String content,
+    FontWeight fontweight,
+    double fontsize,
+    Color textcolor,
+  ) {
+    return Text(
+      content,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: fontweight,
+        fontSize: fontsize,
+        color: textcolor,
+        fontStyle: FontStyle.italic,
+      ),
+    );
+  }
+
+  Widget bountyButton(
+    Widget child,
+    VoidCallback onPressed,
+    Color color,
+    double borderRadius,
+  ) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: color,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
+          )),
+      onPressed: onPressed,
+      child: child,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -24,69 +73,50 @@ class _BountiesScreenState extends State<BountiesScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: customHeight * 0.07,
-                ),
+                verticalSpace(customHeight * 0.07),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    text(
                       'flaq bounties',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
+                      FontWeight.w500,
+                      20,
+                      Colors.white,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5),
                       child: GestureDetector(
                         onTap: () {},
-                        child: const CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Color(0xFF9999A5),
-                          child: Icon(
+                        child: circleAvatar(
+                          12,
+                          const Color(0xFF9999A5),
+                          customIcon(
                             Icons.person,
+                            Colors.black,
                             size: 18,
-                            color: Colors.black,
                           ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: customHeight * 0.03,
-                ),
-                Image.asset('assets/images/bounties.png'),
-                SizedBox(
-                  height: customHeight * 0.015,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.03),
+                showAssetImage('assets/images/bounties.png'),
+                verticalSpace(customHeight * 0.015),
+                text(
                   'do bounties earn crypto',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFF9999A5),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
+                  FontWeight.w400,
+                  14,
+                  const Color(0xFF9999A5),
                 ),
-                SizedBox(
-                  height: customHeight * 0.01,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.01),
+                text(
                   'find opportunities and join us on this web3 journey.',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                  ),
+                  FontWeight.w500,
+                  20,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 SizedBox(
                   width: customWidth,
                   child: ListView.builder(
@@ -117,103 +147,65 @@ class _BountiesScreenState extends State<BountiesScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text(
+                                              text(
                                                 'frontier',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                ),
+                                                FontWeight.w500,
+                                                18,
+                                                Colors.black,
                                               ),
-                                              CircleAvatar(
-                                                radius: 13,
-                                                child: Image.asset(
+                                              circleAvatar(
+                                                13,
+                                                Colors.transparent,
+                                                showAssetImage(
                                                     'assets/images/frontier.png'),
                                               ),
                                             ],
                                           )),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
-                                      const Text(
+                                      verticalSpace(customHeight * 0.01),
+                                      text(
                                         'write a wallet introduction script for frontier wallet with emphasis on NFTS',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
+                                        FontWeight.w500,
+                                        12,
+                                        Colors.black,
                                       ),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
+                                      verticalSpace(customHeight * 0.01),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
-                                              ElevatedButton(
-                                                  onPressed: () {},
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    primary:
-                                                        const Color(0xFFAC663B),
-                                                  ),
-                                                  child: const Text('research',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))),
-                                              SizedBox(
-                                                width: customWidth * 0.02,
+                                              bountyButton(
+                                                text(
+                                                  'research',
+                                                  FontWeight.w400,
+                                                  12,
+                                                  Colors.white,
+                                                ),
+                                                () {},
+                                                const Color(0xFFAC663B),
+                                                20,
                                               ),
-                                              ElevatedButton(
-                                                  onPressed: () {},
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    primary:
-                                                        const Color(0xFFAC663B),
-                                                  ),
-                                                  child: const Text('writing',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))),
+                                              horizontalSpace(
+                                                  customWidth * 0.02),
+                                              bountyButton(
+                                                text(
+                                                  'writing',
+                                                  FontWeight.w400,
+                                                  12,
+                                                  Colors.white,
+                                                ),
+                                                () {},
+                                                const Color(0xFFAC663B),
+                                                20,
+                                              ),
                                             ],
                                           ),
-                                          const Text(
+                                          italicText(
                                             '\$1000',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16,
-                                              fontStyle: FontStyle.italic,
-                                            ),
+                                            FontWeight.w600,
+                                            16,
+                                            Colors.black,
                                           )
                                         ],
                                       ),
@@ -234,105 +226,66 @@ class _BountiesScreenState extends State<BountiesScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text(
+                                              text(
                                                 'filecoin',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                ),
+                                                FontWeight.w500,
+                                                18,
+                                                Colors.black,
                                               ),
-                                              CircleAvatar(
-                                                radius: 13,
-                                                backgroundColor: Colors.white,
-                                                child: Image.asset(
+                                              circleAvatar(
+                                                13,
+                                                Colors.white,
+                                                showAssetImage(
                                                     'assets/images/filecoin-blue.png'),
                                               ),
                                             ],
                                           )),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
-                                      const Text(
+                                      verticalSpace(customHeight * 0.01),
+                                      text(
                                         'filecoin landing page redesign with branding focused on green change',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
+                                        FontWeight.w500,
+                                        12,
+                                        Colors.black,
                                       ),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
+                                      verticalSpace(customHeight * 0.01),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
-                                              ElevatedButton(
-                                                  onPressed: () {},
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    primary:
-                                                        const Color(0xFF0090FF),
-                                                  ),
-                                                  child: const Text('research',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))),
-                                              SizedBox(
-                                                width: customWidth * 0.02,
+                                              bountyButton(
+                                                text(
+                                                  'research',
+                                                  FontWeight.w400,
+                                                  12,
+                                                  Colors.white,
+                                                ),
+                                                () {},
+                                                Colors.blue,
+                                                20,
                                               ),
-                                              ElevatedButton(
-                                                  onPressed: () {},
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    elevation: 0,
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    primary:
-                                                        const Color(0xFF0090FF),
-                                                  ),
-                                                  child: const Text('writing',
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            'Montserrat',
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        fontSize: 12,
-                                                      ))),
+                                              horizontalSpace(
+                                                  customWidth * 0.02),
+                                              bountyButton(
+                                                text(
+                                                  'writing',
+                                                  FontWeight.w400,
+                                                  12,
+                                                  Colors.white,
+                                                ),
+                                                () {},
+                                                Colors.blue,
+                                                20,
+                                              ),
                                             ],
                                           ),
-                                          const Text(
+                                          italicText(
                                             '\$1000',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          )
+                                            FontWeight.w600,
+                                            16,
+                                            Colors.black,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -341,9 +294,7 @@ class _BountiesScreenState extends State<BountiesScreen> {
                         );
                       }),
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
               ],
             ),
           ),

@@ -1,5 +1,8 @@
+import 'package:flaq/screens/auth/signup.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
 class AddNewPassword extends StatefulWidget {
   const AddNewPassword({Key? key}) : super(key: key);
@@ -20,18 +23,6 @@ class _AddNewPasswordState extends State<AddNewPassword> {
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
     var customWidth = MediaQuery.of(context).size.width;
-    Widget _text(String content, FontWeight fontweight, double fontsize,
-        Color textcolor) {
-      return Text(
-        content,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: fontweight,
-          fontSize: fontsize,
-          color: textcolor,
-        ),
-      );
-    }
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
@@ -42,179 +33,47 @@ class _AddNewPasswordState extends State<AddNewPassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: customHeight * 0.1,
-              ),
-              _text(
+              verticalSpace(customHeight * 0.1),
+              text(
                 'forgot password',
                 FontWeight.w500,
                 20,
                 Colors.white,
               ),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
-              _text(
+              verticalSpace(customHeight * 0.02),
+              text(
                 'reset your password',
                 FontWeight.w400,
                 14,
                 const Color(0xFF9999A5),
               ),
-              SizedBox(
-                height: customHeight * 0.06,
-              ),
+              verticalSpace(customHeight * 0.06),
               Form(
                 key: _passwordchangeformKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: newPasswordController,
-                      cursorColor: Colors.white,
-                      obscureText: true,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'new password',
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF9999A5),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                        fillColor: const Color(0xFF1A1A1A),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                      ),
-                      validator:
-                          RequiredValidator(errorText: 'password is required'),
-                    ),
-                    SizedBox(
-                      height: customHeight * 0.04,
-                    ),
-                    TextFormField(
-                      controller: confirmPasswordController,
-                      cursorColor: Colors.white,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                      ),
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'confirm password',
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF9999A5),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                        fillColor: const Color(0xFF1A1A1A),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                      ),
-                      validator:
-                          RequiredValidator(errorText: 'password is required'),
+                    formField(
+                        newPasswordController,
+                        TextInputType.text,
+                        'new password',
+                        RequiredValidator(errorText: 'password is required'),
+                        true),
+                    verticalSpace(customHeight * 0.04),
+                    formField(
+                      confirmPasswordController,
+                      TextInputType.text,
+                      'confirm password',
+                      RequiredValidator(errorText: 'password is required'),
+                      true,
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
+              verticalSpace(customHeight * 0.05),
               passwordLengthError
                   ? Align(
                       alignment: Alignment.center,
-                      child: _text(
+                      child: text(
                         'passwords must be at least 8 characters in length',
                         FontWeight.w400,
                         10,
@@ -228,7 +87,7 @@ class _AddNewPasswordState extends State<AddNewPassword> {
               !matchingPasswords
                   ? Align(
                       alignment: Alignment.center,
-                      child: _text(
+                      child: text(
                         'passwords do not match, please try again',
                         FontWeight.w400,
                         10,
@@ -239,18 +98,12 @@ class _AddNewPasswordState extends State<AddNewPassword> {
                       height: 0,
                       width: 0,
                     ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    elevation: 0,
-                    fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    )),
-                onPressed: () {
+              verticalSpace(customHeight * 0.05),
+              customButton(
+                customHeight * 0.06,
+                customWidth * 0.9,
+                text('reset password', FontWeight.w700, 14, Colors.black),
+                () {
                   if (newPasswordController.text.length >= 8 &&
                       confirmPasswordController.text.length >= 8) {
                     setState(() {
@@ -275,74 +128,50 @@ class _AddNewPasswordState extends State<AddNewPassword> {
                     });
                   }
                 },
-                child: const Text(
-                  'reset password',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-                ),
+                Colors.white,
+                4,
               ),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
+              verticalSpace(customHeight * 0.02),
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
-                  onTap: () {},
-                  child: const Text(
+                  onTap: () {
+                    Get.offAll(() => const SignUp());
+                  },
+                  child: textWithUnderline(
                     'new user? sign up',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Color(0xFF9999A5),
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      fontSize: 12,
-                    ),
+                    FontWeight.w700,
+                    12,
+                    const Color(0xFF9999A5),
                   ),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.2,
-              ),
-              const Text.rich(
+              verticalSpace(customHeight * 0.2),
+              Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
-                      text: 'by signing up you agree to our ',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                      ),
+                    textSpan(
+                      'by signing up you agree to our ',
+                      FontWeight.w400,
+                      10,
+                      Colors.white,
                     ),
-                    TextSpan(
-                      text:
-                          'terms of use, privacy policy, information collection,',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Color(0xFF363664),
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
-                        fontSize: 10,
-                      ),
+                    textSpanWithUnderline(
+                      'terms of use, privacy policy, information collection,',
+                      FontWeight.w400,
+                      10,
+                      const Color(0xFF363664),
                     ),
-                    TextSpan(
-                      text: 'and that you are over 18 years old',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                      ),
+                    textSpan(
+                      'and that you are over 18 years old',
+                      FontWeight.w400,
+                      10,
+                      Colors.white,
                     ),
                   ],
                 ),
                 textAlign: TextAlign.center,
-              )
+              ),
             ],
           ),
         ),

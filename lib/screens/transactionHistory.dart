@@ -1,6 +1,7 @@
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flaq/services/messaging.service.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,50 +41,42 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: customHeight * 0.05,
-                ),
+                verticalSpace(customHeight * 0.05),
                 InkWell(
                   onTap: () {
                     Get.back();
                   },
-                  child: const Icon(
+                  child: customIcon(
                     Icons.arrow_back_outlined,
-                    color: Colors.white,
+                    Colors.white,
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        text(
                           'transactions',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(),
+                          FontWeight.w400,
+                          18,
+                          Colors.white,
                         ),
                         IconButton(
                           onPressed: dataService.fetchTransactions,
-                          icon: const Icon(Icons.refresh, color: Colors.white),
+                          icon: customIcon(
+                            Icons.refresh,
+                            Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.015,
-                ),
+                verticalSpace(customHeight * 0.015),
                 Obx(
                   () => Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -94,115 +87,88 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                         itemCount: dataService.txnList.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: customHeight * 0.075,
-                                        width: customWidth * 0.15,
-                                        padding: EdgeInsets.all(15),
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xFF1A1A1A),
-                                            border: Border.all(
-                                                color: const Color(0xFF000000),
-                                                width: 1),
-                                            borderRadius:
-                                                BorderRadius.circular(8)),
-                                        child: Image.asset(
-                                            'assets/images/transactions.png'),
-                                      ),
-                                      SizedBox(
-                                        width: customWidth * 0.02,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text(
-                                            'Flaq earned',
-                                            style: TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Color(0xFF9999A5),
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: customHeight * 0.01,
-                                          ),
-                                          Text(
-                                            '${dataService.txnList[index].rewardFlaq} Flaq',
-                                            style: const TextStyle(
-                                              fontFamily: 'Montserrat',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '- \u{20B9}${dataService.txnList[index].amount}',
-                                        style: const TextStyle(
-                                          fontFamily: 'WorkSans',
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      height: customHeight * 0.075,
+                                      width: customWidth * 0.15,
+                                      padding: const EdgeInsets.all(15),
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFF1A1A1A),
+                                          border: Border.all(
+                                              color: const Color(0xFF000000),
+                                              width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
+                                      child: showAssetImage(
+                                          'assets/images/transactions.png'),
+                                    ),
+                                    horizontalSpace(customWidth * 0.02),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        text(
+                                          'Flaq earned',
+                                          FontWeight.w400,
+                                          14,
+                                          const Color(0xFF9999A5),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
-                                      Text(
-                                        formatDate(DateTime.parse(dataService
-                                            .txnList[index].createdAt)),
-                                        style: const TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Color(0xFF9999A5),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
+                                        verticalSpace(customHeight * 0.01),
+                                        text(
+                                          '${dataService.txnList[index].flaqReward} Flaq',
+                                          FontWeight.w400,
+                                          14,
+                                          Colors.white,
                                         ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    textWorkSans(
+                                      '- \u{20B9}${dataService.txnList[index].amount}',
+                                      FontWeight.w400,
+                                      14,
+                                      Colors.white,
+                                    ),
+                                    verticalSpace(customHeight * 0.01),
+                                    text(
+                                      formatDate(DateTime.parse(dataService
+                                          .txnList[index].createdAt
+                                          .toString())),
+                                      FontWeight.w400,
+                                      12,
+                                      const Color(0xFF9999A5),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                           );
                         }),
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 InkWell(
                   onTap: () {},
-                  child: const Align(
+                  child: Align(
                     alignment: Alignment.center,
-                    child: Text(
+                    child: text(
                       'see more',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                      ),
+                      FontWeight.w500,
+                      14,
+                      Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.05,
-                ),
+                verticalSpace(customHeight * 0.05),
               ],
             ),
           ),

@@ -1,12 +1,9 @@
-import 'package:flaq/main.dart';
 import 'package:flaq/screens/sms_open_settings.dart';
-import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/instance_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SmsApprovalScreen extends StatefulWidget {
   const SmsApprovalScreen({Key? key}) : super(key: key);
@@ -76,93 +73,64 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
-                        height: customHeight * 0.06,
-                      ),
-                      const Align(
+                      verticalSpace(customHeight * 0.06),
+                      Align(
                         alignment: Alignment.topLeft,
-                        child: Text(
+                        child: text(
                           'Flaq requires your\napproval for messages',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                          ),
+                          FontWeight.w400,
+                          18,
+                          Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        height: customHeight * 0.03,
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: Text(
+                      verticalSpace(customHeight * 0.03),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: text(
                           'flaq application rewards you for every payment you make, which are detected using messages',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
+                          FontWeight.w500,
+                          12,
+                          Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        height: customHeight * 0.05,
+                      verticalSpace(customHeight * 0.05),
+                      showAssetImage('assets/images/give-approval.png'),
+                      verticalSpace(customHeight * 0.05),
+                      customButton(
+                        customHeight * 0.06,
+                        customWidth * 0.85,
+                        text(
+                          'give approval',
+                          FontWeight.w700,
+                          14,
+                          Colors.black,
+                        ),
+                        () async {
+                          await load();
+                          Get.find<RootService>().requestSmsPermission();
+                        },
+                        Colors.white,
+                        4,
                       ),
-                      Image.asset('assets/images/give-approval.png'),
-                      SizedBox(
-                        height: customHeight * 0.05,
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              elevation: 0,
-                              fixedSize:
-                                  Size(customWidth * 0.85, customHeight * 0.06),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4),
-                              )),
-                          onPressed: () async {
-                            await load();
-                            Get.find<RootService>().requestSmsPermission();
-                          },
-                          child: const Text(
-                            'give approval',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          )),
-                      SizedBox(
-                        height: customHeight * 0.035,
-                      ),
+                      verticalSpace(customHeight * 0.035),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.03,
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+              verticalSpace(customHeight * 0.03),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Align(
                   alignment: Alignment.topLeft,
-                  child: Text(
+                  child: text(
                     'faqs',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                    ),
+                    FontWeight.w400,
+                    18,
+                    Colors.white,
                   ),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
+              verticalSpace(customHeight * 0.02),
               Container(
                 height: customHeight * 0.21,
                 child: ListView.builder(
@@ -172,9 +140,10 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: index == 0
-                            ? EdgeInsets.only(
+                            ? const EdgeInsets.only(
                                 left: 20, top: 5, bottom: 5, right: 5)
-                            : EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            : const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 5),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 20),
@@ -186,43 +155,30 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
                           ),
                           child: Column(
                             children: [
-                              const Align(
+                              Align(
                                 alignment: Alignment.topLeft,
-                                child: Text(
+                                child: text(
                                   'how does flaq work?',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 18,
-                                  ),
+                                  FontWeight.w400,
+                                  18,
+                                  Colors.white,
                                 ),
                               ),
-                              SizedBox(
-                                height: customHeight * 0.01,
-                              ),
-                              const Text(
+                              verticalSpace(customHeight * 0.01),
+                              text(
                                 'flaq application rewards you for every payment you make, which are detected using messages',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                ),
+                                FontWeight.w500,
+                                12,
+                                Colors.white,
                               ),
-                              SizedBox(
-                                height: customHeight * 0.04,
-                              ),
-                              const Align(
+                              verticalSpace(customHeight * 0.04),
+                              Align(
                                 alignment: Alignment.topLeft,
-                                child: Text(
+                                child: text(
                                   'wallets are an integral part of your Web3 journey',
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 10,
-                                  ),
+                                  FontWeight.w500,
+                                  10,
+                                  Colors.white,
                                 ),
                               ),
                             ],
@@ -231,9 +187,7 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
                       );
                     }),
               ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
+              verticalSpace(customHeight * 0.05),
             ],
           ),
         ),

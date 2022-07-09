@@ -1,3 +1,4 @@
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -14,6 +15,57 @@ class QuizResultScreen extends StatefulWidget {
 }
 
 class _QuizResultScreenState extends State<QuizResultScreen> {
+  Widget circleAvatar(
+    double radius,
+    Color color,
+    Widget child,
+  ) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: color,
+      child: child,
+    );
+  }
+
+  Widget textCenter(
+      String content, FontWeight fontweight, double fontsize, Color textcolor) {
+    return Text(
+      content,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: fontweight,
+        fontSize: fontsize,
+        color: textcolor,
+      ),
+      textAlign: TextAlign.center,
+    );
+  }
+
+  Widget scoreDisplay(
+    Color progressColor,
+  ) {
+    return CircularPercentIndicator(
+      radius: 130.0,
+      animation: true,
+      animationDuration: 800,
+      lineWidth: 5.0,
+      percent: (widget.score / 10),
+      center: circleAvatar(
+        110,
+        const Color(0xFFECF0F3),
+        text(
+          '${widget.score}/10',
+          FontWeight.w700,
+          40,
+          progressColor,
+        ),
+      ),
+      circularStrokeCap: CircularStrokeCap.butt,
+      backgroundColor: Colors.black,
+      progressColor: progressColor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -26,9 +78,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: customHeight * 0.07,
-              ),
+              verticalSpace(customHeight * 0.07),
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -43,182 +93,101 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                           onTap: () {
                             Get.back();
                           },
-                          child: const Icon(
+                          child: customIcon(
                             Icons.arrow_back_outlined,
-                            color: Colors.white,
+                            Colors.white,
                           ),
                         ),
-                        SizedBox(
-                          width: customWidth * 0.025,
-                        ),
-                        const Text.rich(
+                        verticalSpace(customHeight * 0.035),
+                        Text.rich(
                           TextSpan(children: [
-                            TextSpan(
-                              text: 'frontier ',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Color(0xFFa76237),
-                                fontWeight: FontWeight.w400,
-                                fontSize: 24,
-                              ),
+                            textSpan(
+                              'frontier',
+                              FontWeight.w400,
+                              24,
+                              const Color(0xFFa76237),
                             ),
-                            TextSpan(
-                              text: 'quiz?',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 24,
-                              ),
+                            textSpan(
+                              'quiz?',
+                              FontWeight.w400,
+                              24,
+                              Colors.white,
                             ),
                           ]),
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: customHeight * 0.12,
-                    ),
+                    verticalSpace(customHeight * 0.12),
                     widget.score < 9
-                        ? CircularPercentIndicator(
-                            radius: 130.0,
-                            animation: true,
-                            animationDuration: 800,
-                            lineWidth: 5.0,
-                            percent: (widget.score / 10),
-                            center: CircleAvatar(
-                              radius: 110,
-                              backgroundColor: const Color(0xFFECF0F3),
-                              child: Text(
-                                '${widget.score}/10',
-                                style: const TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFFDB4437),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 40,
-                                ),
-                              ),
-                            ),
-                            circularStrokeCap: CircularStrokeCap.butt,
-                            backgroundColor: Colors.black,
-                            progressColor: const Color(0xFFDB4437),
+                        ? scoreDisplay(
+                            const Color(0xFFDB4437),
                           )
-                        : CircularPercentIndicator(
-                            radius: 130.0,
-                            animation: true,
-                            animationDuration: 800,
-                            lineWidth: 5.0,
-                            percent: (widget.score / 10),
-                            center: CircleAvatar(
-                              radius: 110,
-                              backgroundColor: const Color(0xFFECF0F3),
-                              child: Text(
-                                '${widget.score}/10',
-                                style: const TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF0F9D58),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 40,
-                                ),
-                              ),
-                            ),
-                            circularStrokeCap: CircularStrokeCap.butt,
-                            backgroundColor: Colors.black,
-                            progressColor: const Color(0xFF0F9D58),
+                        : scoreDisplay(
+                            const Color(0xFF0F9D58),
                           ),
-                    SizedBox(
-                      height: customHeight * 0.04,
-                    ),
+                    verticalSpace(customHeight * 0.04),
                     widget.score < 9
-                        ? Image.asset('assets/images/retake-quiz.png')
-                        : Image.asset('assets/images/quiz-complete.png'),
-                    SizedBox(
-                      height: customHeight * 0.01,
-                    ),
-                    const Text(
+                        ? showAssetImage('assets/images/retake-quiz.png')
+                        : showAssetImage('assets/images/quiz-complete.png'),
+                    verticalSpace(customHeight * 0.01),
+                    text(
                       'quiz completed',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 24,
-                      ),
+                      FontWeight.w400,
+                      24,
+                      Colors.white,
                     ),
-                    SizedBox(
-                      height: customHeight * 0.01,
-                    ),
+                    verticalSpace(customHeight * 0.01),
                     widget.score < 9
-                        ? const Padding(
-                            padding: EdgeInsets.symmetric(
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 18,
                             ),
-                            child: Text(
+                            child: textCenter(
                               'in order to claim your rewards you have to pass the quiz with a score of 90% or above! keep on learning',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                              ),
-                              textAlign: TextAlign.center,
+                              FontWeight.w500,
+                              12,
+                              Colors.white,
                             ),
                           )
-                        : const Padding(
-                            padding: EdgeInsets.symmetric(
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 18,
                             ),
-                            child: Text(
+                            child: textCenter(
                               'congratulations you have scored more than 90% and are now eligible to claim rewards',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                              ),
-                              textAlign: TextAlign.center,
+                              FontWeight.w500,
+                              12,
+                              Colors.white,
                             ),
                           ),
-                    SizedBox(
-                      height: customHeight * 0.1,
-                    ),
+                    verticalSpace(customHeight * 0.1),
                     widget.score < 9
-                        ? ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                elevation: 0,
-                                fixedSize: Size(
-                                    customWidth * 0.9, customHeight * 0.06),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                )),
-                            onPressed: () {},
-                            child: const Text(
+                        ? customButton(
+                            customHeight * 0.06,
+                            customWidth * 0.9,
+                            text(
                               'retake quiz',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            ))
-                        : ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                elevation: 0,
-                                fixedSize: Size(
-                                    customWidth * 0.9, customHeight * 0.06),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                )),
-                            onPressed: () {},
-                            child: const Text(
+                              FontWeight.w700,
+                              14,
+                              Colors.black,
+                            ),
+                            () {},
+                            Colors.white,
+                            4,
+                          )
+                        : customButton(
+                            customHeight * 0.06,
+                            customWidth * 0.9,
+                            text(
                               'claim rewards',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            )),
+                              FontWeight.w700,
+                              14,
+                              Colors.black,
+                            ),
+                            () {},
+                            Colors.white,
+                            4,
+                          )
                   ],
                 ),
               ),

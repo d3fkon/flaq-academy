@@ -1,5 +1,8 @@
+import 'package:flaq/screens/auth/signup.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
+import 'package:get/get.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key? key}) : super(key: key);
@@ -16,18 +19,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
     var customWidth = MediaQuery.of(context).size.width;
-    Widget _text(String content, FontWeight fontweight, double fontsize,
-        Color textcolor) {
-      return Text(
-        content,
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: fontweight,
-          fontSize: fontsize,
-          color: textcolor,
-        ),
-      );
-    }
 
     return Scaffold(
       backgroundColor: const Color(0xFF0D0D0D),
@@ -38,286 +29,118 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: customHeight * 0.1,
-              ),
-              _text(
+              verticalSpace(customHeight * 0.1),
+              text(
                 'forgot password',
                 FontWeight.w500,
                 20,
                 Colors.white,
               ),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
-              _text(
+              verticalSpace(customHeight * 0.02),
+              text(
                 'reset your password',
                 FontWeight.w400,
                 14,
                 const Color(0xFF9999A5),
               ),
-              SizedBox(
-                height: customHeight * 0.06,
-              ),
+              verticalSpace(customHeight * 0.06),
               Form(
                 key: _forgotpasswordformKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: emailController,
-                      cursorColor: Colors.white,
-                      keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'email',
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF9999A5),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                        fillColor: const Color(0xFF1A1A1A),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                      ),
-                      validator: MultiValidator([
+                    formField(
+                      emailController,
+                      TextInputType.emailAddress,
+                      'email',
+                      MultiValidator([
                         RequiredValidator(errorText: 'email is required'),
                         EmailValidator(errorText: 'enter a valid email')
                       ]),
+                      false,
                     ),
-                    SizedBox(
-                      height: customHeight * 0.04,
-                    ),
-                    TextFormField(
-                      controller: vcodeController,
-                      cursorColor: Colors.white,
-
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Montserrat',
-                      ),
-
-                      // obscureText: true,
-                      decoration: InputDecoration(
-                        suffixIcon: InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 16),
-                            child: Text(
-                              'send code',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Montserrat',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ),
-                        hintText: 'verification code',
-                        hintStyle: const TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF9999A5),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                        ),
-                        fillColor: const Color(0xFF1A1A1A),
-                        filled: true,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.white,
-                            width: 0.2,
-                          ),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4),
-                          borderSide: const BorderSide(
-                            color: Colors.red,
-                            width: 0.2,
-                          ),
-                        ),
-                      ),
-                      validator: RequiredValidator(
+                    verticalSpace(customHeight * 0.04),
+                    formfieldWithSuffix(
+                      vcodeController,
+                      TextInputType.text,
+                      'verification code',
+                      RequiredValidator(
                           errorText: 'verification code is required'),
+                      false,
+                      text(
+                        'send code',
+                        FontWeight.w500,
+                        12,
+                        Colors.white,
+                      ),
+                      () {},
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
-              const Align(
+              verticalSpace(customHeight * 0.05),
+              Align(
                 alignment: Alignment.topRight,
-                child: Text(
+                child: text(
                   'forgot password?',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Color(0xFF9999A5),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                  ),
+                  FontWeight.w400,
+                  12,
+                  const Color(0xFF9999A5),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.white,
-                    elevation: 0,
-                    fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    )),
-                onPressed: () {
+              verticalSpace(customHeight * 0.05),
+              customButton(
+                customHeight * 0.06,
+                customWidth * 0.9,
+                text(
+                  'log in',
+                  FontWeight.w700,
+                  14,
+                  Colors.black,
+                ),
+                () {
                   if (_forgotpasswordformKey.currentState!.validate()) {
                     // add functionality here
                   }
                 },
-                child: const Text(
-                  'log in',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
-                ),
+                Colors.white,
+                4,
               ),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
+              verticalSpace(customHeight * 0.02),
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
-                  onTap: () {},
-                  child: const Text(
+                  onTap: () {
+                    Get.offAll(() => const SignUp());
+                  },
+                  child: textWithUnderline(
                     'new user? sign up',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Color(0xFF9999A5),
-                      fontWeight: FontWeight.w700,
-                      decoration: TextDecoration.underline,
-                      fontSize: 12,
-                    ),
+                    FontWeight.w700,
+                    12,
+                    const Color(0xFF9999A5),
                   ),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.2,
-              ),
-              const Text.rich(
+              verticalSpace(customHeight * 0.2),
+              Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
-                      text: 'by signing up you agree to our ',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                      ),
+                    textSpan(
+                      'by signing up you agree to our ',
+                      FontWeight.w400,
+                      10,
+                      Colors.white,
                     ),
-                    TextSpan(
-                      text:
-                          'terms of use, privacy policy, information collection,',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Color(0xFF363664),
-                        fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.underline,
-                        fontSize: 10,
-                      ),
+                    textSpanWithUnderline(
+                      'terms of use, privacy policy, information collection,',
+                      FontWeight.w400,
+                      10,
+                      const Color(0xFF363664),
                     ),
-                    TextSpan(
-                      text: 'and that you are over 18 years old',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10,
-                      ),
+                    textSpan(
+                      'and that you are over 18 years old',
+                      FontWeight.w400,
+                      10,
+                      Colors.white,
                     ),
                   ],
                 ),

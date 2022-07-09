@@ -1,11 +1,8 @@
 import 'package:flaq/screens/about_frontier.dart';
-import 'package:flaq/screens/claim_rewards/claim_rewards.screen.dart';
 import 'package:flaq/screens/flaqBank.dart';
-import 'package:flaq/screens/quiz.dart';
-import 'package:flaq/screens/withdrawFrontierForm.dart';
-import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flaq/services/messaging.service.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +23,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     'locked',
     'locked',
   ];
+  Widget circleAvatar(
+    double radius,
+    Color color,
+    Widget child,
+  ) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: color,
+      child: child,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -66,9 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: customHeight * 0.06,
-                        ),
+                        verticalSpace(customHeight * 0.06),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,42 +83,32 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Align(
+                                Align(
                                   alignment: Alignment.topLeft,
-                                  child: Text(
+                                  child: text(
                                     'flaq points',
-                                    style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 18,
-                                    ),
+                                    FontWeight.w400,
+                                    18,
+                                    Colors.white,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: customHeight * 0.005,
-                                ),
+                                verticalSpace(customHeight * 0.005),
                                 Row(
                                   children: [
-                                    Image.asset(
+                                    showAssetImage(
                                       'assets/images/icon-1.png',
                                       width: 25,
                                       height: 25,
                                     ),
-                                    SizedBox(
-                                      width: customWidth * 0.01,
-                                    ),
+                                    horizontalSpace(customWidth * 0.01),
                                     Align(
                                       alignment: Alignment.topLeft,
                                       child: Obx(
-                                        () => Text(
+                                        () => text(
                                           '${dataService.totalFlaqRewarded}',
-                                          style: const TextStyle(
-                                            fontFamily: 'Montserrat',
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 30,
-                                          ),
+                                          FontWeight.w500,
+                                          30,
+                                          Colors.white,
                                         ),
                                       ),
                                     ),
@@ -123,92 +120,70 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                               padding: const EdgeInsets.only(top: 5),
                               child: GestureDetector(
                                 onTap: () {},
-                                child: const CircleAvatar(
-                                  radius: 12,
-                                  backgroundColor: Color(0xFF9999A5),
-                                  child: Icon(
+                                child: circleAvatar(
+                                  12,
+                                  const Color(0xFF9999A5),
+                                  customIcon(
                                     Icons.person,
+                                    Colors.black,
                                     size: 18,
-                                    color: Colors.black,
                                   ),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: customHeight * 0.025,
-                        ),
-                        const Align(
+                        verticalSpace(customHeight * 0.025),
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text(
+                          child: text(
                             'flaq rewards you for every upi payment you make which you can then redeem for front tokens',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                            ),
+                            FontWeight.w500,
+                            12,
+                            Colors.white,
                           ),
                         ),
-                        SizedBox(
-                          height: customHeight * 0.025,
+                        verticalSpace(customHeight * 0.025),
+                        customButton(
+                          customHeight * 0.06,
+                          customWidth * 0.9,
+                          text(
+                            'earn flaq',
+                            FontWeight.w700,
+                            14,
+                            Colors.black,
+                          ),
+                          () {
+                            Get.to(() => const FlaqBankScreen());
+                            // Get.snackbar(
+                            //   "Coming Soon",
+                            //   "Claiming Rewards is coming soon",
+                            //   backgroundColor: Colors.black,
+                            //   colorText: Colors.white,
+                            // );
+                          },
+                          Colors.white,
+                          4,
                         ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.white,
-                                elevation: 0,
-                                fixedSize: Size(
-                                    customWidth * 0.9, customHeight * 0.06),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                )),
-                            onPressed: () {
-                              Get.to(() => const FlaqBankScreen());
-                              // Get.snackbar(
-                              //   "Coming Soon",
-                              //   "Claiming Rewards is coming soon",
-                              //   backgroundColor: Colors.black,
-                              //   colorText: Colors.white,
-                              // );
-                            },
-                            child: const Text(
-                              'earn flaq',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 14,
-                              ),
-                            )),
-                        SizedBox(
-                          height: customHeight * 0.025,
-                        ),
+                        verticalSpace(customHeight * 0.025),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.022,
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 20),
+                verticalSpace(customHeight * 0.022),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: Text(
+                    child: text(
                       'learn and earn',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
-                      ),
+                      FontWeight.w400,
+                      18,
+                      Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.022,
-                ),
+                verticalSpace(customHeight * 0.022),
                 SizedBox(
                   width: customWidth,
                   child: ListView.builder(
@@ -234,94 +209,73 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                   child: Column(
                                     children: [
                                       Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                'frontier',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                ),
-                                              ),
-                                              CircleAvatar(
-                                                radius: 13,
-                                                child: Image.asset(
-                                                    'assets/images/frontier.png'),
-                                              ),
-                                            ],
-                                          )),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
-                                      const Text(
-                                        'a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
+                                        alignment: Alignment.topLeft,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            text(
+                                              'frontier',
+                                              FontWeight.w500,
+                                              18,
+                                              Colors.black,
+                                            ),
+                                            circleAvatar(
+                                              13,
+                                              Colors.transparent,
+                                              showAssetImage(
+                                                  'assets/images/frontier.png'),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
+                                      verticalSpace(customHeight * 0.01),
+                                      text(
+                                        'a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
+                                        FontWeight.w500,
+                                        12,
+                                        Colors.black,
                                       ),
+                                      verticalSpace(customHeight * 0.01),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
+                                          textWorkSans(
                                             lockedUnlocked[index],
-                                            style: const TextStyle(
-                                              fontFamily: 'WorkSans',
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 14,
-                                            ),
+                                            FontWeight.w500,
+                                            14,
+                                            Colors.black,
                                           ),
-                                          ElevatedButton(
-                                              style: ElevatedButton.styleFrom(
-                                                  primary: Colors.black,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  fixedSize: Size(
-                                                      customWidth * 0.42,
-                                                      customHeight * 0.04)),
-                                              onPressed: () {
-                                                Get.to(() =>
-                                                    const WhatIsFrontier());
-                                              },
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  const Text(
-                                                    'take the quiz',
-                                                    style: TextStyle(
-                                                      fontFamily: 'Montserrat',
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontSize: 12,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: customWidth * 0.02,
-                                                  ),
-                                                  const Icon(
-                                                    Icons.arrow_forward,
-                                                    size: 15,
-                                                    color: Colors.white,
-                                                  )
-                                                ],
-                                              )),
+                                          customButton(
+                                            customHeight * 0.04,
+                                            customWidth * 0.42,
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                text(
+                                                  'take the quiz',
+                                                  FontWeight.w700,
+                                                  12,
+                                                  Colors.white,
+                                                ),
+                                                horizontalSpace(
+                                                    customWidth * 0.02),
+                                                customIcon(
+                                                  Icons.arrow_forward,
+                                                  Colors.white,
+                                                  size: 15,
+                                                ),
+                                              ],
+                                            ),
+                                            () {
+                                              Get.to(
+                                                  () => const WhatIsFrontier());
+                                            },
+                                            Colors.black,
+                                            4,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -341,50 +295,36 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                              const Text(
+                                              text(
                                                 'filecoin',
-                                                style: TextStyle(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                ),
+                                                FontWeight.w500,
+                                                18,
+                                                Colors.white,
                                               ),
-                                              CircleAvatar(
-                                                radius: 13,
-                                                backgroundColor:
-                                                    const Color(0xFF9999A5),
-                                                child: Image.asset(
+                                              circleAvatar(
+                                                13,
+                                                Colors.transparent,
+                                                showAssetImage(
                                                     'assets/images/filecoin.png'),
                                               ),
                                             ],
                                           )),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
-                                      const Text(
+                                      verticalSpace(customHeight * 0.01),
+                                      text(
                                         'a Crypto & DeFi, NFT wallet where you can send, store & invest in 4,000+ crypto assets',
-                                        style: TextStyle(
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12,
-                                        ),
+                                        FontWeight.w500,
+                                        12,
+                                        Colors.white,
                                       ),
-                                      SizedBox(
-                                        height: customHeight * 0.01,
-                                      ),
+                                      verticalSpace(customHeight * 0.01),
                                       index == 2
-                                          ? const Padding(
-                                              padding: EdgeInsets.all(15),
-                                              child: Text(
+                                          ? Padding(
+                                              padding: const EdgeInsets.all(15),
+                                              child: textWorkSans(
                                                 'unlocks in 17:05:21',
-                                                style: TextStyle(
-                                                  fontFamily: 'WorkSans',
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
+                                                FontWeight.w500,
+                                                14,
+                                                Colors.white,
                                               ),
                                             )
                                           : Row(
@@ -392,48 +332,30 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
+                                                textWorkSans(
                                                   lockedUnlocked[index],
-                                                  style: const TextStyle(
-                                                    fontFamily: 'WorkSans',
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                  ),
+                                                  FontWeight.w500,
+                                                  14,
+                                                  Colors.white,
                                                 ),
-                                                ElevatedButton(
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            primary:
-                                                                Colors.white,
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          4),
-                                                            ),
-                                                            fixedSize: Size(
-                                                                customWidth *
-                                                                    0.42,
-                                                                customHeight *
-                                                                    0.04)),
-                                                    onPressed: () {
-                                                      Get.to(() =>
-                                                          const WhatIsFrontier());
-                                                    },
-                                                    child: Obx(() => Text(
-                                                          'use ${dataService.totalFlaqRewarded} flaq',
-                                                          style:
-                                                              const TextStyle(
-                                                            fontFamily:
-                                                                'Montserrat',
-                                                            color: Colors.black,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ))),
+                                                customButton(
+                                                  customHeight * 0.04,
+                                                  customWidth * 0.42,
+                                                  Obx(
+                                                    () => text(
+                                                      'use ${dataService.totalFlaqRewarded} flaq',
+                                                      FontWeight.w700,
+                                                      12,
+                                                      Colors.black,
+                                                    ),
+                                                  ),
+                                                  () {
+                                                    Get.to(() =>
+                                                        const WhatIsFrontier());
+                                                  },
+                                                  Colors.white,
+                                                  4,
+                                                ),
                                               ],
                                             ),
                                     ],
@@ -442,9 +364,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         );
                       }),
                 ),
-                SizedBox(
-                  height: customHeight * 0.025,
-                ),
+                verticalSpace(customHeight * 0.025),
               ],
             ),
           ),

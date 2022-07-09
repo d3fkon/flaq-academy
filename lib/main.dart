@@ -6,6 +6,7 @@ import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,20 +42,7 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(
     const InitializationSettings(android: initializationSettingsAndroid),
     onSelectNotification: (payload) async {
-      print("IN ON SELECT NOTIFICATION");
-      final SharedPreferences sp = await SharedPreferences.getInstance();
-      final key = sp.getString("AUTHKEY");
-      if (key == null) return;
-      try {
-        await http.post(Uri.parse("$BASE_URL/payments/register"), body: {
-          "amount": payload.toString()
-        }, headers: {
-          'x-auth-token': key,
-        });
-        Helper.showRewardReceipt(payload.toString());
-      } catch (e) {
-        print(e);
-      }
+      debugPrint("IN ON SELECT NOTIFICATION");
     },
   );
   // print("NOTIFICAITON INITIALIZATION RESULT: $res");

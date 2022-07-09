@@ -1,5 +1,6 @@
 import 'package:flaq/screens/inviteAndEarn.dart';
 import 'package:flaq/screens/transactionHistory.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +12,12 @@ class FlaqBankScreen extends StatefulWidget {
 }
 
 class _FlaqBankScreenState extends State<FlaqBankScreen> {
+  Widget divider(Color color) {
+    return Divider(
+      color: color,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -27,230 +34,146 @@ class _FlaqBankScreenState extends State<FlaqBankScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: customHeight * 0.05,
-                ),
+                verticalSpace(customHeight * 0.05),
                 InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_outlined,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: customIcon(
+                      Icons.arrow_back_outlined,
+                      Colors.white,
+                    )),
+                verticalSpace(customHeight * 0.02),
                 Row(
                   children: [
-                    const Text(
+                    text(
                       'flaq-a-bank',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 18,
-                      ),
+                      FontWeight.w400,
+                      18,
+                      Colors.white,
                     ),
-                    SizedBox(
-                      width: customWidth * 0.01,
-                    ),
-                    Image.asset('assets/images/bank.png'),
+                    horizontalSpace(customWidth * 0.01),
+                    showAssetImage('assets/images/bank.png'),
                   ],
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Text.rich(
+                verticalSpace(customHeight * 0.02),
+                Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
-                        text:
-                            'we reward you flaq points for every upi payment you make, see ',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
+                      textSpan(
+                        'we reward you flaq points for every upi payment you make, see ',
+                        FontWeight.w500,
+                        12,
+                        Colors.white,
                       ),
-                      TextSpan(
-                        text: 'terms and conditions',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          decoration: TextDecoration.underline,
-                        ),
+                      textSpanWithUnderline(
+                        'terms and conditions',
+                        FontWeight.bold,
+                        12,
+                        Colors.white,
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.025,
+                verticalSpace(customHeight * 0.025),
+                customButton(
+                  customHeight * 0.06,
+                  customWidth * 0.9,
+                  text(
+                    'transaction history',
+                    FontWeight.w700,
+                    14,
+                    Colors.black,
+                  ),
+                  () {
+                    Get.to(() => const TransactionHistoryScreen());
+                  },
+                  Colors.white,
+                  4,
                 ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        elevation: 0,
-                        fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        )),
-                    onPressed: () {
-                      Get.to(() => const TransactionHistoryScreen());
-                    },
-                    child: const Text(
-                      'transaction history',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
-                    )),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Divider(
-                  color: Color(0xFF1F1F1F),
-                ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.02),
+                divider(const Color(0xFF1F1F1F)),
+                verticalSpace(customHeight * 0.02),
+                text(
                   'refer & earn flaq',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                  ),
+                  FontWeight.w400,
+                  18,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.015,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.015),
+                text(
                   'flaq is an invite only app',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
+                  FontWeight.w400,
+                  14,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.02),
+                text(
                   'invite a friend and earn upto 500 flaq',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
+                  FontWeight.w500,
+                  12,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.025,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        elevation: 0,
-                        fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        )),
-                    onPressed: () {
-                      Get.to(() => const InviteAndEarnScreen());
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.share,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                        SizedBox(
-                          width: customWidth * 0.02,
-                        ),
-                        const Text(
-                          'invite and earn',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    )),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Divider(
-                  color: Color(0xFF1F1F1F),
-                ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Text(
-                  'complete a campaign',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                  ),
-                ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
-                const Text(
-                  'successfully complete a quiz and share the results with your friends to earn 1000 flaq',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
-                ),
-                SizedBox(
-                  height: customHeight * 0.025,
-                ),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        elevation: 0,
-                        fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        )),
-                    onPressed: () {
-                      // Get.to(() => const FlaqBankScreen());
-                    },
-                    child: const Text(
-                      'see active campaigns',
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
+                verticalSpace(customHeight * 0.025),
+                customButton(
+                  customHeight * 0.06,
+                  customWidth * 0.9,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      customIcon(
+                        Icons.share,
+                        Colors.black,
+                        size: 15,
                       ),
-                    )),
-                SizedBox(
-                  height: customHeight * 0.04,
+                      horizontalSpace(customWidth * 0.02),
+                      text(
+                        'invite and earn',
+                        FontWeight.w700,
+                        14,
+                        Colors.black,
+                      ),
+                    ],
+                  ),
+                  () {
+                    Get.to(() => const InviteAndEarnScreen());
+                  },
+                  Colors.white,
+                  4,
                 ),
-                const Divider(
-                  color: Color(0xFF1F1F1F),
+                verticalSpace(customHeight * 0.02),
+                divider(const Color(0xFF1F1F1F)),
+                verticalSpace(customHeight * 0.02),
+                text(
+                  'complete a campaign',
+                  FontWeight.w400,
+                  18,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
+                verticalSpace(customHeight * 0.02),
+                text(
+                  'successfully complete a quiz and share the results with your friends to earn 1000 flaq',
+                  FontWeight.w500,
+                  12,
+                  Colors.white,
                 ),
+                verticalSpace(customHeight * 0.025),
+                customButton(
+                  customHeight * 0.06,
+                  customWidth * 0.9,
+                  text(
+                    'see active campaigns',
+                    FontWeight.w700,
+                    14,
+                    Colors.black,
+                  ),
+                  () {},
+                  Colors.white,
+                  4,
+                ),
+                verticalSpace(customHeight * 0.04),
+                divider(const Color(0xFF1F1F1F)),
+                verticalSpace(customHeight * 0.02),
               ],
             ),
           ),

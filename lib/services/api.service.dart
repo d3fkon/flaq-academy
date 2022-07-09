@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
+
 import 'package:flaq/screens/dashboard.dart';
 import 'package:flaq/screens/home.screen.dart';
 import 'package:flaq/screens/notification_approval.screen.dart';
@@ -18,122 +19,285 @@ import 'package:get/get.dart';
 import 'package:optimize_battery/optimize_battery.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 const BASE_URL = "http://52.66.228.64:4000/api/v1";
+const BASE_URL_GO = "http://52.66.228.64:8080";
 
 class ApiService extends GetConnect implements GetxService {
+  late final SharedPreferences _sp;
+
   @override
   void onInit() {
     super.onInit();
-    httpClient.addRequestModifier<dynamic>((request) async {
-      Get.printInfo(info: 'Request - ${request.url}');
-      request.headers['x-auth-token'] =
-          '${await Get.find<AuthService>().getUserToken()}';
-      return request;
-    });
-    httpClient.addResponseModifier((request, response) {
-      if (response.hasError) {
-        Get.printError(info: 'Response - ${response.bodyString}');
+  }
+
+  //sign up user
+  Future signup(String email, String password) async {
+    try {
+      EasyLoading.show();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      debugPrint('Signing up the user');
+      final res = await http.post(
+        Uri.parse('$BASE_URL_GO/auth/signup'),
+        body: jsonEncode({"Email": email, "Password": password}),
+      );
+      var jsonData = jsonDecode(res.body);
+      if (jsonData['StatusCode'] != 200) {
+        if (jsonData['Message'] != null) {
+          Helper.toast(jsonData['Message']);
+        }
       } else {
-        Get.printInfo(info: response.bodyString ?? '');
+        await prefs.setString("REFRESHTOKEN", jsonData['Data']['RefreshToken']);
+        await prefs.setString("ACCESSTOKEN", jsonData['Data']['AccessToken']);
+        debugPrint("signed up successfully");
       }
-      return response;
-    });
-    // httpClient.baseUrl = 'https://6b2f-125-22-99-42.in.ngrok.io/api/v1';
-    httpClient.baseUrl = BASE_URL;
+      EasyLoading.dismiss();
+    } catch (e) {
+      Helper.toast('error, please try again');
+      debugPrint('error: $e');
+      EasyLoading.dismiss();
+    }
+  }
+
+  //login the user
+  Future login(String email, String password) async {
+    try {
+      EasyLoading.show();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      debugPrint('logging in the user');
+      final res = await http.post(
+        Uri.parse('$BASE_URL_GO/auth/login'),
+        body: jsonEncode({"Email": email, "Password": password}),
+      );
+      var jsonData = jsonDecode(res.body);
+      debugPrint(jsonData.toString());
+      if (jsonData['StatusCode'] != 200) {
+        if (jsonData['Message'] != null) {
+          Helper.toast(jsonData['Message']);
+        }
+        EasyLoading.dismiss();
+        return false;
+      } else {
+        await prefs.setString("REFRESHTOKEN", jsonData['Data']['RefreshToken']);
+        await prefs.setString("ACCESSTOKEN", jsonData['Data']['AccessToken']);
+        debugPrint("logged in successfully");
+        EasyLoading.dismiss();
+        return true;
+      }
+    } catch (e) {
+      Helper.toast('error, please try again');
+      debugPrint('error: $e');
+      EasyLoading.dismiss();
+      return false;
+    }
+  }
+
+  //refresh token
+  Future refreshToken() async {
+    bool internet = await Helper().checkInternetConnectivity();
+    if (internet) {
+      try {
+        EasyLoading.show();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var refreshtoken = prefs.getString('REFRESHTOKEN');
+        debugPrint('refreshing the token');
+        final res = await http.post(
+          Uri.parse('$BASE_URL_GO/auth/token/refresh'),
+          body: jsonEncode({"RefreshToken": refreshtoken}),
+        );
+        var jsonData = jsonDecode(res.body);
+        if (jsonData['StatusCode'] != 200) {
+          if (jsonData['Message'] != null) {
+            Helper.toast(jsonData['Message']);
+          }
+        } else {
+          await prefs.setString(
+              "REFRESHTOKEN", jsonData['Data']['RefreshToken']);
+          await prefs.setString("ACCESSTOKEN", jsonData['Data']['AccessToken']);
+          debugPrint("refresh successfully");
+        }
+        EasyLoading.dismiss();
+      } catch (e) {
+        Helper.toast('error, please try again');
+        debugPrint('error: $e');
+        EasyLoading.dismiss();
+      }
+    } else {
+      Helper.toast('please enable your internet connection');
+    }
   }
 
   // Get the user's profile
   Future<FlaqUser?> getProfile() async {
     debugPrint('Getting profile');
-    final res = await httpClient.get('/user/profile');
-    if (res.hasError) {
-      debugPrint("Error fetching profile");
-      debugPrint(res.bodyString);
-      return null;
+    try {
+      EasyLoading.show();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accessToken = prefs.getString('ACCESSTOKEN');
+      final res =
+          await http.get(Uri.parse('$BASE_URL_GO/users/profile'), headers: {
+        'Authorization': 'Bearer $accessToken',
+      });
+      var jsonData = jsonDecode(res.body);
+      debugPrint(jsonData.toString());
+      if (jsonData['StatusCode'] == 401) {
+        await refreshToken();
+        await getProfile();
+      } else if (jsonData['StatusCode'] != 200) {
+        if (jsonData['Message'] != null) {
+          Helper.toast(jsonData['Message']);
+          return null;
+        }
+      } else {
+        debugPrint("profile fetched successfully");
+        EasyLoading.dismiss();
+        return UserProfileResponse.fromJson(jsonData).data;
+      }
+      EasyLoading.dismiss();
+    } catch (e) {
+      Helper.toast('error, please try again');
+      debugPrint('error: $e');
+      EasyLoading.dismiss();
     }
-    debugPrint("Profile fetched");
-    return UserProfileResponse.fromJson(res.body).data;
   }
 
   registerPayment(String amount) async {
-    final res = await httpClient.post('/payments/register', body: {
-      'amount': amount,
-    });
-    if (res.hasError) {
-      debugPrint("Error registering payment");
-      debugPrint(res.bodyString);
+    bool internet = await Helper().checkInternetConnectivity();
+    if (internet) {
+      try {
+        EasyLoading.show();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var accessToken = prefs.getString('ACCESSTOKEN');
+        debugPrint('registering the payment');
+        final res = await http.post(Uri.parse('$BASE_URL_GO/payments/register'),
+            body: jsonEncode(
+              {"Amount": amount},
+            ),
+            headers: {'Authorization': 'Bearer $accessToken'});
+        var jsonData = jsonDecode(res.body);
+        if (jsonData['StatusCode'] == 401) {
+          await refreshToken();
+          await registerPayment(amount);
+        } else if (jsonData['StatusCode'] != 200) {
+          if (jsonData['Message'] != null) {
+            Helper.toast(jsonData['Message']);
+            return null;
+          }
+        } else {
+          debugPrint("payment registered successfully");
+        }
+        EasyLoading.dismiss();
+      } catch (e) {
+        Helper.toast('error, please try again');
+        debugPrint('error: $e');
+
+        EasyLoading.dismiss();
+        return null;
+      }
+    } else {
+      Helper.toast('please enable your internet connection');
       return null;
     }
   }
 
   Future<List<Transaction>?> getAllPayments() async {
     await Future.delayed(const Duration(seconds: 1));
-    final res = await httpClient.post('/payments/all');
-    if (res.hasError) {
-      debugPrint("Error fetching payments");
-      debugPrint(res.bodyString);
-      return null;
+    debugPrint('Getting payments');
+    try {
+      EasyLoading.show();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accessToken = prefs.getString('ACCESSTOKEN');
+      final res = await http.get(Uri.parse('$BASE_URL_GO/payments'),
+          headers: {'Authorization': 'Bearer $accessToken'});
+      var jsonData = jsonDecode(res.body);
+      if (jsonData['StatusCode'] == 401) {
+        await refreshToken();
+        await getAllPayments();
+      } else if (jsonData['StatusCode'] != 200) {
+        if (jsonData['Message'] != null) {
+          Helper.toast(jsonData['Message']);
+        }
+      } else {
+        debugPrint("payments fetched successfully");
+        return TransactionDataResponse.fromJson(jsonData).data;
+      }
+      EasyLoading.dismiss();
+    } catch (e) {
+      Helper.toast('error, please try again');
+      debugPrint('error: $e');
+      EasyLoading.dismiss();
     }
-    debugPrint(res.bodyString);
-    debugPrint("Payments fetched");
-    final data = TransactionDataResponse.fromJson(res.body).data;
-    print(data?.length);
-    return data;
   }
 
-  checkReferralCode(String referralCode) async {
-    EasyLoading.show();
-    debugPrint('Checking Referral Code');
-    final res = await httpClient.post('/user/referral/apply', body: {
-      'referralCode': referralCode,
-    });
-    var jsonData = res.body;
-    debugPrint(jsonData['message']);
-    if (jsonData['statusCode'] != 200) {
-      if (jsonData['message'] != null) {
-        Helper.toast(jsonData['message']);
-      }
-    } else {
-      debugPrint("Referral Code checked successfully");
-      final apiService = Get.find<ApiService>();
+  Future checkReferralCode(String referralCode) async {
+    try {
+      EasyLoading.show();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var accessToken = prefs.getString('ACCESSTOKEN');
+      debugPrint('Checking Referral Code');
+      final res = await http.post(
+          Uri.parse('$BASE_URL_GO/users/apply-referral'),
+          body: jsonEncode({"ReferralCode": referralCode}),
+          headers: {'Authorization': 'Bearer $accessToken'});
+      var jsonData = jsonDecode(res.body);
+      debugPrint(jsonData['Message']);
+      if (jsonData['StatusCode'] == 401) {
+        await refreshToken();
+        await checkReferralCode(referralCode);
+      } else if (jsonData['StatusCode'] != 200) {
+        if (jsonData['Message'] != null) {
+          Helper.toast(jsonData['Message']);
+        }
+      } else {
+        debugPrint("Referral Code checked successfully");
+        final apiService = Get.find<ApiService>();
 
-      var user = (await apiService.getProfile());
-
-      if (user!.isAllowed) {
-        if (true) {
-          if (await Permission.sms.isGranted) {
-            if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-              Get.offAll(() => const DashBoard());
-              EasyLoading.dismiss();
-              return;
-            } else {
-              Get.offAll(() => const OpenSettingsScreen());
-              EasyLoading.dismiss();
-              return;
-            }
-          } else {
-            final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
-            bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
-            if (!permissionAsked) {
-              Get.offAll(() => const SmsApprovalScreen());
-              EasyLoading.dismiss();
-              return;
-            } else {
-              Get.offAll(() => const SmsOpenSettingsScreen());
-              EasyLoading.dismiss();
-              return;
+        var user = (await apiService.getProfile());
+        if (user != null) {
+          if (user.isAllowed == true) {
+            if (true) {
+              if (await Permission.sms.isGranted) {
+                if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
+                  Get.offAll(() => const DashBoard());
+                  EasyLoading.dismiss();
+                  return;
+                } else {
+                  Get.offAll(() => const OpenSettingsScreen());
+                  EasyLoading.dismiss();
+                  return;
+                }
+              } else {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                bool permissionAsked =
+                    prefs.getBool('permissionAsked') ?? false;
+                if (!permissionAsked) {
+                  Get.offAll(() => const SmsApprovalScreen());
+                  EasyLoading.dismiss();
+                  return;
+                } else {
+                  Get.offAll(() => const SmsOpenSettingsScreen());
+                  EasyLoading.dismiss();
+                  return;
+                }
+              }
             }
           }
         }
+        if (user != null && user.isAllowed != null) {
+          if (user.isAllowed == false) {
+            Get.offAll(() => const ReferralScreen());
+            EasyLoading.dismiss();
+            return;
+          }
+        }
       }
-      if (!user.isAllowed) {
-        Get.offAll(() => const ReferralScreen());
-        EasyLoading.dismiss();
-        return;
-      }
+      EasyLoading.dismiss();
+    } catch (e) {
+      Helper.toast('error, please try again');
+      debugPrint('error: $e');
+      EasyLoading.dismiss();
     }
-    EasyLoading.dismiss();
   }
 }
