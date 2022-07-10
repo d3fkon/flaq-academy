@@ -1,6 +1,7 @@
 import 'package:flaq/models/article_model.dart';
 import 'package:flaq/screens/article.dart';
 import 'package:flaq/screens/quiz.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -20,6 +21,38 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
       mute: true,
     ),
   );
+  Widget ytWidget() {
+    return YoutubePlayerBuilder(
+      player: YoutubePlayer(
+        controller: _controller,
+      ),
+      builder: (context, player) {
+        return player;
+      },
+    );
+  }
+
+  Widget textWithOverflow(
+    String content,
+    FontWeight fontweight,
+    double fontsize,
+    Color textcolor,
+    int maxlines,
+    TextOverflow overflow,
+  ) {
+    return Text(
+      content,
+      maxLines: maxlines,
+      overflow: overflow,
+      style: TextStyle(
+        fontFamily: 'Montserrat',
+        fontWeight: fontweight,
+        fontSize: fontsize,
+        color: textcolor,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -36,59 +69,45 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
+              verticalSpace(customHeight * 0.05),
               InkWell(
                 onTap: () {
                   Get.back();
                 },
-                child: const Icon(
+                child: customIcon(
                   Icons.arrow_back_outlined,
-                  color: Colors.white,
+                  Colors.white,
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.02,
+              verticalSpace(customHeight * 0.02),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text.rich(
+                  TextSpan(
+                    children: [
+                      textSpan(
+                        'what is ',
+                        FontWeight.w400,
+                        24,
+                        Colors.white,
+                      ),
+                      textSpan(
+                        'frontier',
+                        FontWeight.w400,
+                        24,
+                        const Color(0xFFa76237),
+                      ),
+                      textSpan(
+                        '?',
+                        FontWeight.w400,
+                        24,
+                        Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'what is ',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 24,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'frontier',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Color(0xFFa76237),
-                            fontWeight: FontWeight.w400,
-                            fontSize: 24,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '?',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
-              SizedBox(
-                height: customHeight * 0.02,
-              ),
+              verticalSpace(customHeight * 0.02),
               SizedBox(
                 height: customHeight * 0.38,
                 child: Container(
@@ -102,76 +121,49 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                   ),
                   child: Column(
                     children: [
-                      const Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            'learn how frontier works',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 18,
-                            ),
-                          )),
-                      SizedBox(
-                        height: customHeight * 0.01,
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: text(
+                          'learn how frontier works',
+                          FontWeight.w400,
+                          18,
+                          Colors.white,
+                        ),
                       ),
-                      const Text(
+                      verticalSpace(customHeight * 0.01),
+                      text(
                         'here’s a short video on explaining how the wallet works and about the frontier team',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
+                        FontWeight.w500,
+                        12,
+                        Colors.white,
                       ),
-                      SizedBox(
-                        height: customHeight * 0.01,
-                      ),
-                      YoutubePlayerBuilder(
-                        player: YoutubePlayer(
-                          controller: _controller,
-                        ),
-                        builder: (BuildContext, player) {
-                          return player;
-                        },
-                      ),
+                      verticalSpace(customHeight * 0.01),
+                      ytWidget(),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: customHeight * 0.05,
-              ),
-              const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'feed your mind',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18,
-                    ),
-                  )),
-              SizedBox(
-                height: customHeight * 0.01,
-              ),
-              SizedBox(
-                width: customWidth * 0.8,
-                child: const Text(
-                  'here are some articles for you to read and learn about how the frontier works in depth',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
+              verticalSpace(customHeight * 0.05),
+              Align(
+                alignment: Alignment.topLeft,
+                child: text(
+                  'feed your mind',
+                  FontWeight.w400,
+                  18,
+                  Colors.white,
                 ),
               ),
+              verticalSpace(customHeight * 0.01),
               SizedBox(
-                height: customHeight * 0.01,
+                width: customWidth * 0.8,
+                child: text(
+                  'here are some articles for you to read and learn about how the frontier works in depth',
+                  FontWeight.w500,
+                  12,
+                  Colors.white,
+                ),
               ),
+              verticalSpace(customHeight * 0.01),
               SizedBox(
                 height: customHeight * 0.26,
                 child: ListView.builder(
@@ -204,40 +196,30 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                               children: [
                                 Align(
                                   alignment: Alignment.topRight,
-                                  child: Image.asset(
+                                  child: showAssetImage(
                                     'assets/images/book.PNG',
                                   ),
                                 ),
-                                SizedBox(
-                                  height: customHeight * 0.01,
-                                ),
+                                verticalSpace(customHeight * 0.01),
                                 Align(
                                   alignment: Alignment.topLeft,
-                                  child: Text(
+                                  child: textWithOverflow(
                                     article[index].title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                    ),
+                                    FontWeight.w400,
+                                    16,
+                                    Colors.white,
+                                    1,
+                                    TextOverflow.ellipsis,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: customHeight * 0.01,
-                                ),
-                                Text(
+                                verticalSpace(customHeight * 0.01),
+                                textWithOverflow(
                                   article[index].content,
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                  ),
+                                  FontWeight.w400,
+                                  14,
+                                  Colors.white,
+                                  3,
+                                  TextOverflow.ellipsis,
                                 ),
                               ],
                             ),
@@ -246,32 +228,23 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                       );
                     }),
               ),
-              SizedBox(
-                height: customHeight * 0.02,
+              verticalSpace(customHeight * 0.02),
+              customButton(
+                customHeight * 0.06,
+                customWidth * 0.9,
+                text(
+                  'take the frontier quiz',
+                  FontWeight.w700,
+                  14,
+                  Colors.black,
+                ),
+                () {
+                  Get.to(() => const QuizScreen());
+                },
+                Colors.white,
+                4,
               ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.white,
-                      elevation: 0,
-                      fixedSize: Size(customWidth * 0.9, customHeight * 0.06),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      )),
-                  onPressed: () {
-                    Get.to(() => const QuizScreen());
-                  },
-                  child: const Text(
-                    'take the frontier quiz',
-                    style: TextStyle(
-                      fontFamily: 'Montserrat',
-                      color: Colors.black,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  )),
-              SizedBox(
-                height: customHeight * 0.07,
-              ),
+              verticalSpace(customHeight * 0.07),
             ],
           ),
         ),

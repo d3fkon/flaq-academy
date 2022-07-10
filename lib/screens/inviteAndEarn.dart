@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,37 @@ class InviteAndEarnScreen extends StatefulWidget {
 }
 
 class _InviteAndEarnScreenState extends State<InviteAndEarnScreen> {
+  Widget circularDottedWidget(String number) {
+    return DottedBorder(
+      color: Colors.white,
+      strokeWidth: 1,
+      borderType: BorderType.Circle,
+      dashPattern: const [5, 5],
+      child: CircleAvatar(
+        radius: 17,
+        backgroundColor: Colors.black,
+        child: text(
+          number,
+          FontWeight.w500,
+          14,
+          Colors.white,
+        ),
+      ),
+    );
+  }
+
+  Widget dottedLine(double customWidth, double customHeight) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 19,
+        vertical: 5,
+      ),
+      child: CustomPaint(
+          size: Size(customWidth * 0.01, customHeight * 0.05),
+          painter: DashedLineVerticalPainter()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
@@ -28,21 +60,17 @@ class _InviteAndEarnScreenState extends State<InviteAndEarnScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: customHeight * 0.05,
-                ),
+                verticalSpace(customHeight * 0.05),
                 InkWell(
                   onTap: () {
                     Get.back();
                   },
-                  child: const Icon(
+                  child: customIcon(
                     Icons.arrow_back_outlined,
-                    color: Colors.white,
+                    Colors.white,
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 25,
@@ -50,43 +78,33 @@ class _InviteAndEarnScreenState extends State<InviteAndEarnScreen> {
                   ),
                   width: customWidth,
                   decoration: BoxDecoration(
-                    color: Color(0xFF171717),
+                    color: const Color(0xFF171717),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
+                      showAssetImage(
                         'assets/images/icon-1-white.png',
                         width: customWidth * 0.09,
                         height: customHeight * 0.09,
                       ),
-                      SizedBox(
-                        height: customHeight * 0.005,
-                      ),
-                      const Text(
+                      verticalSpace(customHeight * 0.005),
+                      text(
                         'your unique referral code',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+                        FontWeight.w600,
+                        16,
+                        Colors.white,
                       ),
-                      SizedBox(
-                        height: customHeight * 0.015,
-                      ),
+                      verticalSpace(customHeight * 0.015),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          text(
                             '7bxu71ii',
-                            style: TextStyle(
-                              fontFamily: 'Montserrat',
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
+                            FontWeight.w600,
+                            14,
+                            Colors.white,
                           ),
                           InkWell(
                             onTap: () {
@@ -96,175 +114,78 @@ class _InviteAndEarnScreenState extends State<InviteAndEarnScreen> {
                                 Helper.toast('copied');
                               });
                             },
-                            child: const Icon(
+                            child: customIcon(
                               Icons.copy,
-                              color: Colors.white,
+                              Colors.white,
                               size: 20,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: customHeight * 0.04,
-                      ),
+                      verticalSpace(customHeight * 0.04),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.06,
-                ),
-                const Text(
+                verticalSpace(customHeight * 0.06),
+                text(
                   'how flaq’s invitation system works',
-                  style: TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
+                  FontWeight.w600,
+                  16,
+                  Colors.white,
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 Row(
                   children: [
-                    DottedBorder(
-                      color: Colors.white,
-                      strokeWidth: 1,
-                      borderType: BorderType.Circle,
-                      dashPattern: [5, 5],
-                      child: const CircleAvatar(
-                        radius: 17,
-                        backgroundColor: Colors.black,
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: customWidth * 0.04,
-                    ),
+                    circularDottedWidget('1'),
+                    horizontalSpace(customWidth * 0.04),
                     SizedBox(
                       width: customWidth * 0.65,
-                      child: const Text(
+                      child: text(
                         'your friend installs and signs up with flaq using your invitation code',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+                        FontWeight.w500,
+                        14,
+                        Colors.white,
                       ),
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 19,
-                    vertical: 5,
-                  ),
-                  child: CustomPaint(
-                      size: Size(customWidth * 0.01, customHeight * 0.05),
-                      painter: DashedLineVerticalPainter()),
-                ),
+                dottedLine(customWidth, customHeight),
                 Row(
                   children: [
-                    DottedBorder(
-                      color: Colors.white,
-                      strokeWidth: 1,
-                      borderType: BorderType.Circle,
-                      dashPattern: [5, 5],
-                      child: const CircleAvatar(
-                        radius: 17,
-                        backgroundColor: Colors.black,
-                        child: Text(
-                          '2',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: customWidth * 0.04,
-                    ),
+                    circularDottedWidget('2'),
+                    horizontalSpace(customWidth * 0.04),
                     SizedBox(
                       width: customWidth * 0.65,
-                      child: const Text(
+                      child: text(
                         'your friend completes their first transaction using flaq',
-                        style: TextStyle(
-                          fontFamily: 'Montserrat',
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
+                        FontWeight.w500,
+                        14,
+                        Colors.white,
                       ),
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 19,
-                    vertical: 5,
-                  ),
-                  child: CustomPaint(
-                      size: Size(customWidth * 0.01, customHeight * 0.05),
-                      painter: DashedLineVerticalPainter()),
-                ),
+                dottedLine(customWidth, customHeight),
                 Row(
                   children: [
-                    DottedBorder(
-                      color: Colors.white,
-                      strokeWidth: 1,
-                      borderType: BorderType.Circle,
-                      dashPattern: [5, 5],
-                      child: const CircleAvatar(
-                        radius: 17,
-                        backgroundColor: Colors.black,
-                        child: Text(
-                          '3',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: customWidth * 0.04,
-                    ),
+                    circularDottedWidget('3'),
+                    horizontalSpace(customWidth * 0.04),
                     SizedBox(
                       width: customWidth * 0.65,
-                      child: const Text.rich(
+                      child: Text.rich(
                         TextSpan(
                           children: [
-                            TextSpan(
-                              text: 'you receive ',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                              ),
+                            textSpan(
+                              'you receive ',
+                              FontWeight.w500,
+                              14,
+                              Colors.white,
                             ),
-                            TextSpan(
-                              text: '500 flaq tokens',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
+                            textSpan(
+                              '500 flaq tokens',
+                              FontWeight.bold,
+                              14,
+                              Colors.white,
                             ),
                           ],
                         ),

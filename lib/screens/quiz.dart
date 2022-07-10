@@ -1,5 +1,6 @@
 import 'package:flaq/models/questions_model.dart';
 import 'package:flaq/screens/quizResult.dart';
+import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/radioListTile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,37 @@ class _QuizScreenState extends State<QuizScreen> {
   int count = 0;
   List<String?> _value = [];
   int score = 0;
+  Widget smallDash(
+    double customWidth,
+    double customHeight,
+  ) {
+    return Container(
+      color: Colors.black,
+      width: customWidth * 0.12,
+      height: customHeight * 0.007,
+    );
+  }
+
+  Widget textUbuntu(
+      String content, FontWeight fontweight, double fontsize, Color textcolor) {
+    return Text(
+      content,
+      style: TextStyle(
+        fontFamily: 'Ubuntu',
+        fontWeight: fontweight,
+        fontSize: fontsize,
+        color: textcolor,
+      ),
+    );
+  }
+
+  Widget circleAvatar(Color color, Widget child, {double? radius}) {
+    return CircleAvatar(
+      radius: radius,
+      backgroundColor: color,
+      child: child,
+    );
+  }
 
   @override
   void initState() {
@@ -48,9 +80,7 @@ class _QuizScreenState extends State<QuizScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: customHeight * 0.07,
-                ),
+                verticalSpace(customHeight * 0.07),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -65,59 +95,44 @@ class _QuizScreenState extends State<QuizScreen> {
                             onTap: () {
                               Get.back();
                             },
-                            child: const Icon(
+                            child: customIcon(
                               Icons.arrow_back_outlined,
-                              color: Colors.white,
+                              Colors.white,
                             ),
                           ),
-                          SizedBox(
-                            width: customWidth * 0.025,
-                          ),
-                          const Text.rich(
+                          horizontalSpace(customWidth * 0.025),
+                          Text.rich(
                             TextSpan(children: [
-                              TextSpan(
-                                text: 'frontier ',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFFa76237),
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 24,
-                                ),
+                              textSpan(
+                                'frontier ',
+                                FontWeight.w400,
+                                24,
+                                const Color(0xFFa76237),
                               ),
-                              TextSpan(
-                                text: 'quiz?',
-                                style: TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 24,
-                                ),
+                              textSpan(
+                                'quiz?',
+                                FontWeight.w400,
+                                24,
+                                Colors.white,
                               ),
                             ]),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: customHeight * 0.015,
-                      ),
+                      verticalSpace(customHeight * 0.015),
                       SizedBox(
                         width: customWidth * 0.7,
-                        child: const Text(
+                        child: text(
                           'score more than 90% in order to claim your frontier reward tokens',
-                          style: TextStyle(
-                            fontFamily: 'Montserrat',
-                            color: Color(0xFFB9B9B9),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
+                          FontWeight.w500,
+                          12,
+                          const Color(0xFFB9B9B9),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: customHeight * 0.02,
-                ),
+                verticalSpace(customHeight * 0.02),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -132,14 +147,8 @@ class _QuizScreenState extends State<QuizScreen> {
                       )),
                   child: Column(
                     children: [
-                      SizedBox(
-                        height: customHeight * 0.025,
-                      ),
-                      Container(
-                        color: Colors.black,
-                        width: customWidth * 0.12,
-                        height: customHeight * 0.007,
-                      ),
+                      verticalSpace(customHeight * 0.025),
+                      smallDash(customWidth, customHeight),
                       SizedBox(
                         width: customWidth,
                         height: customHeight * 0.1,
@@ -147,7 +156,6 @@ class _QuizScreenState extends State<QuizScreen> {
                           itemScrollController: _scrollController,
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          // mainAxisAlignment: MainAxisAlignment.center,
                           itemBuilder: (context, index) {
                             return buildDot(index, context);
                           },
@@ -165,36 +173,27 @@ class _QuizScreenState extends State<QuizScreen> {
                           },
                           itemBuilder: (_, i) {
                             return Column(children: [
-                              SizedBox(height: customHeight * 0.03),
-                              Text(
+                              verticalSpace(customHeight * 0.03),
+                              textUbuntu(
                                 quizQuestions[i].question,
-                                style: const TextStyle(
-                                  fontFamily: 'Ubuntu',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17,
-                                ),
+                                FontWeight.w500,
+                                17,
+                                Colors.black,
                               ),
-                              SizedBox(
-                                height: customHeight * 0.02,
-                              ),
+                              verticalSpace(customHeight * 0.02),
                               MyRadioListTile<String?>(
                                 value: quizQuestions[i].option1,
                                 groupValue: _value[i],
                                 leading: 'A',
                                 title: SizedBox(
                                   width: customWidth * 0.6,
-                                  child: Text(
+                                  child: textUbuntu(
                                     quizQuestions[i].option1,
-                                    style: TextStyle(
-                                      fontFamily: 'Ubuntu',
-                                      color:
-                                          _value[i] == quizQuestions[i].option1
-                                              ? Colors.black
-                                              : const Color(0xFF9999A5),
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                    ),
+                                    FontWeight.w400,
+                                    14,
+                                    _value[i] == quizQuestions[i].option1
+                                        ? Colors.black
+                                        : const Color(0xFF9999A5),
                                   ),
                                 ),
                                 onChanged: (value) =>
@@ -206,17 +205,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                 leading: 'B',
                                 title: SizedBox(
                                   width: customWidth * 0.6,
-                                  child: Text(
+                                  child: textUbuntu(
                                     quizQuestions[i].option2,
-                                    style: TextStyle(
-                                      fontFamily: 'Ubuntu',
-                                      color:
-                                          _value[i] == quizQuestions[i].option2
-                                              ? Colors.black
-                                              : const Color(0xFF9999A5),
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                    ),
+                                    FontWeight.w400,
+                                    14,
+                                    _value[i] == quizQuestions[i].option2
+                                        ? Colors.black
+                                        : const Color(0xFF9999A5),
                                   ),
                                 ),
                                 onChanged: (value) =>
@@ -229,17 +224,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                       leading: 'C',
                                       title: SizedBox(
                                         width: customWidth * 0.6,
-                                        child: Text(
+                                        child: textUbuntu(
                                           quizQuestions[i].option3,
-                                          style: TextStyle(
-                                            fontFamily: 'Ubuntu',
-                                            color: _value[i] ==
-                                                    quizQuestions[i].option3
-                                                ? Colors.black
-                                                : const Color(0xFF9999A5),
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                          ),
+                                          FontWeight.w400,
+                                          14,
+                                          _value[i] == quizQuestions[i].option3
+                                              ? Colors.black
+                                              : const Color(0xFF9999A5),
                                         ),
                                       ),
                                       onChanged: (value) =>
@@ -256,17 +247,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                       leading: 'D',
                                       title: SizedBox(
                                         width: customWidth * 0.6,
-                                        child: Text(
+                                        child: textUbuntu(
                                           quizQuestions[i].option4,
-                                          style: TextStyle(
-                                            fontFamily: 'Ubuntu',
-                                            color: _value[i] ==
-                                                    quizQuestions[i].option4
-                                                ? Colors.black
-                                                : const Color(0xFF9999A5),
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                          ),
+                                          FontWeight.w400,
+                                          14,
+                                          _value[i] == quizQuestions[i].option4
+                                              ? Colors.black
+                                              : const Color(0xFF9999A5),
                                         ),
                                       ),
                                       onChanged: (value) =>
@@ -303,13 +290,13 @@ class _QuizScreenState extends State<QuizScreen> {
                         _controller.jumpToPage(currentIndex);
                       });
                     },
-                    child: const CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.black,
-                      child: Icon(
+                    child: circleAvatar(
+                      Colors.black,
+                      customIcon(
                         Icons.arrow_forward_ios,
-                        color: Colors.white,
+                        Colors.white,
                       ),
+                      radius: 30,
                     ),
                   ),
                 )
@@ -329,48 +316,39 @@ class _QuizScreenState extends State<QuizScreen> {
                                   duration: const Duration(seconds: 1));
                             });
                           },
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.black,
-                            child: Icon(
+                          child: circleAvatar(
+                            Colors.black,
+                            customIcon(
                               Icons.arrow_back_ios,
-                              color: Colors.white,
+                              Colors.white,
                             ),
+                            radius: 30,
                           ),
                         ),
-                        SizedBox(
-                          width: customWidth * 0.05,
-                        ),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.black,
-                                elevation: 0,
-                                fixedSize: Size(
-                                    customWidth * 0.68, customHeight * 0.07),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                )),
-                            onPressed: () {
-                              setState(() {
-                                score = 0;
-                              });
-                              for (int i = 0; i < _value.length; i++) {
-                                if (_value[i] ==
-                                    quizQuestions[i].correctOption) {
-                                  score++;
-                                }
+                        horizontalSpace(customWidth * 0.05),
+                        customButton(
+                          customHeight * 0.07,
+                          customWidth * 0.68,
+                          text(
+                            'next',
+                            FontWeight.w700,
+                            16,
+                            Colors.white,
+                          ),
+                          () {
+                            setState(() {
+                              score = 0;
+                            });
+                            for (int i = 0; i < _value.length; i++) {
+                              if (_value[i] == quizQuestions[i].correctOption) {
+                                score++;
                               }
-                              Get.to(() => QuizResultScreen(score: score));
-                            },
-                            child: const Text(
-                              'next',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                              ),
-                            )),
+                            }
+                            Get.to(() => QuizResultScreen(score: score));
+                          },
+                          Colors.black,
+                          4,
+                        ),
                       ],
                     )
                   : Row(
@@ -389,13 +367,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                   duration: const Duration(seconds: 1));
                             });
                           },
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.black,
-                            child: Icon(
+                          child: circleAvatar(
+                            Colors.black,
+                            customIcon(
                               Icons.arrow_back_ios,
-                              color: Colors.white,
+                              Colors.white,
                             ),
+                            radius: 30,
                           ),
                         ),
                         InkWell(
@@ -411,13 +389,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                   duration: const Duration(seconds: 1));
                             });
                           },
-                          child: const CircleAvatar(
-                            radius: 30,
-                            backgroundColor: Colors.black,
-                            child: Icon(
+                          child: circleAvatar(
+                            Colors.black,
+                            customIcon(
                               Icons.arrow_forward_ios,
-                              color: Colors.white,
+                              Colors.white,
                             ),
+                            radius: 30,
                           ),
                         ),
                       ],
@@ -451,17 +429,15 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ),
         ),
-        child: CircleAvatar(
-            backgroundColor:
-                index == currentIndex ? Colors.black : const Color(0xFFD4D4D4),
-            child: Text(
-              (index + 1).toString(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-            )),
+        child: circleAvatar(
+          index == currentIndex ? Colors.black : const Color(0xFFD4D4D4),
+          text(
+            (index + 1).toString(),
+            FontWeight.w500,
+            16,
+            Colors.white,
+          ),
+        ),
       ),
     );
   }

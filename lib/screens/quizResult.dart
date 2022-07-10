@@ -98,11 +98,11 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                             Colors.white,
                           ),
                         ),
-                        verticalSpace(customHeight * 0.035),
+                        horizontalSpace(customWidth * 0.025),
                         Text.rich(
                           TextSpan(children: [
                             textSpan(
-                              'frontier',
+                              'frontier ',
                               FontWeight.w400,
                               24,
                               const Color(0xFFa76237),
