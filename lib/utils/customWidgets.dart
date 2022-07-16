@@ -276,3 +276,11 @@ Widget showAssetImage(String image, {double? width, double? height}) {
     width: width,
   );
 }
+
+Widget showNetworkImage(String image, {double? width, double? height}) {
+  return Image.network(
+    image,
+    height: height,
+    width: width,
+  );
+}

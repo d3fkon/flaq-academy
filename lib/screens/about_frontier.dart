@@ -1,26 +1,33 @@
 import 'package:flaq/models/article_model.dart';
+import 'package:flaq/models/campaignModel.dart';
 import 'package:flaq/screens/article.dart';
 import 'package:flaq/screens/quiz.dart';
 import 'package:flaq/utils/customWidgets.dart';
+import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WhatIsFrontier extends StatefulWidget {
-  const WhatIsFrontier({Key? key}) : super(key: key);
+  final Campaign? campaign;
+  final participationId;
+  const WhatIsFrontier(
+      {Key? key, required this.campaign, required this.participationId})
+      : super(key: key);
 
   @override
   State<WhatIsFrontier> createState() => _WhatIsFrontierState();
 }
 
 class _WhatIsFrontierState extends State<WhatIsFrontier> {
-  final YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: 'eZI95CU3iSE',
+  late final YoutubePlayerController _controller = YoutubePlayerController(
+    initialVideoId: Helper.ytId ?? '',
     flags: const YoutubePlayerFlags(
       autoPlay: false,
       mute: true,
     ),
   );
+
   Widget ytWidget() {
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
@@ -92,7 +99,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                         Colors.white,
                       ),
                       textSpan(
-                        'frontier',
+                        '${widget.campaign!.title}',
                         FontWeight.w400,
                         24,
                         const Color(0xFFa76237),
@@ -124,18 +131,21 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                       Align(
                         alignment: Alignment.topLeft,
                         child: text(
-                          'learn how frontier works',
+                          'learn how ${widget.campaign!.title} works',
                           FontWeight.w400,
                           18,
                           Colors.white,
                         ),
                       ),
                       verticalSpace(customHeight * 0.01),
-                      text(
-                        'here’s a short video on explaining how the wallet works and about the frontier team',
-                        FontWeight.w500,
-                        12,
-                        Colors.white,
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: text(
+                          '${widget.campaign!.description}',
+                          FontWeight.w500,
+                          12,
+                          Colors.white,
+                        ),
                       ),
                       verticalSpace(customHeight * 0.01),
                       ytWidget(),
@@ -165,9 +175,9 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
               ),
               verticalSpace(customHeight * 0.01),
               SizedBox(
-                height: customHeight * 0.26,
+                height: customHeight * 0.2,
                 child: ListView.builder(
-                    itemCount: article.length,
+                    itemCount: widget.campaign!.articleUrls!.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
@@ -180,8 +190,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                         child: InkWell(
                           onTap: () {
                             Get.to(() => ArticleScreen(
-                                  title: article[index].title,
-                                  content: article[index].content,
+                                  link: widget.campaign!.articleUrls![index],
                                 ));
                           },
                           child: Container(
@@ -204,7 +213,7 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: textWithOverflow(
-                                    article[index].title,
+                                    'article ${index + 1}',
                                     FontWeight.w400,
                                     16,
                                     Colors.white,
@@ -213,14 +222,14 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                                   ),
                                 ),
                                 verticalSpace(customHeight * 0.01),
-                                textWithOverflow(
-                                  article[index].content,
-                                  FontWeight.w400,
-                                  14,
-                                  Colors.white,
-                                  3,
-                                  TextOverflow.ellipsis,
-                                ),
+                                // textWithOverflow(
+                                //   article[index].content,
+                                //   FontWeight.w400,
+                                //   14,
+                                //   Colors.white,
+                                //   3,
+                                //   TextOverflow.ellipsis,
+                                // ),
                               ],
                             ),
                           ),
@@ -233,13 +242,17 @@ class _WhatIsFrontierState extends State<WhatIsFrontier> {
                 customHeight * 0.06,
                 customWidth * 0.9,
                 text(
-                  'take the frontier quiz',
+                  'take the ${widget.campaign!.title} quiz',
                   FontWeight.w700,
                   14,
                   Colors.black,
                 ),
                 () {
-                  Get.to(() => const QuizScreen());
+                  Get.to(() => QuizScreen(
+                        participationId: widget.participationId,
+                        campaignId: widget.campaign!.id ?? '',
+                        title: widget.campaign!.title ?? '',
+                      ));
                 },
                 Colors.white,
                 4,

@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:material_dialogs/material_dialogs.dart';
 import 'package:material_dialogs/widgets/buttons/icon_button.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Helper {
   static toast(String message) {
@@ -70,5 +71,10 @@ class Helper {
     } else {
       return false;
     }
+  }
+
+  static String? ytId;
+  static String? getYoutubeVideoIdByURL(String? url) {
+    return YoutubePlayer.convertUrlToId(url!);
   }
 }

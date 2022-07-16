@@ -1,14 +1,18 @@
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class QuizResultScreen extends StatefulWidget {
-  final score;
-  const QuizResultScreen({
-    Key? key,
-    required this.score,
-  }) : super(key: key);
+  final isPassing, totalQuestion, correctAns, title;
+  const QuizResultScreen(
+      {Key? key,
+      required this.isPassing,
+      required this.totalQuestion,
+      required this.correctAns,
+      required this.title})
+      : super(key: key);
 
   @override
   State<QuizResultScreen> createState() => _QuizResultScreenState();
@@ -49,12 +53,12 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
       animation: true,
       animationDuration: 800,
       lineWidth: 5.0,
-      percent: (widget.score / 10),
+      percent: (widget.correctAns / widget.totalQuestion),
       center: circleAvatar(
         110,
         const Color(0xFFECF0F3),
         text(
-          '${widget.score}/10',
+          '${widget.correctAns} / ${widget.totalQuestion}',
           FontWeight.w700,
           40,
           progressColor,
@@ -102,7 +106,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                         Text.rich(
                           TextSpan(children: [
                             textSpan(
-                              'frontier ',
+                              '${widget.title} ',
                               FontWeight.w400,
                               24,
                               const Color(0xFFa76237),
@@ -118,7 +122,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                       ],
                     ),
                     verticalSpace(customHeight * 0.12),
-                    widget.score < 9
+                    !widget.isPassing
                         ? scoreDisplay(
                             const Color(0xFFDB4437),
                           )
@@ -126,7 +130,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                             const Color(0xFF0F9D58),
                           ),
                     verticalSpace(customHeight * 0.04),
-                    widget.score < 9
+                    !widget.isPassing
                         ? showAssetImage('assets/images/retake-quiz.png')
                         : showAssetImage('assets/images/quiz-complete.png'),
                     verticalSpace(customHeight * 0.01),
@@ -137,7 +141,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                       Colors.white,
                     ),
                     verticalSpace(customHeight * 0.01),
-                    widget.score < 9
+                    !widget.isPassing
                         ? Padding(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 18,
@@ -161,7 +165,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                             ),
                           ),
                     verticalSpace(customHeight * 0.1),
-                    widget.score < 9
+                    !widget.isPassing
                         ? customButton(
                             customHeight * 0.06,
                             customWidth * 0.9,
@@ -171,7 +175,10 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                               14,
                               Colors.black,
                             ),
-                            () {},
+                            () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
                             Colors.white,
                             4,
                           )
@@ -184,7 +191,67 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                               14,
                               Colors.black,
                             ),
-                            () {},
+                            () {
+                              showMaterialModalBottomSheet(
+                                context: context,
+                                isDismissible: false,
+                                builder: (context) {
+                                  return Container(
+                                    width: customWidth,
+                                    height: customHeight * 0.25,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 30,
+                                      vertical: 20,
+                                    ),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        text(
+                                          'failed to claim rewards',
+                                          FontWeight.w600,
+                                          18,
+                                          Colors.black,
+                                        ),
+                                        verticalSpace(customHeight * 0.02),
+                                        text(
+                                          'sorry for the inconvenience',
+                                          FontWeight.w500,
+                                          14,
+                                          Colors.grey,
+                                        ),
+                                        verticalSpace(customHeight * 0.04),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          },
+                                          child: Row(
+                                            children: [
+                                              customIcon(
+                                                Icons.arrow_back_ios,
+                                                Colors.grey,
+                                                size: 18,
+                                              ),
+                                              text(
+                                                'Go Back',
+                                                FontWeight.w700,
+                                                14,
+                                                Colors.grey,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             Colors.white,
                             4,
                           )

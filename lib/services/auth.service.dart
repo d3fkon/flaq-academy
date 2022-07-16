@@ -73,9 +73,6 @@ class AuthService extends GetxService {
       debugPrint("user exists");
       bool internet = await Helper().checkInternetConnectivity();
       if (internet) {
-        EasyLoading.show();
-        user = await _apiService.getProfile();
-        EasyLoading.dismiss();
         navigate();
       } else {
         Helper.toast('please enable your internet connection');
@@ -88,7 +85,9 @@ class AuthService extends GetxService {
   /// Navigate to the right screen
   navigate() async {
     debugPrint("AuthService: navigate");
-
+    EasyLoading.show();
+    user = await _apiService.getProfile();
+    EasyLoading.dismiss();
     if (user == null) {
       Get.offAll(() => const LoginScreen());
       return;

@@ -47,6 +47,8 @@ dependencies:
   flutter_tabler_icons: ^1.1.1
   percent_indicator: ^4.2.2
   connectivity_plus: ^2.3.5
+  webview_flutter: ^3.0.4
+  modal_bottom_sheet: ^2.1.0
 
   flutter:
     sdk: flutter
