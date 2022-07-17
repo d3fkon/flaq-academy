@@ -144,21 +144,24 @@ class _QuizScreenState extends State<QuizScreen> {
                                   ),
                                 ),
                                 horizontalSpace(customWidth * 0.025),
-                                Text.rich(
-                                  TextSpan(children: [
-                                    textSpan(
-                                      '${widget.title} ',
-                                      FontWeight.w400,
-                                      24,
-                                      const Color(0xFFa76237),
-                                    ),
-                                    textSpan(
-                                      'quiz?',
-                                      FontWeight.w400,
-                                      24,
-                                      Colors.white,
-                                    ),
-                                  ]),
+                                SizedBox(
+                                  width: customWidth * 0.8,
+                                  child: Text.rich(
+                                    TextSpan(children: [
+                                      textSpan(
+                                        '${widget.title} ',
+                                        FontWeight.w400,
+                                        24,
+                                        const Color(0xFFa76237),
+                                      ),
+                                      textSpan(
+                                        'quiz?',
+                                        FontWeight.w400,
+                                        24,
+                                        Colors.white,
+                                      ),
+                                    ]),
+                                  ),
                                 ),
                               ],
                             ),
@@ -375,6 +378,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                               ['CorrectCount'];
                                         });
                                         EasyLoading.dismiss();
+                                        Navigator.pop(context);
+
                                         Get.to(() => QuizResultScreen(
                                               isPassing: isPassing,
                                               totalQuestion: totalQuestions,
@@ -457,12 +462,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
   buildDot(int index, BuildContext context) {
     return InkWell(
-      onTap: () {
-        setState(() {
-          currentIndex = index;
-          _controller.jumpToPage(currentIndex);
-        });
-      },
+      onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 5,

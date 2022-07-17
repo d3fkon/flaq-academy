@@ -45,7 +45,9 @@ class RootService extends GetxService with WidgetsBindingObserver {
   navigate() async {
     if (await Permission.sms.status.isGranted) {
       if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-        Get.offAll(() => const DashBoard());
+        Get.offAll(() => const DashBoard(
+              tab: 0,
+            ));
       } else {
         Get.offAll(() => const OpenSettingsScreen());
         return;

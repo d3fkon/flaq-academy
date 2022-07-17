@@ -76,7 +76,7 @@ class Campaign {
   int? flaqReward;
   String? tickerName;
   String? tickerImageUrl;
-  int? airdropPerUser;
+  dynamic airdropPerUser;
   int? totalAirdrop;
   int? currentAirdrop;
   String? taskType;
@@ -96,7 +96,9 @@ class Campaign {
         totalAirdrop: json["TotalAirdrop"],
         currentAirdrop: json["CurrentAirdrop"],
         taskType: json["TaskType"],
-        articleUrls: List<String>.from(json["ArticleUrls"].map((x) => x)),
+        articleUrls: json["ArticleUrls"] == null
+            ? null
+            : List<String>.from(json["ArticleUrls"].map((x) => x)),
         ytVideoUrl: json["YTVideoUrl"],
       );
 

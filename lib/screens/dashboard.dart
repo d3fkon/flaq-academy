@@ -1,15 +1,19 @@
 import 'package:flaq/screens/bounties.dart';
 import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/screens/wallet.dart';
+import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 List<Widget> tabs = const [
   HomeScreen(),
+  WalletScreen(),
   BountiesScreen(),
 ];
 
 class DashBoard extends StatefulWidget {
-  const DashBoard({Key? key}) : super(key: key);
+  final tab;
+  const DashBoard({Key? key, required this.tab}) : super(key: key);
 
   @override
   _DashBoardState createState() => _DashBoardState();
@@ -21,7 +25,8 @@ class _DashBoardState extends State<DashBoard> {
   late PageController _pageController;
   @override
   void initState() {
-    _pageController = PageController(initialPage: pageIndex, keepPage: true);
+    _pageController = PageController(initialPage: widget.tab, keepPage: true);
+    _bottomTab = widget.tab;
     super.initState();
   }
 
@@ -86,8 +91,32 @@ class _DashBoardState extends State<DashBoard> {
                       ),
                     )),
           BottomNavigationBarItem(
-              label: 'Bounties',
+              label: 'Wallet',
               icon: _bottomTab == 1
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 7),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Icon(
+                          TablerIcons.wallet,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      child: Icon(
+                        TablerIcons.wallet,
+                        color: Colors.grey,
+                      ),
+                    )),
+          BottomNavigationBarItem(
+              label: 'Bounties',
+              icon: _bottomTab == 2
                   ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Container(
@@ -111,11 +140,16 @@ class _DashBoardState extends State<DashBoard> {
                     )),
         ],
         onTap: (i) {
-          setState(() {
-            _bottomTab = i;
-            pageIndex = i;
-            _pageController.jumpToPage(i);
-          });
+          if (i == 2) {
+            Helper.toast('coming soon');
+          } else {
+            setState(() {
+              _bottomTab = i;
+              pageIndex = i;
+
+              _pageController.jumpToPage(i);
+            });
+          }
         },
       ),
     );

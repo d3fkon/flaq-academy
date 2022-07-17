@@ -1,3 +1,6 @@
+import 'package:flaq/screens/dashboard.dart';
+import 'package:flaq/screens/wallet.dart';
+import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -93,15 +96,6 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                   children: [
                     Row(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: customIcon(
-                            Icons.arrow_back_outlined,
-                            Colors.white,
-                          ),
-                        ),
                         horizontalSpace(customWidth * 0.025),
                         Text.rich(
                           TextSpan(children: [
@@ -177,7 +171,6 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                             ),
                             () {
                               Navigator.pop(context);
-                              Navigator.pop(context);
                             },
                             Colors.white,
                             4,
@@ -191,66 +184,75 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                               14,
                               Colors.black,
                             ),
-                            () {
-                              showMaterialModalBottomSheet(
-                                context: context,
-                                isDismissible: false,
-                                builder: (context) {
-                                  return Container(
-                                    width: customWidth,
-                                    height: customHeight * 0.25,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 30,
-                                      vertical: 20,
-                                    ),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        text(
-                                          'failed to claim rewards',
-                                          FontWeight.w600,
-                                          18,
-                                          Colors.black,
-                                        ),
-                                        verticalSpace(customHeight * 0.02),
-                                        text(
-                                          'sorry for the inconvenience',
-                                          FontWeight.w500,
-                                          14,
-                                          Colors.grey,
-                                        ),
-                                        verticalSpace(customHeight * 0.04),
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                            Navigator.pop(context);
-                                          },
-                                          child: Row(
-                                            children: [
-                                              customIcon(
-                                                Icons.arrow_back_ios,
-                                                Colors.grey,
-                                                size: 18,
-                                              ),
-                                              text(
-                                                'Go Back',
-                                                FontWeight.w700,
-                                                14,
-                                                Colors.grey,
-                                              ),
-                                            ],
+                            () async {
+                              var rewardsData =
+                                  await Get.find<ApiService>().getRewards();
+                              if (rewardsData == null || rewardsData == []) {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  isDismissible: false,
+                                  builder: (context) {
+                                    return Container(
+                                      width: customWidth,
+                                      height: customHeight * 0.25,
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 30,
+                                        vertical: 20,
+                                      ),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          text(
+                                            'failed to claim rewards',
+                                            FontWeight.w600,
+                                            18,
+                                            Colors.black,
                                           ),
-                                        ),
-                                      ],
-                                    ),
+                                          verticalSpace(customHeight * 0.02),
+                                          text(
+                                            'sorry for the inconvenience',
+                                            FontWeight.w500,
+                                            14,
+                                            Colors.grey,
+                                          ),
+                                          verticalSpace(customHeight * 0.04),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                            },
+                                            child: Row(
+                                              children: [
+                                                customIcon(
+                                                  Icons.arrow_back_ios,
+                                                  Colors.grey,
+                                                  size: 18,
+                                                ),
+                                                text(
+                                                  'Go Back',
+                                                  FontWeight.w700,
+                                                  14,
+                                                  Colors.grey,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                Get.offAll(() {
+                                  return const DashBoard(
+                                    tab: 1,
                                   );
-                                },
-                              );
+                                });
+                              }
                             },
                             Colors.white,
                             4,

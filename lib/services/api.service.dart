@@ -27,8 +27,6 @@ const BASE_URL = "http://52.66.228.64:4000/api/v1";
 const BASE_URL_GO = "http://52.66.228.64:8080";
 
 class ApiService extends GetConnect implements GetxService {
-  late final SharedPreferences _sp;
-
   @override
   void onInit() {
     super.onInit();
@@ -184,6 +182,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  //register payment
   registerPayment(String amount) async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -223,6 +222,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  // get all payments
   Future<List<Transaction>?> getAllPayments() async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -258,6 +258,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  // check referral code
   Future checkReferralCode(String referralCode) async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -289,7 +290,9 @@ class ApiService extends GetConnect implements GetxService {
               if (true) {
                 if (await Permission.sms.isGranted) {
                   if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-                    Get.offAll(() => const DashBoard());
+                    Get.offAll(() => const DashBoard(
+                          tab: 0,
+                        ));
                     EasyLoading.dismiss();
                     return;
                   } else {
@@ -335,6 +338,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  // get all campaigns
   getCampaigns() async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -361,7 +365,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("campaigns fetched successfully");
           EasyLoading.dismiss();
-          return campaignResponseFromJson(res.body).data;
+          return CampaignResponse.fromJson(jsonDecode(res.body)).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -375,6 +379,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  // participate in the quiz
   participateInCampaign(String campaignId) async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -457,6 +462,7 @@ class ApiService extends GetConnect implements GetxService {
     }
   }
 
+  // evaluate quiz
   evaluateQuiz(List answers, String quizId, String participationId) async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
@@ -497,6 +503,86 @@ class ApiService extends GetConnect implements GetxService {
         debugPrint('error: $e');
         EasyLoading.dismiss();
         return false;
+      }
+    } else {
+      Helper.toast('please enable your internet connection');
+      return null;
+    }
+  }
+
+  // get all rewards
+  getRewards() async {
+    bool internet = await Helper().checkInternetConnectivity();
+    if (internet) {
+      debugPrint('Getting rewards');
+      try {
+        EasyLoading.show();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var accessToken = prefs.getString('ACCESSTOKEN');
+        final res = await http.get(Uri.parse('$BASE_URL_GO/rewards'), headers: {
+          'Authorization': 'Bearer $accessToken',
+        });
+        var jsonData = jsonDecode(res.body);
+        debugPrint(jsonData.toString());
+        if (jsonData['StatusCode'] == 401) {
+          await refreshToken();
+          await getRewards();
+        } else if (jsonData['StatusCode'] != 200) {
+          if (jsonData['Message'] != null) {
+            Helper.toast(jsonData['Message']);
+            return null;
+          }
+        } else {
+          debugPrint("rewards fetched successfully");
+          EasyLoading.dismiss();
+          return jsonData['Data'];
+        }
+        EasyLoading.dismiss();
+      } catch (e) {
+        Helper.toast('error, please try again');
+        debugPrint('error: $e');
+        EasyLoading.dismiss();
+      }
+    } else {
+      Helper.toast('please enable your internet connection');
+      return null;
+    }
+  }
+
+  // get all campaigns
+  getConversions() async {
+    bool internet = await Helper().checkInternetConnectivity();
+    if (internet) {
+      debugPrint('Getting Conversions');
+      try {
+        EasyLoading.show();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var accessToken = prefs.getString('ACCESSTOKEN');
+        final res = await http
+            .get(Uri.parse('$BASE_URL_GO/campaign/conversion'), headers: {
+          'Authorization': 'Bearer $accessToken',
+        });
+        var jsonData = jsonDecode(res.body);
+        debugPrint(jsonData.toString());
+        if (jsonData['StatusCode'] == 401) {
+          await refreshToken();
+          await getCampaigns();
+        } else if (jsonData['StatusCode'] != 200) {
+          if (jsonData['Message'] != null) {
+            Helper.toast(jsonData['Message']);
+            EasyLoading.dismiss();
+            return null;
+          }
+        } else {
+          debugPrint("conversion fetched successfully");
+          EasyLoading.dismiss();
+          return jsonData['Data'];
+        }
+        EasyLoading.dismiss();
+      } catch (e) {
+        Helper.toast('error, please try again');
+        debugPrint('error: $e');
+        EasyLoading.dismiss();
       }
     } else {
       Helper.toast('please enable your internet connection');
