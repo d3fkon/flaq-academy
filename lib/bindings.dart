@@ -13,8 +13,6 @@ class AppBindings implements Bindings {
     Get.lazyPut(() => DataService());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
-    if (permissionAsked) {
-      Get.putAsync(() => RootService().init());
-    }
+    Get.putAsync(() => RootService().init());
   }
 }

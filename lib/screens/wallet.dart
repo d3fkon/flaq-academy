@@ -1,8 +1,15 @@
+import 'package:flaq/models/rewards.model.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+
+List<Color> assetListColors = [
+  (const Color(0xFFF7CD76)),
+  (const Color(0xFFE9F5FA)),
+  (const Color(0xFFB5FFC1)),
+];
 
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
@@ -11,51 +18,112 @@ class WalletScreen extends StatefulWidget {
   State<WalletScreen> createState() => _WalletScreenState();
 }
 
+class AssetContainer extends StatelessWidget {
+  final RewardDatum reward;
+  final int randInt;
+  const AssetContainer({Key? key, required this.reward, required this.randInt})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: assetListColors[randInt % assetListColors.length],
+          borderRadius: BorderRadius.circular(6),
+        ),
+        height: 84,
+        child: Row(
+          children: [
+            const SizedBox(width: 20),
+            Image.network(
+              reward.tickerImageUrl ?? '',
+              height: 42,
+              width: 42,
+            ),
+            const SizedBox(width: 12),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  reward.tickerName ?? "",
+                  style: const TextStyle(
+                    color: Color(0xff1A1A1A),
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  reward.name ?? "",
+                  style: const TextStyle(
+                    color: Color(0xff1A1A1A),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+            Expanded(
+              child: Container(),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  reward.amount.toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Montserrat",
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  (((reward.amount ?? 0) * (reward.conversion ?? 0))
+                          .toPrecision(3))
+                      .toString(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Montserrat",
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 20),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _WalletScreenState extends State<WalletScreen> {
-  var rewardsData;
-  List amount = [];
-  List tickerName = [];
-  List tickerImage = [];
-  List<Color> listColors = [];
-  bool isLoading = true;
   double totalAmount = 0;
-  var conversions;
-  List coinAmount = [];
-  List coinName = [];
+  bool isLoading = false;
+  List<RewardDatum> rewards = [];
 
   load() async {
     EasyLoading.show();
     setState(() {
       isLoading = true;
     });
-    rewardsData = await Get.find<ApiService>().getRewards();
-    conversions = await Get.find<ApiService>().getConversions();
-    if (mounted) {
-      if (rewardsData != null) {
-        setState(() {
-          for (int i = 0; i < rewardsData.length; i++) {
-            amount.add(rewardsData[i]['Amount']);
-            totalAmount = totalAmount + rewardsData[i]['Amount'];
-            tickerName.add(rewardsData[i]['TickerName']);
-            tickerImage.add(rewardsData[i]['TickerImageUrl']);
-            listColors.add(const Color(0xFFF7CD76));
-            listColors.add(const Color(0xFFE9F5FA));
-            listColors.add(const Color(0xFFB5FFC1));
-          }
-          for (int j = 0; j < rewardsData.length; j++) {
-            for (int k = 0; k < conversions.length; k++) {
-              if (conversions[k]['TickerName'] ==
-                  rewardsData[j]['TickerName']) {
-                coinAmount.add(amount[j] * conversions[k]['Conversion']);
-                coinName.add(conversions[k]['Name']);
-              }
-            }
-          }
-          isLoading = false;
-        });
 
-        EasyLoading.dismiss();
-      }
+    List<RewardDatum>? rewardsData = await Get.find<ApiService>().getRewards();
+    for (final reward in rewardsData ?? []) {
+      totalAmount += (reward.amount ?? 0) * (reward.conversion ?? 0);
+    }
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+        rewards = rewardsData ?? [];
+      });
     }
   }
 
@@ -150,16 +218,18 @@ class _WalletScreenState extends State<WalletScreen> {
                         width: customWidth,
                         height: customHeight,
                         decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(24),
-                                topRight: Radius.circular(24))),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                          ),
+                        ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              verticalSpace(customHeight * 0.02),
+                              verticalSpace(32),
                               text(
                                 'my assets',
                                 FontWeight.w700,
@@ -172,96 +242,14 @@ class _WalletScreenState extends State<WalletScreen> {
                                 height: customHeight * 0.43,
                                 child: ListView.builder(
                                     shrinkWrap: true,
-                                    itemCount: rewardsData.length,
+                                    itemCount: rewards.length ?? 0,
                                     itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 5,
-                                        ),
-                                        child: Container(
-                                          padding: const EdgeInsets.all(15),
-                                          decoration: BoxDecoration(
-                                            color: listColors[index],
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 10,
-                                                        vertical: 8),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
-                                                    child: showNetworkImage(
-                                                        tickerImage[index],
-                                                        height:
-                                                            customHeight * 0.05,
-                                                        width:
-                                                            customWidth * 0.09),
-                                                  ),
-                                                  horizontalSpace(
-                                                      customWidth * 0.02),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      text(
-                                                        tickerName[index],
-                                                        FontWeight.w400,
-                                                        16,
-                                                        Colors.black,
-                                                      ),
-                                                      verticalSpace(
-                                                          customHeight * 0.01),
-                                                      text(
-                                                        coinName[index],
-                                                        FontWeight.w700,
-                                                        12,
-                                                        Colors.black,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  text(
-                                                    coinAmount[index]
-                                                        .toString(),
-                                                    FontWeight.w500,
-                                                    16,
-                                                    Colors.black,
-                                                  ),
-                                                  verticalSpace(
-                                                      customHeight * 0.01),
-                                                  text(
-                                                    '\u{20B9}${amount[index].toString()}',
-                                                    FontWeight.w500,
-                                                    14,
-                                                    Colors.black,
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                      return AssetContainer(
+                                        randInt: index,
+                                        reward: rewards[index],
                                       );
                                     }),
                               ),
-                              verticalSpace(customHeight * 0.02),
                               customButton(
                                 customHeight * 0.07,
                                 customWidth,

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flaq/models/campaignModel.dart';
 import 'package:flaq/models/quizModel.dart';
+import 'package:flaq/models/rewards.model.dart';
 import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
@@ -511,7 +512,7 @@ class ApiService extends GetConnect implements GetxService {
   }
 
   // get all rewards
-  getRewards() async {
+  Future<List<RewardDatum>?> getRewards() async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
       debugPrint('Getting rewards');
@@ -535,7 +536,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("rewards fetched successfully");
           EasyLoading.dismiss();
-          return jsonData['Data'];
+          return Reward.fromJson(jsonData).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
