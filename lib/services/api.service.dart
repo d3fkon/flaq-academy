@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flaq/models/campaignModel.dart';
 import 'package:flaq/models/quizModel.dart';
 import 'package:flaq/models/rewards.model.dart';
@@ -8,10 +9,10 @@ import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
 
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/home.screen.dart';
-import 'package:flaq/screens/notification_approval.screen.dart';
-import 'package:flaq/screens/open_settings.screen.dart';
-import 'package:flaq/screens/sms_open_settings.dart';
+import 'package:flaq/screens/home/home.dart';
+import 'package:flaq/screens/userApproval/notificationApproval..dart';
+import 'package:flaq/screens/userApproval/openSettings.dart';
+import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flaq/utils/helper.dart';
@@ -74,11 +75,13 @@ class ApiService extends GetConnect implements GetxService {
     if (internet) {
       try {
         EasyLoading.show();
+        final fcmToken = await FirebaseMessaging.instance.getToken();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         debugPrint('logging in the user');
         final res = await http.post(
           Uri.parse('$BASE_URL_GO/auth/login'),
-          body: jsonEncode({"Email": email, "Password": password}),
+          body: jsonEncode(
+              {"DeviceToken": fcmToken, "Email": email, "Password": password}),
         );
         var jsonData = jsonDecode(res.body);
         debugPrint(jsonData.toString());

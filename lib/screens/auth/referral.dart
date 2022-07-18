@@ -1,4 +1,4 @@
-import 'package:flaq/screens/home.screen.dart';
+import 'package:flaq/screens/home/home.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flaq/utils/customWidgets.dart';

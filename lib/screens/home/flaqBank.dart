@@ -1,5 +1,5 @@
-import 'package:flaq/screens/inviteAndEarn.dart';
-import 'package:flaq/screens/transactionHistory.dart';
+import 'package:flaq/screens/home/inviteAndEarn.dart';
+import 'package:flaq/screens/home/transactionHistory.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

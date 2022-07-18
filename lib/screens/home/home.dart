@@ -1,8 +1,8 @@
 import 'package:flaq/models/campaignModel.dart';
 import 'package:flaq/models/user.model.dart';
-import 'package:flaq/screens/about_frontier.dart';
+import 'package:flaq/screens/campaign/aboutFrontier.dart';
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/flaqBank.dart';
+import 'package:flaq/screens/home/flaqBank.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flaq/services/messaging.service.dart';
@@ -83,9 +83,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     Helper.ytId = '';
     load();
     dataService = Get.find();
-    Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      dataService.fetchTransactions();
-    });
     Get.putAsync(() => MessagingService().init());
   }
 

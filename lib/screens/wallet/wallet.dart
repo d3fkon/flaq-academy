@@ -75,7 +75,7 @@ class AssetContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  reward.amount.toString(),
+                  '\u{20B9}${reward.amount.toString()}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     fontFamily: "Montserrat",

@@ -1,7 +1,7 @@
 import 'package:flaq/models/article_model.dart';
 import 'package:flaq/models/campaignModel.dart';
-import 'package:flaq/screens/article.dart';
-import 'package:flaq/screens/quiz.dart';
+import 'package:flaq/screens/campaign/article.dart';
+import 'package:flaq/screens/quiz/quiz.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';

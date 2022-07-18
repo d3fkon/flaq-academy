@@ -1,5 +1,5 @@
 import 'package:flaq/models/quizModel.dart';
-import 'package:flaq/screens/quizResult.dart';
+import 'package:flaq/screens/quiz/quizResult.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/helper.dart';

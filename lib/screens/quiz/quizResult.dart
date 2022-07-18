@@ -1,5 +1,5 @@
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/wallet.dart';
+import 'package:flaq/screens/wallet/wallet.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';

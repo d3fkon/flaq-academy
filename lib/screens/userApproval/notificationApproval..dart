@@ -1,4 +1,4 @@
-import 'package:flaq/screens/sms_open_settings.dart';
+import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
 import 'package:flaq/services/root.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';

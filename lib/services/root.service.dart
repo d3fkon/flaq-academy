@@ -1,8 +1,8 @@
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/home.screen.dart';
-import 'package:flaq/screens/notification_approval.screen.dart';
-import 'package:flaq/screens/open_settings.screen.dart';
-import 'package:flaq/screens/sms_open_settings.dart';
+import 'package:flaq/screens/home/home.dart';
+import 'package:flaq/screens/userApproval/notificationApproval..dart';
+import 'package:flaq/screens/userApproval/openSettings.dart';
+import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
 import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/utils/helper.dart';
