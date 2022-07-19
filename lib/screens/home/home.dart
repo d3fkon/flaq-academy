@@ -1,6 +1,6 @@
 import 'package:flaq/models/campaignModel.dart';
 import 'package:flaq/models/user.model.dart';
-import 'package:flaq/screens/campaign/aboutFrontier.dart';
+import 'package:flaq/screens/campaign/campaignContainer.dart';
 import 'package:flaq/screens/dashboard.dart';
 import 'package:flaq/screens/home/flaqBank.dart';
 import 'package:flaq/services/api.service.dart';
@@ -13,7 +13,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 String formatDate(DateTime date) => DateFormat("dd/MM HH:mm").format(date);
 
@@ -201,12 +200,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                 ),
                                 () {
                                   Get.to(() => const FlaqBankScreen());
-                                  // Get.snackbar(
-                                  //   "Coming Soon",
-                                  //   "Claiming Rewards is coming soon",
-                                  //   backgroundColor: Colors.black,
-                                  //   colorText: Colors.white,
-                                  // );
                                 },
                                 Colors.white,
                                 4,
@@ -246,282 +239,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                                       .participations![i].campaign!.id);
                                 }
                               }
-
-                              return Padding(
-                                  padding: index == 0
-                                      ? const EdgeInsets.fromLTRB(20, 0, 20, 8)
-                                      : const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 8,
-                                        ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 20),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              text(
-                                                campaigns!
-                                                    .campaigns![index].title
-                                                    .toString(),
-                                                FontWeight.w500,
-                                                18,
-                                                Colors.black,
-                                              ),
-                                              circleAvatar(
-                                                13,
-                                                Colors.transparent,
-                                                showNetworkImage(campaigns!
-                                                    .campaigns![index]
-                                                    .tickerImageUrl
-                                                    .toString()),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        verticalSpace(customHeight * 0.01),
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: text(
-                                            campaigns!
-                                                .campaigns![index].description
-                                                .toString(),
-                                            FontWeight.w500,
-                                            12,
-                                            Colors.black,
-                                          ),
-                                        ),
-                                        verticalSpace(customHeight * 0.01),
-                                        completed[index] == true
-                                            ? Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 10,
-                                                ),
-                                                child: textWorkSans(
-                                                  'quiz completed',
-                                                  FontWeight.w500,
-                                                  14,
-                                                  Colors.black,
-                                                ),
-                                              )
-                                            : Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  participationIds.contains(
-                                                          campaigns!
-                                                              .campaigns![index]
-                                                              .id)
-                                                      ? textWorkSans(
-                                                          'unlocked',
-                                                          FontWeight.w500,
-                                                          14,
-                                                          Colors.black,
-                                                        )
-                                                      : textWorkSans(
-                                                          'earn ${campaigns!.campaigns![index].airdropPerUser} ${campaigns!.campaigns![index].tickerName}',
-                                                          FontWeight.w500,
-                                                          14,
-                                                          Colors.black,
-                                                        ),
-                                                  customButton(
-                                                    customHeight * 0.04,
-                                                    customWidth * 0.42,
-                                                    participationIds.contains(
-                                                            campaigns!
-                                                                .campaigns![
-                                                                    index]
-                                                                .id)
-                                                        ? Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              text(
-                                                                'take the quiz',
-                                                                FontWeight.w700,
-                                                                12,
-                                                                Colors.white,
-                                                              ),
-                                                              horizontalSpace(
-                                                                  customWidth *
-                                                                      0.02),
-                                                              customIcon(
-                                                                Icons
-                                                                    .arrow_forward,
-                                                                Colors.white,
-                                                                size: 15,
-                                                              ),
-                                                            ],
-                                                          )
-                                                        : text(
-                                                            'use ${campaigns!.campaigns![index].requiredFlaq} flaq',
-                                                            FontWeight.w700,
-                                                            12,
-                                                            Colors.white,
-                                                          ),
-                                                    () {
-                                                      setState(() {
-                                                        Helper.ytId = Helper
-                                                            .getYoutubeVideoIdByURL(
-                                                                campaigns!
-                                                                    .campaigns![
-                                                                        index]
-                                                                    .ytVideoUrl);
-                                                        for (int i = 0;
-                                                            i <
-                                                                campaigns!
-                                                                    .participations!
-                                                                    .length;
-                                                            i++) {
-                                                          if (campaigns!
-                                                                  .participations![
-                                                                      i]
-                                                                  .campaign!
-                                                                  .id ==
-                                                              campaigns!
-                                                                  .campaigns![
-                                                                      index]
-                                                                  .id) {
-                                                            participationID =
-                                                                campaigns!
-                                                                    .participations![
-                                                                        i]
-                                                                    .id!;
-                                                          }
-                                                        }
-                                                      });
-
-                                                      participationIds.contains(
-                                                              campaigns!
-                                                                  .campaigns![
-                                                                      index]
-                                                                  .id)
-                                                          ? Get.to(() =>
-                                                              WhatIsFrontier(
-                                                                campaign: campaigns!
-                                                                        .campaigns![
-                                                                    index],
-                                                                participationId:
-                                                                    participationID,
-                                                              ))
-                                                          : showDialog(
-                                                              context: context,
-                                                              barrierDismissible:
-                                                                  false,
-                                                              builder:
-                                                                  (context) {
-                                                                return AlertDialog(
-                                                                  title: text(
-                                                                    'Confirmation',
-                                                                    FontWeight
-                                                                        .w600,
-                                                                    18,
-                                                                    Colors
-                                                                        .black,
-                                                                  ),
-                                                                  content: text(
-                                                                    'are you sure you want to participate in this campaign using ${campaigns!.campaigns![index].requiredFlaq} flaq points?',
-                                                                    FontWeight
-                                                                        .w500,
-                                                                    14,
-                                                                    Colors.grey,
-                                                                  ),
-                                                                  actions: [
-                                                                    customButton(
-                                                                      customHeight *
-                                                                          0.06,
-                                                                      customWidth *
-                                                                          0.3,
-                                                                      text(
-                                                                        'No',
-                                                                        FontWeight
-                                                                            .w600,
-                                                                        14,
-                                                                        Colors
-                                                                            .grey,
-                                                                      ),
-                                                                      () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      Colors
-                                                                          .white,
-                                                                      4,
-                                                                    ),
-                                                                    customButton(
-                                                                      customHeight *
-                                                                          0.06,
-                                                                      customWidth *
-                                                                          0.3,
-                                                                      text(
-                                                                        'Yes',
-                                                                        FontWeight
-                                                                            .w600,
-                                                                        14,
-                                                                        Colors
-                                                                            .white,
-                                                                      ),
-                                                                      () async {
-                                                                        var participated =
-                                                                            await Get.find<ApiService>().participateInCampaign(campaigns!.campaigns![index].id ??
-                                                                                '');
-                                                                        if (participated) {
-                                                                          EasyLoading
-                                                                              .show();
-                                                                          campaigns =
-                                                                              await Get.find<ApiService>().getCampaigns();
-                                                                          if (campaigns !=
-                                                                              null) {
-                                                                            if (mounted) {
-                                                                              setState(() {
-                                                                                for (int i = 0; i < campaigns!.participations!.length; i++) {
-                                                                                  if (campaigns!.participations![i].campaign!.id == campaigns!.campaigns![index].id) {
-                                                                                    participationID = campaigns!.participations![i].id!;
-                                                                                  }
-                                                                                }
-                                                                                Navigator.pop(context);
-                                                                                Get.to(() => WhatIsFrontier(
-                                                                                      campaign: campaigns!.campaigns![index],
-                                                                                      participationId: participationID,
-                                                                                    ));
-                                                                                EasyLoading.dismiss();
-                                                                              });
-                                                                            }
-                                                                          }
-                                                                        } else {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          Helper.toast(
-                                                                              'error participating, please try again');
-                                                                        }
-                                                                      },
-                                                                      Colors
-                                                                          .black,
-                                                                      4,
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              });
-                                                    },
-                                                    Colors.black,
-                                                    4,
-                                                  ),
-                                                ],
-                                              ),
-                                      ],
-                                    ),
-                                  ));
+                              return CampaignContainer(
+                                campaigns: campaigns,
+                                index: index,
+                                participationIds: participationIds,
+                                completed: completed,
+                              );
                             }),
                       ),
                       verticalSpace(customHeight * 0.025),
