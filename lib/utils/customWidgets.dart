@@ -1,3 +1,4 @@
+import 'package:flaq/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 Widget text(
@@ -85,12 +86,13 @@ Widget customButton(
 ) {
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
-        primary: color,
-        elevation: 0,
-        fixedSize: Size(width, height),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-        )),
+      primary: color,
+      elevation: 0,
+      fixedSize: Size(width, height),
+      shape: RoundedRectangleBorder(
+        borderRadius: FLAQ_BORDER_RADIUS,
+      ),
+    ),
     onPressed: onPressed,
     child: child,
   );

@@ -4,33 +4,33 @@
 
 import 'dart:convert';
 
-class Reward {
-  Reward({
+class RewardResponse {
+  RewardResponse({
     this.data,
     this.statusCode,
   });
 
-  List<RewardDatum>? data;
+  List<Reward>? data;
   int? statusCode;
 
-  Reward copyWith({
-    List<RewardDatum>? data,
+  RewardResponse copyWith({
+    List<Reward>? data,
     int? statusCode,
   }) =>
-      Reward(
+      RewardResponse(
         data: data ?? this.data,
         statusCode: statusCode ?? this.statusCode,
       );
 
-  factory Reward.fromRawJson(String str) => Reward.fromJson(json.decode(str));
+  factory RewardResponse.fromRawJson(String str) =>
+      RewardResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Reward.fromJson(Map<String, dynamic> json) => Reward(
+  factory RewardResponse.fromJson(Map<String, dynamic> json) => RewardResponse(
         data: json["Data"] == null
             ? null
-            : List<RewardDatum>.from(
-                json["Data"].map((x) => RewardDatum.fromJson(x))),
+            : List<Reward>.from(json["Data"].map((x) => Reward.fromJson(x))),
         statusCode: json["StatusCode"] == null ? null : json["StatusCode"],
       );
 
@@ -42,8 +42,8 @@ class Reward {
       };
 }
 
-class RewardDatum {
-  RewardDatum({
+class Reward {
+  Reward({
     this.id,
     this.campaignParticipations,
     this.user,
@@ -65,7 +65,7 @@ class RewardDatum {
   int? conversion;
   String? name;
 
-  RewardDatum copyWith({
+  Reward copyWith({
     String? id,
     CampaignParticipations? campaignParticipations,
     User? user,
@@ -76,7 +76,7 @@ class RewardDatum {
     int? conversion,
     String? name,
   }) =>
-      RewardDatum(
+      Reward(
         id: id ?? this.id,
         campaignParticipations:
             campaignParticipations ?? this.campaignParticipations,
@@ -89,12 +89,11 @@ class RewardDatum {
         name: name ?? this.name,
       );
 
-  factory RewardDatum.fromRawJson(String str) =>
-      RewardDatum.fromJson(json.decode(str));
+  factory Reward.fromRawJson(String str) => Reward.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory RewardDatum.fromJson(Map<String, dynamic> json) => RewardDatum(
+  factory Reward.fromJson(Map<String, dynamic> json) => Reward(
         id: json["Id"] == null ? null : json["Id"],
         campaignParticipations: json["CampaignParticipations"] == null
             ? null

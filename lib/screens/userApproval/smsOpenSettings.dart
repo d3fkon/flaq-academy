@@ -17,7 +17,6 @@ class _OpenSettingsScreenState extends State<SmsOpenSettingsScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
       if (await (Permission.sms.status).isGranted) {
-        Get.find<RootService>().isSmsPermissionGranted(true);
         await Get.find<RootService>().navigate();
       }
       if (await (Permission.sms.status).isDenied) {
@@ -33,7 +32,6 @@ class _OpenSettingsScreenState extends State<SmsOpenSettingsScreen>
     }
     if (state == AppLifecycleState.resumed) {
       if (await (Permission.sms.status).isGranted) {
-        Get.find<RootService>().isSmsPermissionGranted(true);
         await Get.find<RootService>().navigate();
       }
       if (await (Permission.sms.status).isDenied) {

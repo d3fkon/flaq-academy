@@ -9,16 +9,12 @@ import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
 
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/home/home.dart';
 import 'package:flaq/screens/userApproval/notificationApproval..dart';
 import 'package:flaq/screens/userApproval/openSettings.dart';
 import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
-import 'package:flaq/services/auth.service.dart';
-import 'package:flaq/services/root.service.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:optimize_battery/optimize_battery.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,14 +22,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 const BASE_URL = "http://52.66.228.64:4000/api/v1";
-const BASE_URL_GO = "http://52.66.228.64:8080";
+// const BASE_URL_GO = "http://52.66.228.64:8080";
+const BASE_URL_GO = "https://api.flaq.club";
 
 class ApiService extends GetConnect implements GetxService {
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   //sign up user
   Future signup(String email, String password) async {
     bool internet = await Helper().checkInternetConnectivity();
@@ -343,7 +335,7 @@ class ApiService extends GetConnect implements GetxService {
   }
 
   // get all campaigns
-  getCampaigns() async {
+  Future<CampaignData?> getCampaigns() async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
       debugPrint('Getting Campaigns');
@@ -515,7 +507,7 @@ class ApiService extends GetConnect implements GetxService {
   }
 
   // get all rewards
-  Future<List<RewardDatum>?> getRewards() async {
+  Future<List<Reward>?> getRewards() async {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
       debugPrint('Getting rewards');
@@ -539,7 +531,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("rewards fetched successfully");
           EasyLoading.dismiss();
-          return Reward.fromJson(jsonData).data;
+          return RewardResponse.fromJson(jsonData).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -554,43 +546,43 @@ class ApiService extends GetConnect implements GetxService {
   }
 
   // get all campaigns
-  getConversions() async {
-    bool internet = await Helper().checkInternetConnectivity();
-    if (internet) {
-      debugPrint('Getting Conversions');
-      try {
-        EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res = await http
-            .get(Uri.parse('$BASE_URL_GO/campaign/conversion'), headers: {
-          'Authorization': 'Bearer $accessToken',
-        });
-        var jsonData = jsonDecode(res.body);
-        debugPrint(jsonData.toString());
-        if (jsonData['StatusCode'] == 401) {
-          await refreshToken();
-          await getCampaigns();
-        } else if (jsonData['StatusCode'] != 200) {
-          if (jsonData['Message'] != null) {
-            Helper.toast(jsonData['Message']);
-            EasyLoading.dismiss();
-            return null;
-          }
-        } else {
-          debugPrint("conversion fetched successfully");
-          EasyLoading.dismiss();
-          return jsonData['Data'];
-        }
-        EasyLoading.dismiss();
-      } catch (e) {
-        Helper.toast('error, please try again');
-        debugPrint('error: $e');
-        EasyLoading.dismiss();
-      }
-    } else {
-      Helper.toast('please enable your internet connection');
-      return null;
-    }
-  }
+  getConversions() async {}
+  //   bool internet = await Helper().checkInternetConnectivity();
+  //   if (internet) {
+  //     debugPrint('Getting Conversions');
+  //     try {
+  //       EasyLoading.show();
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       var accessToken = prefs.getString('ACCESSTOKEN');
+  //       final res = await http
+  //           .get(Uri.parse('$BASE_URL_GO/campaign/conversion'), headers: {
+  //         'Authorization': 'Bearer $accessToken',
+  //       });
+  //       var jsonData = jsonDecode(res.body);
+  //       debugPrint(jsonData.toString());
+  //       if (jsonData['StatusCode'] == 401) {
+  //         await refreshToken();
+  //         await getCampaigns();
+  //       } else if (jsonData['StatusCode'] != 200) {
+  //         if (jsonData['Message'] != null) {
+  //           Helper.toast(jsonData['Message']);
+  //           EasyLoading.dismiss();
+  //           return null;
+  //         }
+  //       } else {
+  //         debugPrint("conversion fetched successfully");
+  //         EasyLoading.dismiss();
+  //         return jsonData['Data'];
+  //       }
+  //       EasyLoading.dismiss();
+  //     } catch (e) {
+  //       Helper.toast('error, please try again');
+  //       debugPrint('error: $e');
+  //       EasyLoading.dismiss();
+  //     }
+  //   } else {
+  //     Helper.toast('please enable your internet connection');
+  //     return null;
+  //   }
+  // }
 }

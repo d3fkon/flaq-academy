@@ -1,12 +1,10 @@
 import 'package:flaq/screens/bounties/bounties.dart';
-import 'package:flaq/screens/home/home.dart';
-import 'package:flaq/screens/wallet/wallet.dart';
+import 'package:flaq/screens/wallet/wallet.screen.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 
 List<Widget> tabs = const [
-  HomeScreen(),
   WalletScreen(),
   BountiesScreen(),
 ];

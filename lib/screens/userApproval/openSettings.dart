@@ -18,13 +18,11 @@ class _OpenSettingsScreenState extends State<OpenSettingsScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
       if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-        Get.find<RootService>().isBatteryOptimizationDisabled(true);
         Get.find<RootService>().navigate();
       }
     }
     if (state == AppLifecycleState.resumed) {
       if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-        Get.find<RootService>().isBatteryOptimizationDisabled(true);
         Get.find<RootService>().navigate();
       }
     }

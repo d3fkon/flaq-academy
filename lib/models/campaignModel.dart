@@ -50,74 +50,110 @@ class CampaignData {
       };
 }
 
-class Campaign {
-  Campaign({
-    required this.id,
-    required this.quizzes,
-    required this.description,
-    required this.title,
-    required this.requiredFlaq,
-    required this.flaqReward,
-    required this.tickerName,
-    required this.tickerImageUrl,
-    required this.airdropPerUser,
-    required this.totalAirdrop,
-    required this.currentAirdrop,
-    required this.taskType,
-    required this.articleUrls,
-    required this.ytVideoUrl,
-  });
-
-  String? id;
-  Quizzes? quizzes;
-  String? description;
+class Articles {
+  String? url;
   String? title;
-  int? requiredFlaq;
-  int? flaqReward;
+  String? iconUrl;
+
+  Articles({this.url, this.title, this.iconUrl});
+
+  Articles.fromJson(Map<String, dynamic> json) {
+    url = json['Url'];
+    title = json['Title'];
+    iconUrl = json['IconUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Url'] = this.url;
+    data['Title'] = this.title;
+    data['IconUrl'] = this.iconUrl;
+    return data;
+  }
+}
+
+class Campaign {
+  String id;
+  Quizzes? quizzes;
+  String description;
+  String title;
+  num? requiredFlaq;
+  num? flaqReward;
   String? tickerName;
   String? tickerImageUrl;
-  dynamic airdropPerUser;
-  int? totalAirdrop;
-  int? currentAirdrop;
+  num? airdropPerUser;
+  num? totalAirdrop;
+  num? currentAirdrop;
   String? taskType;
-  List<String>? articleUrls;
-  String? ytVideoUrl;
+  List<Articles>? articles;
+  String? yTVideoUrl;
+  String? image;
 
-  factory Campaign.fromJson(Map<String, dynamic> json) => Campaign(
-        id: json["Id"],
-        quizzes: Quizzes.fromJson(json["Quizzes"]),
-        description: json["Description"],
-        title: json["Title"],
-        requiredFlaq: json["RequiredFlaq"],
-        flaqReward: json["FlaqReward"],
-        tickerName: json["TickerName"],
-        tickerImageUrl: json["TickerImageUrl"],
-        airdropPerUser: json["AirdropPerUser"],
-        totalAirdrop: json["TotalAirdrop"],
-        currentAirdrop: json["CurrentAirdrop"],
-        taskType: json["TaskType"],
-        articleUrls: json["ArticleUrls"] == null
-            ? null
-            : List<String>.from(json["ArticleUrls"].map((x) => x)),
-        ytVideoUrl: json["YTVideoUrl"],
-      );
+  Campaign(
+      {required this.id,
+      this.quizzes,
+      required this.description,
+      required this.title,
+      this.requiredFlaq,
+      this.flaqReward,
+      this.tickerName,
+      this.tickerImageUrl,
+      this.airdropPerUser,
+      this.totalAirdrop,
+      this.currentAirdrop,
+      this.taskType,
+      this.articles,
+      this.yTVideoUrl,
+      this.image});
 
-  Map<String, dynamic> toJson() => {
-        "Id": id,
-        "Quizzes": quizzes!.toJson(),
-        "Description": description,
-        "Title": title,
-        "RequiredFlaq": requiredFlaq,
-        "FlaqReward": flaqReward,
-        "TickerName": tickerName,
-        "TickerImageUrl": tickerImageUrl,
-        "AirdropPerUser": airdropPerUser,
-        "TotalAirdrop": totalAirdrop,
-        "CurrentAirdrop": currentAirdrop,
-        "TaskType": taskType,
-        "ArticleUrls": List<dynamic>.from(articleUrls!.map((x) => x)),
-        "YTVideoUrl": ytVideoUrl,
-      };
+  Campaign.fromJson(Map<String, dynamic> json)
+      : id = json['Id'],
+        quizzes = json['Quizzes'] != null
+            ? new Quizzes.fromJson(json['Quizzes'])
+            : null,
+        description = json['Description'],
+        title = json['Title'],
+        requiredFlaq = json['RequiredFlaq'],
+        flaqReward = json['FlaqReward'],
+        tickerName = json['TickerName'],
+        tickerImageUrl = json['TickerImageUrl'],
+        airdropPerUser = json['AirdropPerUser'],
+        totalAirdrop = json['TotalAirdrop'],
+        currentAirdrop = json['CurrentAirdrop'],
+        taskType = json['TaskType'],
+        yTVideoUrl = json['YTVideoUrl'],
+        image = json['Image'] {
+    if (json['Articles'] != null) {
+      articles = <Articles>[];
+      json['Articles'].forEach((v) {
+        articles!.add(new Articles.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Id'] = this.id;
+    if (this.quizzes != null) {
+      data['Quizzes'] = this.quizzes!.toJson();
+    }
+    data['Description'] = this.description;
+    data['Title'] = this.title;
+    data['RequiredFlaq'] = this.requiredFlaq;
+    data['FlaqReward'] = this.flaqReward;
+    data['TickerName'] = this.tickerName;
+    data['TickerImageUrl'] = this.tickerImageUrl;
+    data['AirdropPerUser'] = this.airdropPerUser;
+    data['TotalAirdrop'] = this.totalAirdrop;
+    data['CurrentAirdrop'] = this.currentAirdrop;
+    data['TaskType'] = this.taskType;
+    if (this.articles != null) {
+      data['Articles'] = this.articles!.map((v) => v.toJson()).toList();
+    }
+    data['YTVideoUrl'] = this.yTVideoUrl;
+    data['Image'] = this.image;
+    return data;
+  }
 }
 
 class Quizzes {
@@ -127,7 +163,7 @@ class Quizzes {
   });
 
   List<String>? ids;
-  dynamic? data;
+  dynamic data;
 
   factory Quizzes.fromJson(Map<String, dynamic> json) => Quizzes(
         ids: List<String>.from(json["Ids"].map((x) => x)),

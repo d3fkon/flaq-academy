@@ -1,4 +1,3 @@
-import 'package:flaq/screens/home/home.dart';
 import 'package:flaq/services/data.service.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
@@ -140,9 +139,10 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                                     ),
                                     verticalSpace(customHeight * 0.01),
                                     text(
-                                      formatDate(DateTime.parse(dataService
-                                          .txnList[index].createdAt
-                                          .toString())),
+                                      (DateTime.parse(dataService
+                                              .txnList[index].createdAt
+                                              .toString()))
+                                          .toString(),
                                       FontWeight.w400,
                                       12,
                                       const Color(0xFF9999A5),

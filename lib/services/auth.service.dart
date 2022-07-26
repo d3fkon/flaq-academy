@@ -2,7 +2,6 @@ import 'package:flaq/constants/auth.constants.dart';
 import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/auth/referral.dart';
 import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/home/home.dart';
 import 'package:flaq/screens/userApproval/notificationApproval..dart';
 import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
 import 'package:flaq/services/api.service.dart';
@@ -20,17 +19,14 @@ import '../utils/helper.dart';
 
 class AuthService extends GetxService {
   static AuthService instance = Get.find();
-  late Rx<User?> firebaseUser;
   late final ApiService _apiService;
   late final SharedPreferences _sp;
-  FlaqUser? user;
+  Rx<FlaqUser?> user = FlaqUser().obs;
 
   @override
   void onInit() {
     super.onInit();
     _apiService = Get.find<ApiService>();
-    debugPrint("Setting up auth service");
-    _setInitialScreen();
   }
 
   @override
@@ -45,7 +41,8 @@ class AuthService extends GetxService {
     if (internet) {
       var loggedIn = await _apiService.login(email, password);
       if (loggedIn) {
-        user = await _apiService.getProfile();
+        var _user = await _apiService.getProfile();
+        user(_user);
         navigate();
       }
     } else {
@@ -86,13 +83,16 @@ class AuthService extends GetxService {
   navigate() async {
     debugPrint("AuthService: navigate");
     EasyLoading.show();
-    user = await _apiService.getProfile();
+    var _user = await _apiService.getProfile();
+    user(_user);
     EasyLoading.dismiss();
     if (user == null) {
       Get.offAll(() => const LoginScreen());
       return;
     }
-    if (user!.isAllowed) {
+    if (_user?.isAllowed ?? false) {
+      debugPrint("User allowed");
+      debugPrint((await Permission.sms.status).toString());
       if (await Permission.sms.status.isGranted) {
         // Get.offAll(() => const DashBoard());
         Get.find<RootService>().navigate();
@@ -114,7 +114,7 @@ class AuthService extends GetxService {
       }
     }
 
-    if (!user!.isAllowed) {
+    if (!(_user?.isAllowed ?? false)) {
       Get.offAll(() => const ReferralScreen());
     }
   }
@@ -123,7 +123,8 @@ class AuthService extends GetxService {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
       await _apiService.signup(email, password);
-      user = await _apiService.getProfile();
+      var _user = await _apiService.getProfile();
+      user(_user);
       navigate();
     } else {
       Helper.toast('please enable your internet connection');
@@ -135,9 +136,10 @@ class AuthService extends GetxService {
     EasyLoading.show();
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
-      user = (await _apiService.getProfile());
+      var _user = (await _apiService.getProfile());
+      user(_user);
       Get.log('Profile fetched');
-      if (user == null) {
+      if (_user == null) {
         Get.log('Signing out');
         signOut();
         EasyLoading.dismiss();
@@ -155,7 +157,7 @@ class AuthService extends GetxService {
   void signOut() async {
     await _sp.remove("ACCESSTOKEN");
     await _sp.remove("REFRESHTOKEN");
-    user = null;
+    user(null);
     navigate();
   }
 }

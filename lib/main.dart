@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flaq/bindings.dart';
 import 'package:flaq/firebase_options.dart';
-import 'package:flaq/services/api.service.dart';
-import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 const AndroidNotificationDetails ANDROID_PLATFORM_CHANNEL_SPECIFICS =
     AndroidNotificationDetails(
@@ -61,6 +58,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return GetMaterialApp(
+      // Set dark theme with the Montserrat font family
+      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'Montserrat'),
+      home: Container(
+        color: Colors.black,
+      ),
+      initialBinding: AppBindings(),
+      builder: EasyLoading.init(),
+      // home: const Generic1Screen(
+      //   type: GenericScreenType.slider,
+      // ),
+    );
     return GetMaterialApp(
       initialBinding: AppBindings(),
       debugShowCheckedModeBanner: false,

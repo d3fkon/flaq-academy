@@ -103,26 +103,28 @@ class UserProfileResponse {
 
 class FlaqUser {
   FlaqUser({
-    required this.id,
-    required this.email,
-    required this.flaqPoints,
-    required this.rewardMultiplier,
-    required this.referralCode,
-    required this.isAllowed,
-    required this.refreshToken,
-    required this.walletAddresses,
-    required this.createdAt,
+    this.id,
+    this.email,
+    this.flaqPoints,
+    this.rewardMultiplier,
+    this.referralCode,
+    this.isAllowed = false,
+    this.refreshToken,
+    this.walletAddresses,
+    this.createdAt,
+    this.totalEarnings,
   });
 
   String? id;
   String? email;
-  int? flaqPoints;
-  int? rewardMultiplier;
+  num? flaqPoints;
+  num? rewardMultiplier;
   String? referralCode;
   late bool isAllowed;
   String? refreshToken;
   WalletAddresses? walletAddresses;
   String? createdAt;
+  num? totalEarnings;
 
   factory FlaqUser.fromJson(Map<String, dynamic> json) => FlaqUser(
         id: json["Id"],
@@ -134,6 +136,7 @@ class FlaqUser {
         refreshToken: json["RefreshToken"],
         walletAddresses: WalletAddresses.fromJson(json["WalletAddresses"]),
         createdAt: json["CreatedAt"],
+        totalEarnings: json["TotalEarningsINR"],
       );
 
   Map<String, dynamic> toJson() => {

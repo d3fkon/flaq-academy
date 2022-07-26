@@ -22,7 +22,6 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       if (await (Permission.sms.status).isGranted) {
-        Get.find<RootService>().isSmsPermissionGranted(true);
         await Get.find<RootService>().navigate();
       }
       if (await (Permission.sms.status).isDenied) {
@@ -107,7 +106,6 @@ class _SmsApprovalScreenState extends State<SmsApprovalScreen>
                         ),
                         () async {
                           await load();
-                          Get.find<RootService>().requestSmsPermission();
                         },
                         Colors.white,
                         4,
