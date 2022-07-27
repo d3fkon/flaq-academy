@@ -1,9 +1,7 @@
 import 'package:flaq/constants/auth.constants.dart';
 import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/auth/referral.dart';
-import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/userApproval/notificationApproval..dart';
-import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
+import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/services/messaging.service.dart';
 import 'package:flaq/services/root.service.dart';
@@ -92,29 +90,8 @@ class AuthService extends GetxService {
     }
     if (_user?.isAllowed ?? false) {
       debugPrint("User allowed");
-      debugPrint((await Permission.sms.status).toString());
-      if (await Permission.sms.status.isGranted) {
-        // Get.offAll(() => const DashBoard());
-        Get.find<RootService>().navigate();
-        // navigate with the root service
-        return;
-      } else if (await Permission.sms.status.isDenied) {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
-        if (permissionAsked) {
-          Get.offAll(() => const SmsOpenSettingsScreen());
-          return;
-        } else {
-          Get.offAll(() => const SmsApprovalScreen());
-          return;
-        }
-      } else if (await Permission.sms.status.isPermanentlyDenied) {
-        Get.offAll(() => const SmsOpenSettingsScreen());
-        return;
-      }
-    }
-
-    if (!(_user?.isAllowed ?? false)) {
+      Get.offAll(() => const HomeScaffold());
+    } else {
       Get.offAll(() => const ReferralScreen());
     }
   }

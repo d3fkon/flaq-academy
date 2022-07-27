@@ -8,10 +8,7 @@ import 'package:flaq/models/transaction.model.dart';
 import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
 
-import 'package:flaq/screens/dashboard.dart';
-import 'package:flaq/screens/userApproval/notificationApproval..dart';
-import 'package:flaq/screens/userApproval/openSettings.dart';
-import 'package:flaq/screens/userApproval/smsOpenSettings.dart';
+import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -283,39 +280,10 @@ class ApiService extends GetConnect implements GetxService {
           var user = (await apiService.getProfile());
           if (user != null) {
             if (user.isAllowed == true) {
-              if (true) {
-                if (await Permission.sms.isGranted) {
-                  if (await OptimizeBattery.isIgnoringBatteryOptimizations()) {
-                    Get.offAll(() => const DashBoard(
-                          tab: 0,
-                        ));
-                    EasyLoading.dismiss();
-                    return;
-                  } else {
-                    Get.offAll(() => const OpenSettingsScreen());
-                    EasyLoading.dismiss();
-                    return;
-                  }
-                } else {
-                  final SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  bool permissionAsked =
-                      prefs.getBool('permissionAsked') ?? false;
-                  if (!permissionAsked) {
-                    Get.offAll(() => const SmsApprovalScreen());
-                    EasyLoading.dismiss();
-                    return;
-                  } else {
-                    Get.offAll(() => const SmsOpenSettingsScreen());
-                    EasyLoading.dismiss();
-                    return;
-                  }
-                }
-              }
-            }
-          }
-          if (user != null && user.isAllowed != null) {
-            if (user.isAllowed == false) {
+              Get.offAll(() => const HomeScaffold());
+              EasyLoading.dismiss();
+              return;
+            } else {
               Get.offAll(() => const ReferralScreen());
               EasyLoading.dismiss();
               return;

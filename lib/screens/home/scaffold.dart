@@ -1,4 +1,5 @@
 import 'package:flaq/screens/explore/explore.screen.dart';
+import 'package:flaq/screens/home/flaqBank.dart';
 import 'package:flaq/screens/participations/participations.screen.dart';
 import 'package:flaq/screens/wallet/wallet.screen.dart';
 import 'package:flaq/services/data.service.dart';
@@ -7,20 +8,25 @@ import 'package:flutter_tabler_icons/flutter_tabler_icons.dart';
 import 'package:get/get.dart';
 
 class HomeScaffold extends StatefulWidget {
-  const HomeScaffold({Key? key}) : super(key: key);
+  final tab;
+  const HomeScaffold({Key? key, this.tab}) : super(key: key);
 
   @override
   State<HomeScaffold> createState() => _HomeScaffoldState();
 }
 
 class _HomeScaffoldState extends State<HomeScaffold> {
+  int selectedIndex = 0;
+
   @override
   void initState() {
     super.initState();
     Get.find<DataService>().fetchData();
+    if (widget.tab != null) {
+      selectedIndex = widget.tab;
+    }
   }
 
-  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +74,7 @@ class _HomeScaffoldState extends State<HomeScaffold> {
             case 2:
               return const WalletScreen();
             default:
-              return Container();
+              return const FlaqBankScreen();
           }
         },
       ),

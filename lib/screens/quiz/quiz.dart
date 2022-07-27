@@ -210,6 +210,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             ),
                             Expanded(
                               child: PageView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
                                 controller: _controller,
                                 itemCount: quiz!.data.questions.length,
                                 onPageChanged: (int index) {
@@ -282,7 +283,9 @@ class _QuizScreenState extends State<QuizScreen> {
               width: 0,
             )
           : BottomAppBar(
+              elevation: 0,
               child: Container(
+                color: Colors.white,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 height: customHeight * 0.125,
@@ -455,7 +458,6 @@ class _QuizScreenState extends State<QuizScreen> {
                             ],
                           ),
               ),
-              elevation: 0,
             ),
     );
   }

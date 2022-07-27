@@ -1,4 +1,4 @@
-import 'package:flaq/screens/dashboard.dart';
+import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/screens/wallet/wallet.screen.dart';
 import 'package:flaq/services/api.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
@@ -248,8 +248,8 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                                 );
                               } else {
                                 Get.offAll(() {
-                                  return const DashBoard(
-                                    tab: 1,
+                                  return const HomeScaffold(
+                                    tab: 2,
                                   );
                                 });
                               }
