@@ -1,6 +1,9 @@
 import 'package:flaq/screens/home/inviteAndEarn.dart';
+import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/screens/home/transactionHistory.dart';
+import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
+import 'package:flaq/widgets/common.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,99 +25,92 @@ class _FlaqBankScreenState extends State<FlaqBankScreen> {
   Widget build(BuildContext context) {
     var customHeight = MediaQuery.of(context).size.height;
     var customWidth = MediaQuery.of(context).size.width;
+    Widget flaqPoints() {
+      final user = Get.find<AuthService>().user;
+      return (() {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("flaq points"),
+              Text(
+                "${user.value?.flaqPoints ?? 0}",
+                style:
+                    const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+              ),
+            ],
+          ),
+        );
+      })();
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xFF0E0C0E),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 20,
+              horizontal: 24,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                verticalSpace(customHeight * 0.05),
+                verticalSpace(55.67),
                 InkWell(
                     onTap: () {
-                      Get.back();
+                      // Get.back();
                     },
                     child: customIcon(
                       Icons.arrow_back_outlined,
                       Colors.white,
                     )),
-                verticalSpace(customHeight * 0.02),
-                Row(
-                  children: [
-                    text(
-                      'flaq-a-bank',
-                      FontWeight.w400,
-                      18,
-                      Colors.white,
-                    ),
-                    horizontalSpace(customWidth * 0.01),
-                    showAssetImage('assets/images/bank.png'),
-                  ],
-                ),
-                verticalSpace(customHeight * 0.02),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      textSpan(
-                        'we reward you flaq points for every upi payment you make, see ',
-                        FontWeight.w500,
-                        12,
-                        Colors.white,
-                      ),
-                      textSpanWithUnderline(
-                        'terms and conditions',
-                        FontWeight.bold,
-                        12,
-                        Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-                verticalSpace(customHeight * 0.025),
-                customButton(
-                  customHeight * 0.06,
-                  customWidth * 0.9,
-                  text(
-                    'transaction history',
-                    FontWeight.w700,
-                    14,
-                    Colors.black,
-                  ),
-                  () {
-                    Get.to(() => const TransactionHistoryScreen());
-                  },
+                verticalSpace(25),
+                text(
+                  'flaq-a-bank',
+                  FontWeight.w400,
+                  18,
                   Colors.white,
-                  4,
                 ),
-                verticalSpace(customHeight * 0.02),
-                divider(const Color(0xFF1F1F1F)),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(16),
+                SizedBox(
+                  width: 155,
+                  child: GradientContainer(
+                    rand: 0,
+                    assetUrl: "assets/images/Lightning.png",
+                    top: -13,
+                    right: -20,
+                    child: Row(
+                      children: [
+                        flaqPoints(),
+                      ],
+                    ),
+                  ),
+                ),
+                verticalSpace(40),
                 text(
                   'refer & earn flaq',
                   FontWeight.w400,
                   18,
                   Colors.white,
                 ),
-                verticalSpace(customHeight * 0.015),
+                verticalSpace(16),
                 text(
                   'flaq is an invite only app',
                   FontWeight.w400,
                   14,
                   Colors.white,
                 ),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(24),
                 text(
                   'invite a friend and earn upto 500 flaq',
-                  FontWeight.w500,
+                  FontWeight.w400,
                   12,
                   Colors.white,
                 ),
-                verticalSpace(customHeight * 0.025),
+                verticalSpace(24),
                 customButton(
                   customHeight * 0.06,
                   customWidth * 0.9,
@@ -123,15 +119,15 @@ class _FlaqBankScreenState extends State<FlaqBankScreen> {
                     children: [
                       customIcon(
                         Icons.share,
-                        Colors.black,
+                        const Color(0xFF3D3D3D),
                         size: 15,
                       ),
                       horizontalSpace(customWidth * 0.02),
                       text(
                         'invite and earn',
-                        FontWeight.w700,
+                        FontWeight.w600,
                         14,
-                        Colors.black,
+                        const Color(0xFF3D3D3D),
                       ),
                     ],
                   ),
@@ -141,23 +137,23 @@ class _FlaqBankScreenState extends State<FlaqBankScreen> {
                   Colors.white,
                   4,
                 ),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(24),
                 divider(const Color(0xFF1F1F1F)),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(24),
                 text(
                   'complete a campaign',
                   FontWeight.w400,
                   18,
                   Colors.white,
                 ),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(24),
                 text(
                   'successfully complete a quiz and share the results with your friends to earn 1000 flaq',
-                  FontWeight.w500,
+                  FontWeight.w400,
                   12,
                   Colors.white,
                 ),
-                verticalSpace(customHeight * 0.025),
+                verticalSpace(16),
                 customButton(
                   customHeight * 0.06,
                   customWidth * 0.9,
@@ -165,15 +161,39 @@ class _FlaqBankScreenState extends State<FlaqBankScreen> {
                     'see active campaigns',
                     FontWeight.w700,
                     14,
-                    Colors.black,
+                    const Color(0xFF1A1A1A),
                   ),
-                  () {},
+                  () {
+                    Get.offAll(() {
+                      return const HomeScaffold(
+                        tab: 1,
+                      );
+                    });
+                  },
                   Colors.white,
                   4,
                 ),
-                verticalSpace(customHeight * 0.04),
+                verticalSpace(24),
                 divider(const Color(0xFF1F1F1F)),
-                verticalSpace(customHeight * 0.02),
+                verticalSpace(24),
+                customButton(
+                  customHeight * 0.06,
+                  customWidth * 0.9,
+                  text(
+                    'logout',
+                    FontWeight.w700,
+                    14,
+                    const Color(0xFF1A1A1A),
+                  ),
+                  () {
+                    Get.find<AuthService>().signOut();
+                  },
+                  Colors.white,
+                  4,
+                ),
+                verticalSpace(24),
+                divider(const Color(0xFF1F1F1F)),
+                verticalSpace(24),
               ],
             ),
           ),

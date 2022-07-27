@@ -135,6 +135,8 @@ class AuthService extends GetxService {
     await _sp.remove("ACCESSTOKEN");
     await _sp.remove("REFRESHTOKEN");
     user(null);
-    navigate();
+    Get.offAll(() {
+      return const LoginScreen();
+    });
   }
 }

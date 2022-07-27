@@ -73,8 +73,10 @@ class _HomeScaffoldState extends State<HomeScaffold> {
               return const ExploreScreen();
             case 2:
               return const WalletScreen();
-            default:
+            case 3:
               return const FlaqBankScreen();
+            default:
+              return Container();
           }
         },
       ),

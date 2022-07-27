@@ -36,12 +36,16 @@ class GradientContainer extends StatelessWidget {
   final Widget child;
   final String assetUrl;
   final int rand;
-  const GradientContainer({
-    Key? key,
-    required this.child,
-    required this.assetUrl,
-    required this.rand,
-  }) : super(key: key);
+  final double? top;
+  final double? right;
+  const GradientContainer(
+      {Key? key,
+      required this.child,
+      required this.assetUrl,
+      required this.rand,
+      this.top,
+      this.right})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +70,8 @@ class GradientContainer extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 0,
-          right: -3,
+          top: top ?? 0,
+          right: right ?? -3,
           child: Image.asset(assetUrl),
         ),
       ],
