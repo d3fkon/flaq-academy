@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 
 class DataService extends GetxService {
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     _apiService = Get.find<ApiService>();
   }
@@ -68,7 +68,6 @@ class DataService extends GetxService {
   // Fetch all the API data related to this service
   Future<void> fetchData() async {
     fetchCampaigns();
-    fetchTransactions();
   }
 
   // Fetch all the available campaigns for the user
@@ -87,11 +86,11 @@ class DataService extends GetxService {
   }
 
   /// Fetch all the transaction history for the user
-  fetchTransactions() async {
-    EasyLoading.show();
-    _txnList(await _apiService.getAllPayments() ?? []);
-    EasyLoading.dismiss();
-  }
+  // fetchTransactions() async {
+  //   EasyLoading.show();
+  //   _txnList(await _apiService.getAllPayments() ?? []);
+  //   EasyLoading.dismiss();
+  // }
 
   /// Register a transaction for the user
   registerTxn(String amount) async {
@@ -115,6 +114,26 @@ class DataService extends GetxService {
       }
     }
     return null;
+  }
+
+  bool isCampaignActive(String campaignId) {
+    final participations = getIncompeleteParticipations();
+    for (final participation in participations) {
+      if (participation.campaign?.id == campaignId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Check if a campaign is complete
+  bool isCampaignComplete(String campaignId) {
+    for (final participation in participations) {
+      if (participation.campaign!.id == campaignId) {
+        return participation.isComplete!;
+      }
+    }
+    return false;
   }
 
   /// Get the total flaq reward for the user using transactions as the base

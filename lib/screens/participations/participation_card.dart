@@ -1,7 +1,9 @@
 import 'package:flaq/models/campaignModel.dart';
+import 'package:flaq/screens/campaign/campaign_detail.screen.dart';
 import 'package:flaq/utils/constants.dart';
 import 'package:flaq/widgets/common.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum ParticipationCardType { large, small }
 
@@ -15,9 +17,9 @@ class ParticipationCardData {
   static fromCampaign(Campaign campaign) {
     return ParticipationCardData(
       imageUrl: campaign.image ?? '',
-      title: campaign.title ?? '',
+      title: campaign.title,
       tickerImageUrl: campaign.tickerImageUrl ?? '',
-      rewardPerUser: campaign.airdropPerUser.toString() ?? '',
+      rewardPerUser: campaign.airdropPerUser.toString(),
       tickerName: campaign.tickerName ?? '',
     );
   }
@@ -34,10 +36,12 @@ class ParticipationCardData {
 class ParticipationCard extends StatelessWidget {
   final ParticipationCardData data;
   final ParticipationCardType type;
+  final VoidCallback onTap;
   const ParticipationCard({
     Key? key,
     required this.data,
     required this.type,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -52,8 +56,9 @@ class ParticipationCard extends StatelessWidget {
       width: 74,
       height: 74,
     );
+    Widget returnable;
     if (type == ParticipationCardType.large) {
-      return Padding(
+      returnable = Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Container(
           decoration: backgroundDecoration,
@@ -103,46 +108,57 @@ class ParticipationCard extends StatelessWidget {
           ),
         ),
       );
-    }
-
-    return Stack(
-      children: [
-        Column(
+    } else {
+      returnable = Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Stack(
           children: [
-            Empty.V(12),
-            Expanded(
-              child: Container(
-                width: 163,
-                decoration: backgroundDecoration,
-                child: Column(
-                  children: [
-                    Empty.V(24),
-                    image,
-                    Empty.V(24),
-                    Text(
-                      data.title,
-                      style: const TextStyle(
-                        color: Color(0xffF7F7F7),
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
-                      ),
+            Column(
+              children: [
+                Empty.V(12),
+                Expanded(
+                  child: Container(
+                    width: 163,
+                    decoration: backgroundDecoration,
+                    child: Column(
+                      children: [
+                        Empty.V(24),
+                        image,
+                        Empty.V(12),
+                        Expanded(
+                          child: Text(
+                            data.title,
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            style: const TextStyle(
+                              color: Color(0xffF7F7F7),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Image.network(
+                data.tickerImageUrl,
+                width: 32,
+                height: 32,
               ),
             ),
           ],
         ),
-        Positioned(
-          top: 0,
-          right: 0,
-          child: Image.network(
-            data.tickerImageUrl,
-            width: 32,
-            height: 32,
-          ),
-        ),
-      ],
+      );
+    }
+    return GestureDetector(
+      onTap: onTap,
+      child: returnable,
     );
   }
 }

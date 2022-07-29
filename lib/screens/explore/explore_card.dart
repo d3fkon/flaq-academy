@@ -32,8 +32,8 @@ class ExploreCardData {
       imageUrl: campaign.image ?? "",
       tickerImageUrl: campaign.tickerImageUrl ?? "",
       tickerName: campaign.tickerName ?? "-",
-      description: campaign.description ?? "-",
-      title: campaign.title ?? "-",
+      description: campaign.description,
+      title: campaign.title,
     );
   }
 
@@ -95,6 +95,8 @@ class ExploreCard extends StatelessWidget {
     var title = Text(
       data.title,
       style: titleTextStyle,
+      textAlign:
+          type == ExploreCardType.large ? TextAlign.start : TextAlign.center,
     );
     var description = Text(
       data.description,
@@ -124,16 +126,16 @@ class ExploreCard extends StatelessWidget {
     /// Render the small explore card
     if (type == ExploreCardType.small) {
       returnable = Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: backgroundDecoration,
         height: 163,
         width: 171,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Empty.V(16),
             image,
             title,
-            Empty.V(9),
             earnRow,
           ],
         ),
@@ -151,12 +153,11 @@ class ExploreCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Empty.V(20),
                   title,
-                  Empty.V(12),
                   description,
-                  Empty.V(16),
                   earnRow,
                 ],
               ),

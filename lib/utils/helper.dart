@@ -28,7 +28,7 @@ class Helper {
       actions: [
         IconsButton(
           onPressed: () async {
-            await Get.find<DataService>().fetchTransactions();
+            // await Get.find<DataService>().fetchTransactions();
             Get.back();
           },
           text: 'Claim',

@@ -1,6 +1,7 @@
 import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/screens/wallet/wallet.screen.dart';
 import 'package:flaq/services/api.service.dart';
+import 'package:flaq/services/scaffold.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -247,11 +248,7 @@ class _QuizResultScreenState extends State<QuizResultScreen> {
                                   },
                                 );
                               } else {
-                                Get.offAll(() {
-                                  return const HomeScaffold(
-                                    tab: 2,
-                                  );
-                                });
+                                Get.find<ScaffoldService>().setIndex(2);
                               }
                             },
                             Colors.white,

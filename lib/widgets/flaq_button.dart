@@ -11,6 +11,7 @@ class FlaqButton extends StatelessWidget {
   final FlaqButtonType type;
   final bool maxWidth;
   final bool isDark;
+  final bool? disabled;
   const FlaqButton({
     Key? key,
     required this.type,
@@ -18,11 +19,15 @@ class FlaqButton extends StatelessWidget {
     required this.title,
     this.maxWidth = false,
     this.isDark = false,
+    this.disabled = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Color bgColor = isDark ? Colors.black : const Color(0xffEFEFEF);
+    if (disabled ?? false) {
+      bgColor = Colors.grey;
+    }
     Color textColor = isDark ? Colors.white : Colors.black;
     double height = 0;
     double width = 0;
@@ -42,7 +47,7 @@ class FlaqButton extends StatelessWidget {
     }
 
     if (maxWidth) {
-      width = MediaQuery.of(context).size.width;
+      width = MediaQuery.of(context).size.width - 48;
     }
 
     Widget returnable;

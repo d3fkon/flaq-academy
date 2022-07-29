@@ -1,26 +1,30 @@
+import 'dart:ui';
+
 import 'package:flaq/models/campaignModel.dart';
-import 'package:flaq/screens/campaign/article.dart';
 import 'package:flaq/screens/quiz/quiz.dart';
 import 'package:flaq/services/data.service.dart';
-import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flaq/widgets/common.dart';
 import 'package:flaq/widgets/flaq_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CampaignDetailScreen extends StatefulWidget {
   final Campaign campaign;
-  const CampaignDetailScreen({Key? key, required this.campaign})
-      : super(key: key);
+  const CampaignDetailScreen({
+    Key? key,
+    required this.campaign,
+  }) : super(key: key);
 
   @override
   State<CampaignDetailScreen> createState() => _CampaignDetailScreenState();
 }
 
 class _CampaignDetailScreenState extends State<CampaignDetailScreen> {
+  bool isFullScreen = false;
   late final YoutubePlayerController _controller;
   @override
   void initState() {
@@ -29,7 +33,7 @@ class _CampaignDetailScreenState extends State<CampaignDetailScreen> {
           YoutubePlayer.convertUrlToId(widget.campaign.yTVideoUrl!)!,
       flags: const YoutubePlayerFlags(
         autoPlay: false,
-        mute: true,
+        mute: false,
       ),
     );
     super.initState();
@@ -198,47 +202,89 @@ class _CampaignDetailScreenState extends State<CampaignDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Empty.V(24),
-                GestureDetector(
-                  onTap: Get.back,
-                  child: const Icon(Icons.arrow_back),
-                ),
-                Empty.V(24),
-                Text(
-                  campaign.title!,
-                  style: titleTextStyle,
-                ),
-                Empty.V(24),
-                ytWidget(),
-                Empty.V(24),
-                Text(
-                  campaign.description!,
-                  style: descriptionTextStyle,
-                ),
-                Empty.V(24),
-                Container(
-                  height: 1,
-                  width: double.infinity,
-                  color: const Color(0xff323232),
-                ),
-                Empty.V(24),
-                if (campaign.articles!.isNotEmpty) buildArticles(),
-                Empty.V(24),
-                FlaqButton(
-                  maxWidth: true,
-                  type: FlaqButtonType.slider,
-                  onTap: handleQuizButton,
-                  title: "take the quiz",
-                )
-              ],
-            ),
+        child: YoutubePlayerBuilder(
+          onEnterFullScreen: () {
+            setState(() {
+              isFullScreen = true;
+            });
+          },
+          onExitFullScreen: () {
+            SystemChrome.restoreSystemUIOverlays();
+            SystemChrome.setEnabledSystemUIMode(
+              SystemUiMode.manual,
+              overlays: SystemUiOverlay.values,
+            );
+            setState(() {
+              isFullScreen = false;
+            });
+          },
+          player: YoutubePlayer(
+            controller: _controller,
           ),
+          builder: (context, player) {
+            if (isFullScreen) {
+              return player;
+            }
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Empty.V(24),
+                    GestureDetector(
+                      onTap: Get.back,
+                      child: const Icon(Icons.arrow_back),
+                    ),
+                    Empty.V(24),
+                    Text(
+                      campaign.title,
+                      style: titleTextStyle,
+                    ),
+                    Empty.V(24),
+                    player,
+                    Empty.V(24),
+                    Text(
+                      campaign.description,
+                      style: descriptionTextStyle,
+                    ),
+                    Empty.V(24),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: const Color(0xff323232),
+                    ),
+                    Empty.V(24),
+                    if (campaign.articles!.isNotEmpty) buildArticles(),
+                    Empty.V(24),
+                    if (campaign.quizzes?.ids?.isNotEmpty ?? false)
+                      if (Get.find<DataService>().isCampaignActive(campaign.id))
+                        FlaqButton(
+                          type: FlaqButtonType.thick,
+                          onTap: handleQuizButton,
+                          title: "complete the quiz",
+                          maxWidth: true,
+                        )
+                      else if (Get.find<DataService>()
+                          .isCampaignComplete(campaign.id))
+                        FlaqButton(
+                          disabled: true,
+                          title: "completed",
+                          type: FlaqButtonType.medium,
+                          onTap: () {},
+                        )
+                      else
+                        FlaqButton(
+                          maxWidth: true,
+                          type: FlaqButtonType.slider,
+                          onTap: handleQuizButton,
+                          title: "take the quiz",
+                        )
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );

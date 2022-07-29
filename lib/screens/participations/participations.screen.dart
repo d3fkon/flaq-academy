@@ -1,3 +1,4 @@
+import 'package:flaq/screens/campaign/campaign_detail.screen.dart';
 import 'package:flaq/screens/participations/empty_campaigns.dart';
 import 'package:flaq/screens/participations/participation_card.dart';
 import 'package:flaq/services/auth.service.dart';
@@ -49,7 +50,7 @@ class _ParticipationScreenState extends State<ParticipationScreen> {
             children: [
               const Text("earnings"),
               Text(
-                "${authService.user.value?.totalEarnings ?? 0}",
+                "₹ ${authService.user.value?.totalEarnings ?? 0}",
                 style:
                     const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
               ),
@@ -81,13 +82,17 @@ class _ParticipationScreenState extends State<ParticipationScreen> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
-                    ...dataService.participations.map(
+                    ...dataService.getIncompeleteParticipations().map(
                       (participation) {
                         var campaign = dataService
                             .getCampaignForId(participation.campaign!.id!);
                         return ParticipationCard(
-                          type: ParticipationCardType.large,
+                          type: ParticipationCardType.small,
                           data: ParticipationCardData.fromCampaign(campaign!),
+                          onTap: () {
+                            Get.to(
+                                () => CampaignDetailScreen(campaign: campaign));
+                          },
                         );
                       },
                     ),
@@ -124,6 +129,9 @@ class _ParticipationScreenState extends State<ParticipationScreen> {
                     return ParticipationCard(
                       type: ParticipationCardType.large,
                       data: ParticipationCardData.fromCampaign(campaign!),
+                      onTap: () {
+                        Get.to(() => CampaignDetailScreen(campaign: campaign));
+                      },
                     );
                   },
                 ),
@@ -145,9 +153,10 @@ class _ParticipationScreenState extends State<ParticipationScreen> {
             children: [
               Empty.V(24),
               const Text(
-                "explore",
+                "participate in flaq",
                 style: flaqTitleTextStyle,
               ),
+              Empty.V(24),
               Row(
                 children: [
                   Expanded(
@@ -165,7 +174,10 @@ class _ParticipationScreenState extends State<ParticipationScreen> {
                   Expanded(
                     child: GradientContainer(
                       rand: 1,
-                      assetUrl: "assets/images/coins.png",
+                      assetUrl: "assets/images/Lightning.png",
+                      scale: 1.3,
+                      right: -20,
+                      top: -5,
                       child: Row(
                         children: [
                           earnings(),

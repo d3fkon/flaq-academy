@@ -62,10 +62,17 @@ class _WalletScreenState extends State<WalletScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    verticalSpace(customHeight * 0.05),
+                    Empty.V(24),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        "your portfolio",
+                        style: flaqTitleTextStyle,
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 15,
+                        horizontal: 24,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,13 +80,14 @@ class _WalletScreenState extends State<WalletScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              text(
-                                'flaq portfolio',
-                                FontWeight.w600,
-                                18,
-                                Colors.white,
-                              ),
-                              verticalSpace(customHeight * 0.015),
+                              Empty.V(12),
+                              const Text(
+                                  'hi degen, here are your earnings\ndw, withdrawals soon',
+                                  style: TextStyle(
+                                    color: Color(0xffF7F7F7),
+                                    fontWeight: FontWeight.w400,
+                                  )),
+                              Empty.V(24),
                               text(
                                 '\u{20B9}$totalAmount',
                                 FontWeight.w600,

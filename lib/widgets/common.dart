@@ -38,11 +38,13 @@ class GradientContainer extends StatelessWidget {
   final int rand;
   final double? top;
   final double? right;
+  final double scale;
   const GradientContainer(
       {Key? key,
       required this.child,
       required this.assetUrl,
       required this.rand,
+      this.scale = 1,
       this.top,
       this.right})
       : super(key: key);
@@ -72,7 +74,11 @@ class GradientContainer extends StatelessWidget {
         Positioned(
           top: top ?? 0,
           right: right ?? -3,
-          child: Image.asset(assetUrl),
+          child: Image.asset(
+            assetUrl,
+            height: 57 * scale,
+            width: 57 * scale,
+          ),
         ),
       ],
     );

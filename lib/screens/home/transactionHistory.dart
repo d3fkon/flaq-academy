@@ -19,7 +19,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     super.initState();
     dataService = Get.find();
     Future.delayed(const Duration(milliseconds: 100)).then((value) {
-      dataService.fetchTransactions();
+      // dataService.fetchTransactions();
     });
     Get.putAsync(() => MessagingService().init());
   }
@@ -65,7 +65,8 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                           Colors.white,
                         ),
                         IconButton(
-                          onPressed: dataService.fetchTransactions,
+                          onPressed: () {},
+                          // onPressed: dataService.fetchTransactions,
                           icon: customIcon(
                             Icons.refresh,
                             Colors.white,

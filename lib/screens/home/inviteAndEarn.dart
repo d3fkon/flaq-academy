@@ -1,4 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flaq/services/auth.service.dart';
+import 'package:flaq/services/data.service.dart';
 import 'package:flaq/utils/customWidgets.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
@@ -101,15 +103,20 @@ class _InviteAndEarnScreenState extends State<InviteAndEarnScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           text(
-                            '7bxu71ii',
+                            Get.find<AuthService>().user.value?.referralCode ??
+                                "-",
                             FontWeight.w600,
                             14,
                             Colors.white,
                           ),
                           InkWell(
                             onTap: () {
+                              var referralCode = Get.find<AuthService>()
+                                  .user
+                                  .value
+                                  ?.referralCode;
                               Clipboard.setData(
-                                      const ClipboardData(text: '7bxu71ii'))
+                                      ClipboardData(text: referralCode))
                                   .then((value) {
                                 Helper.toast('copied');
                               });

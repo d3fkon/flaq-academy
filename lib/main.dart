@@ -29,9 +29,6 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
-
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -42,6 +39,8 @@ void main() async {
       debugPrint("IN ON SELECT NOTIFICATION");
     },
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   // print("NOTIFICAITON INITIALIZATION RESULT: $res");
   Future.delayed(const Duration(milliseconds: 1)).then((value) =>
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -65,17 +64,6 @@ class MyApp extends StatelessWidget {
         color: Colors.black,
       ),
       initialBinding: AppBindings(),
-      builder: EasyLoading.init(),
-      // home: const Generic1Screen(
-      //   type: GenericScreenType.slider,
-      // ),
-    );
-    return GetMaterialApp(
-      initialBinding: AppBindings(),
-      debugShowCheckedModeBanner: false,
-      home: Container(
-        color: Colors.black,
-      ),
       builder: EasyLoading.init(),
     );
   }

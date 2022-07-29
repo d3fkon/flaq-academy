@@ -1,22 +1,20 @@
-import 'package:flaq/constants/auth.constants.dart';
 import 'package:flaq/screens/auth/login.dart';
 import 'package:flaq/screens/auth/referral.dart';
+import 'package:flaq/screens/generic/generic_1.screen.dart';
 import 'package:flaq/screens/home/scaffold.dart';
 import 'package:flaq/services/api.service.dart';
-import 'package:flaq/services/messaging.service.dart';
-import 'package:flaq/services/root.service.dart';
+import 'package:flaq/services/tracking.service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:flaq/models/user.model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/helper.dart';
 
 class AuthService extends GetxService {
   static AuthService instance = Get.find();
+  TrackingService tracker = Get.find();
   late final ApiService _apiService;
   late final SharedPreferences _sp;
   Rx<FlaqUser?> user = FlaqUser().obs;
@@ -27,20 +25,13 @@ class AuthService extends GetxService {
     _apiService = Get.find<ApiService>();
   }
 
-  @override
-  void onReady() async {
-    _setInitialScreen();
-    debugPrint("Setting up auth service");
-  }
-
   /// Login the user
   Future login(String email, String password) async {
     bool internet = await Helper().checkInternetConnectivity();
+
     if (internet) {
       var loggedIn = await _apiService.login(email, password);
       if (loggedIn) {
-        var _user = await _apiService.getProfile();
-        user(_user);
         navigate();
       }
     } else {
@@ -50,14 +41,37 @@ class AuthService extends GetxService {
 
   Future<AuthService> init() async {
     _sp = await SharedPreferences.getInstance();
+    _setInitialScreen();
     return this;
   }
+
+  final FIRST_TIME_USER_TOKEN = 'first_time_user_2';
 
   /// Set the initital screen
   _setInitialScreen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var accessToken = prefs.getString('ACCESSTOKEN');
     var refreshToken = prefs.getString('REFRESHTOKEN');
+    var firstTimeUser = prefs.getBool(FIRST_TIME_USER_TOKEN);
+    if (firstTimeUser ?? true) {
+      Get.to(
+        () => Generic1Screen(
+          data: GenericScreenData.noBS,
+          onTap: () {
+            Get.to(
+              () => Generic1Screen(
+                  data: GenericScreenData.earn$,
+                  onTap: () async {
+                    await prefs.setBool(FIRST_TIME_USER_TOKEN, false);
+                    navigate();
+                  }),
+              preventDuplicates: false,
+            );
+          },
+        ),
+      );
+      return;
+    }
 
     debugPrint("Setting initial screen");
     if (accessToken == null && refreshToken == null) {
@@ -100,34 +114,9 @@ class AuthService extends GetxService {
     bool internet = await Helper().checkInternetConnectivity();
     if (internet) {
       await _apiService.signup(email, password);
-      var _user = await _apiService.getProfile();
-      user(_user);
       navigate();
     } else {
       Helper.toast('please enable your internet connection');
-    }
-  }
-
-  /// Get the user's profile
-  getProfile({bool handleReferral = true}) async {
-    EasyLoading.show();
-    bool internet = await Helper().checkInternetConnectivity();
-    if (internet) {
-      var _user = (await _apiService.getProfile());
-      user(_user);
-      Get.log('Profile fetched');
-      if (_user == null) {
-        Get.log('Signing out');
-        signOut();
-        EasyLoading.dismiss();
-        return;
-      }
-      // final homeController = Get.find<HomeController>();
-      // homeController.flaqValue(double.parse(user?.synFlaqBalance ?? '0'));
-      EasyLoading.dismiss();
-    } else {
-      Helper.toast('please enable your internet connection');
-      return;
     }
   }
 

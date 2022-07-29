@@ -13,8 +13,6 @@ import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:optimize_battery/optimize_battery.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -216,40 +214,40 @@ class ApiService extends GetConnect implements GetxService {
   }
 
   // get all payments
-  Future<List<Transaction>?> getAllPayments() async {
-    bool internet = await Helper().checkInternetConnectivity();
-    if (internet) {
-      await Future.delayed(const Duration(seconds: 1));
-      debugPrint('Getting payments');
-      try {
-        EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res = await http.get(Uri.parse('$BASE_URL_GO/payments'),
-            headers: {'Authorization': 'Bearer $accessToken'});
-        var jsonData = jsonDecode(res.body);
-        if (jsonData['StatusCode'] == 401) {
-          await refreshToken();
-          await getAllPayments();
-        } else if (jsonData['StatusCode'] != 200) {
-          if (jsonData['Message'] != null) {
-            Helper.toast(jsonData['Message']);
-          }
-        } else {
-          debugPrint("payments fetched successfully");
-          return TransactionDataResponse.fromJson(jsonData).data;
-        }
-        EasyLoading.dismiss();
-      } catch (e) {
-        Helper.toast('error, please try again');
-        debugPrint('error: $e');
-        EasyLoading.dismiss();
-      }
-    } else {
-      Helper.toast('please enable your internet connection');
-      return null;
-    }
-  }
+  // Future<List<Transaction>?> getAllPayments() async {
+  //   bool internet = await Helper().checkInternetConnectivity();
+  //   if (internet) {
+  //     await Future.delayed(const Duration(seconds: 1));
+  //     debugPrint('Getting payments');
+  //     try {
+  //       EasyLoading.show();
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       var accessToken = prefs.getString('ACCESSTOKEN');
+  //       final res = await http.get(Uri.parse('$BASE_URL_GO/payments'),
+  //           headers: {'Authorization': 'Bearer $accessToken'});
+  //       var jsonData = jsonDecode(res.body);
+  //       if (jsonData['StatusCode'] == 401) {
+  //         await refreshToken();
+  //         await getAllPayments();
+  //       } else if (jsonData['StatusCode'] != 200) {
+  //         if (jsonData['Message'] != null) {
+  //           Helper.toast(jsonData['Message']);
+  //         }
+  //       } else {
+  //         debugPrint("payments fetched successfully");
+  //         return TransactionDataResponse.fromJson(jsonData).data;
+  //       }
+  //       EasyLoading.dismiss();
+  //     } catch (e) {
+  //       Helper.toast('error, please try again');
+  //       debugPrint('error: $e');
+  //       EasyLoading.dismiss();
+  //     }
+  //   } else {
+  //     Helper.toast('please enable your internet connection');
+  //     return null;
+  //   }
+  // }
 
   // check referral code
   Future checkReferralCode(String referralCode) async {
@@ -319,6 +317,7 @@ class ApiService extends GetConnect implements GetxService {
         debugPrint(jsonData.toString());
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
+          debugPrint("Access Token Not Valid");
           await getCampaigns();
         } else if (jsonData['StatusCode'] != 200) {
           if (jsonData['Message'] != null) {
