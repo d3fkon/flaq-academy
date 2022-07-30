@@ -9,6 +9,7 @@ import 'package:flaq/models/user.model.dart';
 import 'package:flaq/screens/auth/referral.dart';
 
 import 'package:flaq/screens/home/scaffold.dart';
+import 'package:flaq/services/auth.service.dart';
 import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -16,11 +17,30 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-const BASE_URL = "http://52.66.228.64:4000/api/v1";
-// const BASE_URL_GO = "http://52.66.228.64:8080";
 const BASE_URL_GO = "https://api.flaq.club";
 
 class ApiService extends GetConnect implements GetxService {
+  @override
+  void onInit() {
+    super.onInit();
+    httpClient.addRequestModifier<dynamic>((request) async {
+      Get.printInfo(info: 'Request - ${request.url}');
+      request.headers['Authorization'] =
+          'Bearer ${await Get.find<AuthService>().getUserToken()}';
+
+      return request;
+    });
+    httpClient.addResponseModifier((request, response) {
+      if (response.hasError) {
+        Get.printError(info: 'Response - ${response.bodyString}');
+      } else {
+        Get.printInfo(info: response.bodyString ?? '');
+      }
+      return response;
+    });
+    httpClient.baseUrl = BASE_URL_GO;
+  }
+
   //sign up user
   Future signup(String email, String password) async {
     bool internet = await Helper().checkInternetConnectivity();
@@ -29,11 +49,9 @@ class ApiService extends GetConnect implements GetxService {
         EasyLoading.show();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         debugPrint('Signing up the user');
-        final res = await http.post(
-          Uri.parse('$BASE_URL_GO/auth/signup'),
-          body: jsonEncode({"Email": email, "Password": password}),
-        );
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.post('/auth/signup',
+            body: jsonEncode({"Email": email, "Password": password}));
+        var jsonData = res.body;
         if (jsonData['StatusCode'] != 200) {
           if (jsonData['Message'] != null) {
             Helper.toast(jsonData['Message']);
@@ -65,13 +83,13 @@ class ApiService extends GetConnect implements GetxService {
         final fcmToken = await FirebaseMessaging.instance.getToken();
         SharedPreferences prefs = await SharedPreferences.getInstance();
         debugPrint('logging in the user');
-        final res = await http.post(
-          Uri.parse('$BASE_URL_GO/auth/login'),
-          body: jsonEncode(
-              {"DeviceToken": fcmToken, "Email": email, "Password": password}),
-        );
-        var jsonData = jsonDecode(res.body);
-        debugPrint(jsonData.toString());
+        final res = await httpClient.post('/auth/login',
+            body: jsonEncode({
+              "DeviceToken": fcmToken,
+              "Email": email,
+              "Password": password
+            }));
+        var jsonData = res.body;
         if (jsonData['StatusCode'] != 200) {
           if (jsonData['Message'] != null) {
             Helper.toast(jsonData['Message']);
@@ -107,11 +125,9 @@ class ApiService extends GetConnect implements GetxService {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         var refreshtoken = prefs.getString('REFRESHTOKEN');
         debugPrint('refreshing the token');
-        final res = await http.post(
-          Uri.parse('$BASE_URL_GO/auth/token/refresh'),
-          body: jsonEncode({"RefreshToken": refreshtoken}),
-        );
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.post('/auth/token/refresh',
+            body: jsonEncode({"RefreshToken": refreshtoken}));
+        var jsonData = res.body;
         if (jsonData['StatusCode'] != 200) {
           if (jsonData['Message'] != null) {
             Helper.toast(jsonData['Message']);
@@ -140,13 +156,10 @@ class ApiService extends GetConnect implements GetxService {
       debugPrint('Getting profile');
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res =
-            await http.get(Uri.parse('$BASE_URL_GO/users/profile'), headers: {
-          'Authorization': 'Bearer $accessToken',
-        });
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.get(
+          '/users/profile',
+        );
+        var jsonData = res.body;
         debugPrint(jsonData.toString());
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
@@ -159,7 +172,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("profile fetched successfully");
           EasyLoading.dismiss();
-          return UserProfileResponse.fromJson(jsonData).data;
+          return UserProfileResponse.fromJson(res.body).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -179,15 +192,12 @@ class ApiService extends GetConnect implements GetxService {
     if (internet) {
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
         debugPrint('registering the payment');
-        final res = await http.post(Uri.parse('$BASE_URL_GO/payments/register'),
+        final res = await httpClient.post('/payments/register',
             body: jsonEncode(
               {"Amount": amount},
-            ),
-            headers: {'Authorization': 'Bearer $accessToken'});
-        var jsonData = jsonDecode(res.body);
+            ));
+        var jsonData = res.body;
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
           await registerPayment(amount);
@@ -255,14 +265,12 @@ class ApiService extends GetConnect implements GetxService {
     if (internet) {
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
         debugPrint('Checking Referral Code');
-        final res = await http.post(
-            Uri.parse('$BASE_URL_GO/users/apply-referral'),
-            body: jsonEncode({"ReferralCode": referralCode}),
-            headers: {'Authorization': 'Bearer $accessToken'});
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.post(
+          '/users/apply-referral',
+          body: jsonEncode({"ReferralCode": referralCode}),
+        );
+        var jsonData = res.body;
         debugPrint(jsonData['Message']);
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
@@ -307,13 +315,10 @@ class ApiService extends GetConnect implements GetxService {
       debugPrint('Getting Campaigns');
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res =
-            await http.get(Uri.parse('$BASE_URL_GO/campaign'), headers: {
-          'Authorization': 'Bearer $accessToken',
-        });
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.get(
+          '/campaign',
+        );
+        var jsonData = res.body;
         debugPrint(jsonData.toString());
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
@@ -328,7 +333,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("campaigns fetched successfully");
           EasyLoading.dismiss();
-          return CampaignResponse.fromJson(jsonDecode(res.body)).data;
+          return CampaignResponse.fromJson(res.body).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -348,16 +353,14 @@ class ApiService extends GetConnect implements GetxService {
     if (internet) {
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
         debugPrint('participating in the campaign');
-        final res =
-            await http.post(Uri.parse('$BASE_URL_GO/campaign/participate'),
-                body: jsonEncode(
-                  {"CampaignId": campaignId},
-                ),
-                headers: {'Authorization': 'Bearer $accessToken'});
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.post(
+          '/campaign/participate',
+          body: jsonEncode(
+            {"CampaignId": campaignId},
+          ),
+        );
+        var jsonData = res.body;
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
           await participateInCampaign(campaignId);
@@ -392,13 +395,10 @@ class ApiService extends GetConnect implements GetxService {
       debugPrint('Getting quiz');
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res = await http
-            .get(Uri.parse('$BASE_URL_GO/campaign/$campaignId/quiz'), headers: {
-          'Authorization': 'Bearer $accessToken',
-        });
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.get(
+          '/campaign/$campaignId/quiz',
+        );
+        var jsonData = res.body;
         debugPrint(jsonData.toString());
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
@@ -411,7 +411,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("quiz fetched successfully");
           EasyLoading.dismiss();
-          return quizResponseFromJson(res.body);
+          return QuizResponse.fromJson(res.body);
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -431,20 +431,18 @@ class ApiService extends GetConnect implements GetxService {
     if (internet) {
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
         debugPrint('evaluating the quiz');
-        final res =
-            await http.post(Uri.parse('$BASE_URL_GO/campaign/quiz/evaluate'),
-                body: jsonEncode(
-                  {
-                    "Answers": answers,
-                    "CampaignParticipationId": participationId,
-                    "QuizTemplateId": quizId
-                  },
-                ),
-                headers: {'Authorization': 'Bearer $accessToken'});
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.post(
+          '/campaign/quiz/evaluate',
+          body: jsonEncode(
+            {
+              "Answers": answers,
+              "CampaignParticipationId": participationId,
+              "QuizTemplateId": quizId
+            },
+          ),
+        );
+        var jsonData = res.body;
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
           await evaluateQuiz(answers, quizId, participationId);
@@ -480,12 +478,10 @@ class ApiService extends GetConnect implements GetxService {
       debugPrint('Getting rewards');
       try {
         EasyLoading.show();
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        var accessToken = prefs.getString('ACCESSTOKEN');
-        final res = await http.get(Uri.parse('$BASE_URL_GO/rewards'), headers: {
-          'Authorization': 'Bearer $accessToken',
-        });
-        var jsonData = jsonDecode(res.body);
+        final res = await httpClient.get(
+          '/rewards',
+        );
+        var jsonData = res.body;
         debugPrint(jsonData.toString());
         if (jsonData['StatusCode'] == 401) {
           await refreshToken();
@@ -498,7 +494,7 @@ class ApiService extends GetConnect implements GetxService {
         } else {
           debugPrint("rewards fetched successfully");
           EasyLoading.dismiss();
-          return RewardResponse.fromJson(jsonData).data;
+          return RewardResponse.fromJson(res.body).data;
         }
         EasyLoading.dismiss();
       } catch (e) {
@@ -511,45 +507,4 @@ class ApiService extends GetConnect implements GetxService {
       return null;
     }
   }
-
-  // get all campaigns
-  getConversions() async {}
-  //   bool internet = await Helper().checkInternetConnectivity();
-  //   if (internet) {
-  //     debugPrint('Getting Conversions');
-  //     try {
-  //       EasyLoading.show();
-  //       SharedPreferences prefs = await SharedPreferences.getInstance();
-  //       var accessToken = prefs.getString('ACCESSTOKEN');
-  //       final res = await http
-  //           .get(Uri.parse('$BASE_URL_GO/campaign/conversion'), headers: {
-  //         'Authorization': 'Bearer $accessToken',
-  //       });
-  //       var jsonData = jsonDecode(res.body);
-  //       debugPrint(jsonData.toString());
-  //       if (jsonData['StatusCode'] == 401) {
-  //         await refreshToken();
-  //         await getCampaigns();
-  //       } else if (jsonData['StatusCode'] != 200) {
-  //         if (jsonData['Message'] != null) {
-  //           Helper.toast(jsonData['Message']);
-  //           EasyLoading.dismiss();
-  //           return null;
-  //         }
-  //       } else {
-  //         debugPrint("conversion fetched successfully");
-  //         EasyLoading.dismiss();
-  //         return jsonData['Data'];
-  //       }
-  //       EasyLoading.dismiss();
-  //     } catch (e) {
-  //       Helper.toast('error, please try again');
-  //       debugPrint('error: $e');
-  //       EasyLoading.dismiss();
-  //     }
-  //   } else {
-  //     Helper.toast('please enable your internet connection');
-  //     return null;
-  //   }
-  // }
 }

@@ -120,6 +120,12 @@ class AuthService extends GetxService {
     }
   }
 
+  getUserToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var accessToken = prefs.getString('ACCESSTOKEN');
+    return accessToken;
+  }
+
   void signOut() async {
     await _sp.remove("ACCESSTOKEN");
     await _sp.remove("REFRESHTOKEN");
