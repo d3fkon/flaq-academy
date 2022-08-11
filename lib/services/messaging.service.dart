@@ -59,24 +59,19 @@ backgroundMessageHandler(SmsMessage message) async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final sp = await SharedPreferences.getInstance();
-  if (sp.getString("AUTHKEY") == null) return;
-  http.post(Uri.parse("$BASE_URL/payments/register"), body: {
-    "amount": amount.toString()
-  }, headers: {
-    'x-auth-token': sp.getString("AUTHKEY") ?? "",
-  });
+  Get.lazyPut(() => ApiService());
+  await Get.find<ApiService>().registerPayment(amount.toString());
 
-  // final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  // Future.delayed(const Duration(seconds: 3)).then(
-  //   (value) => flutterLocalNotificationsPlugin.show(
-  //     100,
-  //     'You earned $amount flaq!',
-  //     'Tap now to claim your reward',
-  //     PLATFORM_CHANNEL_SPECIFICS,
-  //     payload: '$amount',
-  //   ),
-  // );
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  Future.delayed(const Duration(seconds: 3)).then(
+    (value) => flutterLocalNotificationsPlugin.show(
+      100,
+      'You earned $amount flaq!',
+      'Tap now to claim your reward',
+      PLATFORM_CHANNEL_SPECIFICS,
+      payload: '$amount',
+    ),
+  );
 }
 
 class MessagingService extends GetxService {

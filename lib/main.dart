@@ -1,15 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flaq/bindings.dart';
 import 'package:flaq/firebase_options.dart';
-import 'package:flaq/services/api.service.dart';
-import 'package:flaq/utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 const AndroidNotificationDetails ANDROID_PLATFORM_CHANNEL_SPECIFICS =
     AndroidNotificationDetails(
@@ -31,9 +29,6 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool permissionAsked = prefs.getBool('permissionAsked') ?? false;
-
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -41,22 +36,11 @@ void main() async {
   await flutterLocalNotificationsPlugin.initialize(
     const InitializationSettings(android: initializationSettingsAndroid),
     onSelectNotification: (payload) async {
-      print("IN ON SELECT NOTIFICATION");
-      final SharedPreferences sp = await SharedPreferences.getInstance();
-      final key = sp.getString("AUTHKEY");
-      if (key == null) return;
-      try {
-        await http.post(Uri.parse("$BASE_URL/payments/register"), body: {
-          "amount": payload.toString()
-        }, headers: {
-          'x-auth-token': key,
-        });
-        Helper.showRewardReceipt(payload.toString());
-      } catch (e) {
-        print(e);
-      }
+      debugPrint("IN ON SELECT NOTIFICATION");
     },
   );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   // print("NOTIFICAITON INITIALIZATION RESULT: $res");
   Future.delayed(const Duration(milliseconds: 1)).then((value) =>
       SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -74,11 +58,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialBinding: AppBindings(),
-      debugShowCheckedModeBanner: false,
+      // Set dark theme with the Montserrat font family
+      theme: ThemeData(brightness: Brightness.dark, fontFamily: 'Montserrat'),
       home: Container(
         color: Colors.black,
       ),
+      initialBinding: AppBindings(),
       builder: EasyLoading.init(),
     );
   }
